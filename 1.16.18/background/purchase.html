@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sticky Notes Store</title>
+	<script type="text/javascript" src="../lib/jquery.min.js"></script>
+	<script type="text/javascript" src="../lib/buy.js"></script>
+	<script type="text/javascript" src="../lib/url.min.js"></script>
+	<script type="text/javascript" src="../appData/inAppProducts.js"></script>
+	<script type="text/javascript" src="purchase.js"></script>
+	<style>
+		html,body{
+			overflow:auto;
+			padding:0px;
+			margin:0px;
+		}
+		html{
+			overflow-y:scroll;
+		}
+		ul.itemlist{
+			list-style:none;
+			padding:0px;
+		}
+		ul.itemlist>li{
+			border-top:solid 2px #d7d7d7;
+		}
+		ul.itemlist>div{
+			
+		}
+		ul.itemlist>div:first-child{
+			
+		}
+		div.leftbox{
+			
+		}
+		div.rightbox{
+		    text-align: right;
+			margin-bottom: 20px;
+		}
+		button.purchasebutton{
+			width: 100px;
+			height: 50px;
+			font-weight: bold;
+			text-align: center;
+			vertical-align: middle;
+			box-sizing: border-box;
+			padding: 11px;
+			font-size: 18px;
+			border-radius: 3px;
+			cursor:pointer;
+			border:none;
+		}
+		button.buy{
+			background: #65C168;
+		}
+		button.owned{
+			background: #D0D0D0;
+		}
+		header{
+			position:fixed;
+			top:0px;
+			left:0px;
+			width:100%;
+		}
+		section.section1{
+			position:absolute;
+			top:125px;
+			left:0px;
+		}
+		table.header{
+			width:100%;
+			border-spacing:0px;
+			background: #f7f7f7;
+		}
+		table.header td{
+			text-align:center;
+			border-color:#e8e8e8 !important;
+		}
+		table.header td.tabbutton{
+			border-bottom:solid 1px;
+			cursor:pointer;
+		}
+		table.header td.tabbutton.tabcurrent{
+			border-bottom:none !important;
+			background:#FDFDFD;
+		}
+		.tabcontent{
+			display:none;
+			padding: 8px;
+			box-sizing: border-box;
+		}
+		.tabcontent.tabcontenton{
+			display:block;
+		}
+	</style>
+</head>
+<body>
+<header>
+	<table class="header">
+		<tbody>
+			<tr><td colspan="2" style="border-top:solid 1px; border-bottom:solid 1px;"><h1 style="text-align: center;">Sticky Notes Store</h1></td></tr>
+			<tr>
+			<td class="tabbutton tabcurrent" data-for="art1" style="border-right:solid 1px; width:50%;"><h2>Already purchased items</h2></td>
+			<td class="tabbutton" data-for="art2"><h2>All available items</h2></td>
+			</tr>
+		</tbody>
+	</table>
+</header>
+<section class="section1">
+	<div class="tabcontent tabcontenton" id="art1"><p id="purchased">You have no purchased products.</p></div>
+	<div class="tabcontent" id="art2"><p id="available">There is no products available at this moment.</p></div>
+</section>
+
+</body>
+</html>

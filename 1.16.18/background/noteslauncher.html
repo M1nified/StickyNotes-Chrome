@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Sticky Notes Launcher</title>
+	<link rel="stylesheet" type="text/css" href="note.css">
+	<link rel="stylesheet" type="text/css" href="noteslauncher.css">
+	<script type="text/javascript" src="../lib/jquery.min.js"></script>
+	<script type="text/javascript" src="../lib/urlize.js"></script>
+	<script type="text/javascript" src="general_variables.js"></script>
+	<script type="text/javascript" src="general.js"></script>
+	<script type="text/javascript" src="noteslauncher.js"></script>
+</head>
+<body>
+	<header>
+		<table class="header">
+			<tbody>
+				<tr><td colspan="2" style="border-top:solid 1px; border-bottom:solid 1px;"><h1 style="text-align: center;">Sticky Notes</h1></td></tr>
+				<tr>
+				<td class="tabbutton openall" style="width:50%;"><h2>Open all notes</h2></td>
+				<td class="tabbutton" style="width:50%;"><h2>Open and close launcher</h2></td>
+				</tr>
+			</tbody>
+		</table>
+	</header>
+	
+<section id="notes">
+	<ul id="noteslist">
+	</ul>
+</section>
+<section id="settings">
+<span class="openall">Open all notes</span>
+<form>
+<label for="showalways" id="showalwayslabel"><input type="checkbox" id="showalways">Don't show this panel again, just open all notes.</label>
+</form>
+</section>
+</body>
+</html>

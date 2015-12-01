@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Scan/Click/Share</title>
+	<script type="text/javascript" src="../lib/jquery.min.js"></script>
+	<script type="text/javascript" src="../lib/qrcode.js"></script>
+	<script type="text/javascript" src="general.js"></script>
+	<script type="text/javascript" src="shared.js"></script>
+	<style type="text/css">
+	body{
+		margin:0px;
+	}
+	a{
+		cursor:pointer;
+	}
+	input{
+		width: 240px;
+		border-radius: 10px;
+		border: none;
+		outline: none;
+		box-shadow: 0 0 5px #000;
+		padding: 4px;
+		margin: 4px;
+	}
+	input[type="button"]{
+		width:248px !important;
+		cursor: pointer;
+		background: -webkit-linear-gradient(rgb(237, 237, 237), rgb(185, 185, 185));
+		background: -o-linear-gradient(rgb(237, 237, 237), rgb(185, 185, 185));
+		background: -moz-linear-gradient(rgb(237, 237, 237), rgb(185, 185, 185));
+		background: linear-gradient(rgb(237, 237, 237), rgb(185, 185, 185));
+	}
+	input[type="button"]:hover{
+		width:248px !important;
+		cursor: pointer;
+		background: -webkit-linear-gradient(rgb(246, 246, 246), rgb(185, 185, 185));
+		background: -o-linear-gradient(rgb(246, 246, 246), rgb(185, 185, 185));
+		background: -moz-linear-gradient(rgb(246, 246, 246), rgb(185, 185, 185));
+		background: linear-gradient(rgb(246, 246, 246), rgb(185, 185, 185));
+	}
+	input[type="button"]:active{
+		width:248px !important;
+		cursor: pointer;
+		background: -webkit-linear-gradient(rgb(207, 207, 207), rgb(185, 185, 185));
+		background: -o-linear-gradient(rgb(207, 207, 207), rgb(185, 185, 185));
+		background: -moz-linear-gradient(rgb(207, 207, 207), rgb(185, 185, 185));
+		background: linear-gradient(rgb(207, 207, 207), rgb(185, 185, 185));
+	}
+	div#alert{
+		position: fixed;
+		height:100vh;
+		width:100vw;
+		margin-top:-100vh;
+		-webkit-transition: margin 0.5s;
+		transition: margin 0.5s;
+		background: rgba(231, 231, 231, 0.95);
+		cursor:pointer;
+	}
+	div#alert p{
+		margin: 10px;
+		font-size: 15px;
+		font-weight: bold;
+	}
+	</style>
+</head>
+<body>
+	<div id="alert"><p></p></div>
+	<a id="linker" href="" target="_blank">
+		<div id="qrcode"></div>
+	</a>
+	<input type="text" value="" id="link" readonly>
+	<input type="button" value="Do not share this note anymore" id="btn-remove">
+</body>
+</html>

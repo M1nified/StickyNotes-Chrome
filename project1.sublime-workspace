@@ -1,0 +1,1657 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"set",
+				"setSpeechToTextLangs"
+			],
+			[
+				"spee",
+				"speechToTextActiveLang"
+			],
+			[
+				"speechT",
+				"speechToTextLang"
+			],
+			[
+				"l",
+				"l"
+			],
+			[
+				"speec",
+				"speechToTextLangSelBox"
+			],
+			[
+				"setTe",
+				"setTextToSpeechLangsList"
+			],
+			[
+				"fade",
+				"fadeIn"
+			],
+			[
+				"lang",
+				"lang"
+			],
+			[
+				"spea",
+				"speachToTextInitiate"
+			],
+			[
+				"speach",
+				"speachToTextOn"
+			],
+			[
+				"speechTo",
+				"speechToTextOff"
+			],
+			[
+				"spe",
+				"speachrecognitionon"
+			],
+			[
+				"send",
+				"sendResponse"
+			],
+			[
+				"text",
+				"textarea"
+			],
+			[
+				"te",
+				"buttonTextToSpeech"
+			],
+			[
+				"saveno",
+				"saveNoteDelayed"
+			],
+			[
+				"dispo",
+				"displayAutostart1"
+			],
+			[
+				"remove",
+				"removeBox"
+			],
+			[
+				"close",
+				"closeAllNotes"
+			],
+			[
+				"ctr",
+				"ctrlKey"
+			],
+			[
+				"load",
+				"loadSharedNotesManager"
+			],
+			[
+				"fot",
+				"font-weight"
+			],
+			[
+				"loa",
+				"loadSharedNotesManager"
+			],
+			[
+				"pro",
+				"changesInProgress"
+			],
+			[
+				"chan",
+				"changesInProgress"
+			],
+			[
+				"lin",
+				"link_note"
+			],
+			[
+				"crea",
+				"createdWindow"
+			],
+			[
+				"id",
+				"id_owner"
+			],
+			[
+				"on",
+				"onsuccess"
+			],
+			[
+				"st",
+				"store"
+			],
+			[
+				"lo",
+				"loadNotesManager"
+			],
+			[
+				"ret",
+				"retMM"
+			],
+			[
+				"memo",
+				"memoryGoogleDriveClear"
+			],
+			[
+				"memory",
+				"memoryChromeSyncStorageClear"
+			],
+			[
+				"inde",
+				"indexedDB"
+			],
+			[
+				"mem",
+				"memoryChromeLocalStorageClear"
+			],
+			[
+				"cl",
+				"clearRemovedFromIndexedDB"
+			],
+			[
+				"index",
+				"indexOf"
+			],
+			[
+				"update",
+				"updateDisplayedNote"
+			],
+			[
+				"note",
+				"noteonline"
+			],
+			[
+				"req",
+				"request"
+			],
+			[
+				"reque",
+				"request"
+			],
+			[
+				"err",
+				"errorHandler"
+			],
+			[
+				"lauc",
+				"launchNotes"
+			],
+			[
+				"up",
+				"updateDisplayedNote"
+			],
+			[
+				"upda",
+				"updateNote"
+			],
+			[
+				"launch",
+				"launchNotes"
+			],
+			[
+				"file",
+				"fileEntry"
+			],
+			[
+				"fileE",
+				"fileEntry"
+			],
+			[
+				"write",
+				"writeToFile"
+			],
+			[
+				"synch",
+				"synchronizeVersions"
+			],
+			[
+				"noteo",
+				"noteoffline"
+			],
+			[
+				"notes",
+				"notesoffline"
+			],
+			[
+				"fileEn",
+				"fileEntry"
+			],
+			[
+				"dir",
+				"dirReader"
+			],
+			[
+				"syn",
+				"syncFileSystem"
+			],
+			[
+				"cle",
+				"clearRemovedFromIndexedDB"
+			],
+			[
+				"new",
+				"newnote"
+			],
+			[
+				"is",
+				"isNotesContentSame"
+			],
+			[
+				"con",
+				"contentWindow"
+			],
+			[
+				"remote",
+				"remoteToLocalChange"
+			],
+			[
+				"sync",
+				"syncAllDelayedTimeouted"
+			],
+			[
+				"launc",
+				"launchNotes"
+			],
+			[
+				"save",
+				"saveNotesToIndexedDB"
+			],
+			[
+				"ntoe",
+				"notesoffline"
+			],
+			[
+				"writ",
+				"writeToFile"
+			],
+			[
+				"get",
+				"getFileCallback"
+			],
+			[
+				"not",
+				"notesoffline"
+			],
+			[
+				"noteso",
+				"notesoffline"
+			],
+			[
+				"trun",
+				"truncated"
+			],
+			[
+				"sycn",
+				"synchronizeWithSyncFileSystem"
+			],
+			[
+				"func",
+				"function"
+			],
+			[
+				"padd",
+				"padding-left"
+			],
+			[
+				"button_ins",
+				"button_insertOrderedList"
+			],
+			[
+				"cont",
+				"contentWindow"
+			],
+			[
+				"button",
+				"button_close"
+			],
+			[
+				"back",
+				"background"
+			],
+			[
+				"buttonClose",
+				"buttonCloseAll"
+			],
+			[
+				"but",
+				"buttonclosesaveon"
+			],
+			[
+				"buttonC",
+				"buttonClose"
+			],
+			[
+				"app",
+				"append"
+			],
+			[
+				"sc",
+				"scrollToNote"
+			],
+			[
+				"scroll",
+				"scrollcorrectortimeout"
+			],
+			[
+				"noteh",
+				"noteheight"
+			],
+			[
+				"co",
+				"controller"
+			],
+			[
+				"d",
+				"detailed"
+			],
+			[
+				"mar",
+				"margin"
+			],
+			[
+				"onC",
+				"onClickOutside"
+			],
+			[
+				"web",
+				"webkit-keyframes"
+			],
+			[
+				"no",
+				"note_object_JSON"
+			],
+			[
+				"_",
+				"_POST"
+			],
+			[
+				"j",
+				"json_encode"
+			],
+			[
+				"json",
+				"json_decode"
+			],
+			[
+				"updateNote",
+				"updateNoteDelayed"
+			],
+			[
+				"in",
+				"index"
+			],
+			[
+				"serve",
+				"serverCalls"
+			],
+			[
+				"sess",
+				"session_id"
+			],
+			[
+				"exit",
+				"exitOnNoSession"
+			],
+			[
+				"res",
+				"result"
+			],
+			[
+				"se",
+				"session_id"
+			],
+			[
+				"session_d",
+				"session_destroy"
+			],
+			[
+				"db",
+				"db_con"
+			],
+			[
+				"user",
+				"userdata"
+			],
+			[
+				"auth",
+				"authResult"
+			],
+			[
+				"print",
+				"print_r"
+			],
+			[
+				"google",
+				"googlebuttonclicked"
+			],
+			[
+				"fb",
+				"fbinitialized"
+			],
+			[
+				"marg",
+				"margin-top"
+			],
+			[
+				"FB",
+				"DB_facebook_get"
+			],
+			[
+				"respo",
+				"response3"
+			],
+			[
+				"margin",
+				"margin-left"
+			],
+			[
+				"fac",
+				"facebookStatusChangeCallback"
+			],
+			[
+				"custom",
+				"customBtnFb"
+			],
+			[
+				"margin-",
+				"margin-left"
+			],
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"filter",
+				"filter_var"
+			],
+			[
+				"regis",
+				"register_box"
+			],
+			[
+				"login",
+				"login_register"
+			],
+			[
+				"re",
+				"response2"
+			],
+			[
+				"fb-",
+				"fb-login-button"
+			],
+			[
+				"ma",
+				"maxrows"
+			],
+			[
+				"add",
+				"addClass"
+			],
+			[
+				"max-",
+				"max-height"
+			],
+			[
+				"col",
+				"columns"
+			],
+			[
+				"filte",
+				"filtered"
+			],
+			[
+				"hide",
+				"hidemenutimeout"
+			],
+			[
+				"mouse",
+				"mouseover"
+			],
+			[
+				"hideW",
+				"hideWindowActionsTimeout"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "manifest.json",
+			"settings":
+			{
+				"buffer_size": 827,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "background/background.html",
+			"settings":
+			{
+				"buffer_size": 338,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "background/background.js",
+			"settings":
+			{
+				"buffer_size": 12148,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "background/note.html",
+			"settings":
+			{
+				"buffer_size": 15228,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "background/note.js",
+			"settings":
+			{
+				"buffer_size": 19426,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/corpse/projekty/chrome_qrcoder/EXT/background/qrcodeviewer.js",
+			"settings":
+			{
+				"buffer_size": 406,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/corpse/projekty/chrome_qrcoder/EXT/background/qrcodeviewer.html",
+			"settings":
+			{
+				"buffer_size": 296,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "background/shared.html",
+			"settings":
+			{
+				"buffer_size": 2193,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "options/features.html",
+			"settings":
+			{
+				"buffer_size": 3133,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "options/changelog.html",
+			"settings":
+			{
+				"buffer_size": 5329,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "options/options.html",
+			"settings":
+			{
+				"buffer_size": 3090,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "options/general.css",
+			"settings":
+			{
+				"buffer_size": 1821,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "background/general.js",
+			"settings":
+			{
+				"buffer_size": 3429,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "background/general_variables.js",
+			"settings":
+			{
+				"buffer_size": 1478,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "background/notifications.js",
+			"settings":
+			{
+				"buffer_size": 713,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "background/micPermission.html",
+			"settings":
+			{
+				"buffer_size": 207,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "background/micPermission.js",
+			"settings":
+			{
+				"buffer_size": 425,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "options/options.js",
+			"settings":
+			{
+				"buffer_size": 10534,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "background/shared.js",
+			"settings":
+			{
+				"buffer_size": 928,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Michał/Desktop/sticky_notes.sticky_notes",
+			"settings":
+			{
+				"buffer_size": 846,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/D/AGH - EAIIIB - INFORMATYKA/Cpp/List Template/main_test.cpp",
+		"/D/corpse/projekty/chrome_YouTube-Playlist/WEB/private_player.html",
+		"/D/corpse/projekty/Sticky_Notes/CHROME EXT/options/changelog.html",
+		"/D/corpse/projekty/Sticky_Notes/CHROME EXT/options/features.html",
+		"/D/corpse/projekty/Sticky_Notes/CHROME EXT/options/options.html",
+		"/D/corpse/projekty/Sticky_Notes/CHROME EXT/options/contact.html",
+		"/D/corpse/projekty/Sticky_Notes/CHROME EXT/options/general.css",
+		"/D/corpse/projekty/chrome_qrcoder/EXT/background/background.js",
+		"/C/Users/Michał/AppData/Local/Temp/fz3temp-1/index.html",
+		"/D/corpse/projekty/Sticky_Notes/WEB/login_register.js",
+		"/D/corpse/projekty/Sticky_Notes/WEB/notes.js",
+		"/D/corpse/projekty/Sticky_Notes/WEB/mobile/mobile_angular_controllers.js",
+		"/C/Users/Michał/AppData/Local/Temp/fz3temp-1/main.cpp",
+		"/D/corpse/projekty/Sticky_Notes/CHROME EXT/options/options.js",
+		"/D/corpse/projekty/Sticky_Notes/CHROME EXT/options/main.html",
+		"/D/corpse/projekty/chrome_hitbox/EXT/background/background-current-browser.js",
+		"/D/corpse/projekty/chrome_hitbox/EXT/background/background.js",
+		"/D/corpse/projekty/chrome_hitbox/EXT/background/background.html",
+		"/C/Users/Michał/AppData/Local/Google/Chrome/User Data/Default/Extensions/nbjdhgkkhefpifbifjiflpaajchdkhpg/1.9.4_0/manifest.json",
+		"/D/corpse/projekty/Sticky_Notes/CHROME EXT/manifest.json",
+		"/D/corpse/projekty/Sticky_Notes/CHROME EXT/background/note.html",
+		"/D/corpse/projekty/Sticky_Notes/CHROME EXT/background/note.js",
+		"/D/corpse/projekty/Sticky_Notes/CHROME EXT/background/urlize.js",
+		"/D/corpse/projekty/Sticky_Notes/CHROME EXT/background/background.js",
+		"/D/corpse/projekty/Sticky_Notes/CHROME EXT/1.9.1.1/background/background.js",
+		"/D/corpse/projekty/Sticky_Notes/WEB/angular_controllers.js",
+		"/D/corpse/projekty/Sticky_Notes/WEB/general.css",
+		"/D/corpse/projekty/Sticky_Notes/WEB/register_googleplus.php",
+		"/D/corpse/projekty/Sticky_Notes/WEB/login.php",
+		"/D/corpse/projekty/Sticky_Notes/WEB/mobile/demo.js",
+		"/D/corpse/projekty/Sticky_Notes/WEB/mobile/app/src/html/index.html",
+		"/D/corpse/projekty/Sticky_Notes/WEB/mobile/app/www/index.html",
+		"/D/corpse/projekty/Sticky_Notes/WEB/mobile/app/www/js/index.js",
+		"/D/corpse/projekty/Sticky_Notes/WEB/mobile_angular_controllers.js",
+		"/D/corpse/projekty/Sticky_Notes/WEB/mobile.html",
+		"/D/corpse/projekty/Sticky_Notes/WEB/project1.sublime-project",
+		"/D/corpse/projekty/chrome_fb_oldchat/CHROME/project.sublime-project",
+		"/D/corpse/projekty/Sticky_Notes/WEB/login_register.php",
+		"/D/corpse/projekty/Sticky_Notes/WEB/register_facebook.php",
+		"/D/corpse/projekty/Sticky_Notes/WEB/login.html",
+		"/D/corpse/projekty/Sticky Notes/WEB/general.css",
+		"/D/corpse/projekty/Sticky Notes/WEB/login_register.js",
+		"/D/corpse/projekty/Sticky Notes/WEB/angular_controllers.js",
+		"/D/corpse/projekty/Sticky Notes/WEB/angular_facebook_api.js",
+		"/D/corpse/projekty/Sticky Notes/WEB/angular_routes.js",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/options/dbConnect.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/login_register.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/login.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/index.html",
+		"/D/corpse/projekty/Sticky Notes/WEB/silex_api2/vendor/silex/silex/src/Silex/Provider/TwigServiceProvider.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/silex_api2/vendor/silex/silex/src/Silex/Provider/TwigCoreExtension.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/silex_api2/vendor/silex/silex/src/Silex/Application/TwigTrait.php",
+		"/D/PHP/php.ini",
+		"/D/corpse/projekty/Sticky Notes/WEB/register_facebook.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/mysql_queries.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/main.html",
+		"/D/corpse/projekty/Sticky Notes/WEB/notes.html",
+		"/D/corpse/projekty/Sticky Notes/WEB/login.html",
+		"/D/corpse/projekty/chrome_BROWSER_PARTY/SERVER/dbConnect.php",
+		"/D/corpse/projekty/chrome_BROWSER_PARTY/SERVER/getMessages.php",
+		"/D/corpse/projekty/chrome_BROWSER_PARTY/SERVER/addMessage.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/silex_api/twig/twig/lib/Twig/TemplateInterface.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/silex_api/twig/twig/lib/Twig/Template.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/google_api/composer.json",
+		"/D/corpse/projekty/Sticky Notes/WEB/silex_api2/composer.json",
+		"/D/corpse/projekty/Sticky Notes/WEB/silex_api/twig/twig/lib/Twig/Loader/Chain.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/autoload_facebook.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/autoload_googleplus.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/src/Google/Service/Resource.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/src/Google/Client.php",
+		"/D/corpse/projekty/Sticky Notes/WEB/composer.json",
+		"/D/corpse/projekty/Sticky Notes/WEB/autoload.php",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/options/contact.html",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/background/background.js",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/background/note.js",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/background/note.html",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/manifest.json",
+		"/D/corpse/projekty/Sticky Notes/WEB/genaral.css",
+		"/C/Users/Michał/AppData/Local/Temp/Temp1_facebook-php-sdk-v4-4.0-dev.zip/facebook-php-sdk-v4-4.0-dev/autoload.php",
+		"/C/Users/Michał/AppData/Local/Temp/Temp1_facebook-php-sdk-v4-4.0-dev.zip/facebook-php-sdk-v4-4.0-dev/composer.json",
+		"/D/corpse/projekty/Sticky Notes/WEB/installer.php",
+		"/C/Users/Michał/AppData/Local/Temp/Temp1_facebook-php-sdk-v4-4.0-dev.zip/facebook-php-sdk-v4-4.0-dev/tests/bootstrap.php",
+		"/C/Users/Michał/AppData/Local/Temp/Temp1_facebook-php-sdk-v4-4.0-dev.zip/facebook-php-sdk-v4-4.0-dev/tests/GraphUserTest.php",
+		"/D/corpse/projekty/phpbb/config.php",
+		"/D/corpse/projekty/register_book/userUpdate.php",
+		"/D/corpse/projekty/register_book/session_if_active.php",
+		"/D/corpse/projekty/register_book/mysqli.php",
+		"/D/corpse/projekty/register_book/index.php",
+		"/D/corpse/projekty/register_book/login.css",
+		"/D/corpse/projekty/register_book/login.php",
+		"/D/corpse/projekty/register_book/logout.php",
+		"/D/corpse/projekty/QuickCMS/admin.php",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/options/general.js",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/options/general.css",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/background/general.js",
+		"/D/corpse/projekty/chrome_qrcoder/SERVER/dbConnect.php",
+		"/D/corpse/projekty/qandamanager-prowebject.rhcloud.com/qandamanager/node_modules/mongodb/lib/mongodb/db.js",
+		"/D/corpse/projekty/Sticky Notes/SERVER/dbConnect.php",
+		"/D/corpse/projekty/qandamanager-prowebject.rhcloud.com/2/qandamanager/node_modules/mongodb/lib/mongodb/db.js",
+		"/D/corpse/test.php",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/background/background.html",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/options/features.html",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/options/changelog.html",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/options/options.html",
+		"/D/corpse/projekty/Pascal Indentation/pascal_indent.html",
+		"/D/cpp/listy_liblike.cpp",
+		"/D/corpse/projekty/chrome_BROWSER_PARTY/EXT/manifest.json",
+		"/D/corpse/projekty/chrome_BROWSER_PARTY/EXT/background/background.js",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/1.8.2/manifest.json",
+		"/D/Pobrane/polski.txt",
+		"/D/AGH - EAIIIB - INFORMATYKA/UNIX/s4",
+		"/D/AGH - EAIIIB - INFORMATYKA/UNIX/s1",
+		"/D/Pobrane/dawg.10",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/1.8.1/manifest.json",
+		"/D/corpse/projekty/NumberSearch/num_search.html",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/options/main.html",
+		"/C/Users/Michał/Desktop/num_search.html",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/options/menu.html",
+		"/D/corpse/projekty/Sticky Notes/CHROME EXT/1.5/background/background.js",
+		"/D/corpse/projekty/Pascal Indentation/pascal_indent.min.html",
+		"/C/Users/Michał/AppData/Roaming/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/D/corpse/projekty/TimeAtSpotCounter/main.js",
+		"/D/corpse/projekty/TimeAtSpotCounter/main.html",
+		"/D/corpse/zlecenia/symulacja_lotow/index.html",
+		"/D/corpse/projekty/chrome_qrcoder/EXT/background/background.html",
+		"/D/corpse/projekty/chrome_qrcoder/EXT/background/qrcodemachine.html",
+		"/D/corpse/projekty/chrome_qrcoder/EXT/background/qrcodemachine.js",
+		"/C/Users/Michał/AppData/Local/Temp/Temp1_kolos3.zip/dijkstra.cpp"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"D:\\corpse\\projekty\\Sticky_Notes\\CHROME EXT\\options",
+			"D:\\corpse\\projekty\\Sticky_Notes\\CHROME EXT\\background",
+			"D:\\corpse\\projekty\\Sticky_Notes\\CHROME EXT",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"\n	#buttonSpeachToText.speachToTextOn{\n		background: url('../img/button_mic_on.png');\n	}",
+			"button",
+			"list",
+			"fonts/",
+			"fonts",
+			"enable",
+			"getFileCallback",
+			".textbox textarea",
+			"textarea",
+			"mobile",
+			"yie;",
+			"title",
+			"include_path",
+			"extension_dir",
+			"exten",
+			"folder",
+			"php_gd",
+			"register_glo",
+			"login.html",
+			"main.html",
+			"mysqli",
+			"sql",
+			"setSortedMenuItems",
+			"temp",
+			"border",
+			"resize",
+			"k18",
+			"k17",
+			".textbox #notetextarea",
+			"textarea",
+			"$('img').height()",
+			"$('img').width()",
+			"change",
+			"=",
+			";\n=					",
+			";\n					",
+			"request.result",
+			";\n					request.result",
+			"padding:4px 6px 6px 6px ",
+			" title=\"\" style=\"\">f</div>",
+			" >f</div>",
+			"style=\"background: url(../img/button_font_Courier-New-Courier-monospace.png);\"></div>",
+			"title=\"\"></div>",
+			">f<",
+			"Captain Bee Fart",
+			"Ultimate Spinach - Ultimate Spinach (Full Album)",
+			"_AdFvJ9iUDQ",
+			"saveAll",
+			"setBadgeText",
+			"func:",
+			"openRequest",
+			"\"monospace\"",
+			"GET",
+			"get",
+			"user",
+			"akamaihd",
+			"DBAC80",
+			"view",
+			"text",
+			"	<",
+			"']);\n",
+			"type",
+			"serialize",
+			"','');\n",
+			"</",
+			"this.scrollToBottom",
+			"this.scrollToTop",
+			"this.chatBoxInner",
+			"this.scrollTools",
+			"scrollToolsHideTimeout",
+			"scrollTools",
+			"scrollToBottom",
+			"scrollToTop",
+			"');\n",
+			");\n",
+			"paper = ",
+			"paper=",
+			"paper",
+			"width",
+			".back",
+			"back",
+			"moveUp",
+			"scroll(",
+			"scroll",
+			"li",
+			"secon",
+			"image",
+			"X",
+			"x",
+			"_x",
+			"x",
+			" ",
+			"chatArray[i]",
+			"chat",
+			"valida",
+			"errors",
+			"body",
+			"default=\"default\"",
+			"selected",
+			"upd",
+			"js",
+			"\n         td\n          input(type=\"text\",value=\"#{mark.type}\",name=\"type\")",
+			"log",
+			"smooth",
+			"css",
+			"));\n",
+			");\n",
+			"login",
+			"elem1",
+			"resizeButton",
+			",",
+			"$n_",
+			"$",
+			"$ => $user",
+			"\"",
+			"]",
+			"[",
+			"rightsString",
+			"markers",
+			"userL",
+			"forum",
+			"view",
+			"tool"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"updateFile",
+			"#notetextarea",
+			"",
+			"k17",
+			"k18",
+			"#notetextarea",
+			"imgheight",
+			"imgwidth",
+			"!=",
+			" ",
+			" || request.result",
+			"padding:6px 0px 0px 6px",
+			" title=\"\" style=\"font-size: 16px; padding:4px 6px 6px 6px !important;width:13px !important;height:15px !important;\">f</div>",
+			" style=\"\">f</div>",
+			">f</div>",
+			"title=\"\" style=\"background: url(../img/button_font_Courier-New-Courier-monospace.png);\"></div>",
+			"><",
+			"'+ channelTitle +'",
+			"'+ videoTitle +'",
+			"'+ videoId +'",
+			"oreq",
+			"'monospace'",
+			"scrollToBottom",
+			"scrollToTop",
+			"chatBoxInner",
+			"scrollTools",
+			"this.scrollToolsHideTimeout",
+			"this.scrollTools",
+			"this.scrollToBottom",
+			"this.scrollToTop",
+			"height",
+			"Y",
+			"y",
+			".",
+			"chatMainDiv",
+			"selected",
+			"reg",
+			"moveButton",
+			";",
+			"$_",
+			"$n",
+			" = $_POST",
+			"$",
+			"']",
+			"['",
+			"user",
+			"markersLatLngArray"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "manifest.json",
+					"settings":
+					{
+						"buffer_size": 827,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								546,
+								546
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "background/background.html",
+					"settings":
+					{
+						"buffer_size": 338,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								322,
+								322
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "background/background.js",
+					"settings":
+					{
+						"buffer_size": 12148,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								516,
+								516
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "background/note.html",
+					"settings":
+					{
+						"buffer_size": 15228,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								228,
+								228
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "background/note.js",
+					"settings":
+					{
+						"buffer_size": 19426,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9598,
+								9614
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 6263.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/D/corpse/projekty/chrome_qrcoder/EXT/background/qrcodeviewer.js",
+					"settings":
+					{
+						"buffer_size": 406,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/D/corpse/projekty/chrome_qrcoder/EXT/background/qrcodeviewer.html",
+					"settings":
+					{
+						"buffer_size": 296,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "background/shared.html",
+					"settings":
+					{
+						"buffer_size": 2193,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1086,
+								1086
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 520.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "options/features.html",
+					"settings":
+					{
+						"buffer_size": 3133,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3000,
+								3000
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 760.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "options/changelog.html",
+					"settings":
+					{
+						"buffer_size": 5329,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5189,
+								5189
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1509.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "options/options.html",
+					"settings":
+					{
+						"buffer_size": 3090,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1010,
+								1026
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "options/general.css",
+					"settings":
+					{
+						"buffer_size": 1821,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								581,
+								581
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 5,
+			"sheets":
+			[
+				{
+					"buffer": 12,
+					"file": "background/general.js",
+					"settings":
+					{
+						"buffer_size": 3429,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								109,
+								110
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "background/general_variables.js",
+					"settings":
+					{
+						"buffer_size": 1478,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1478,
+								1478
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "background/notifications.js",
+					"settings":
+					{
+						"buffer_size": 713,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								379,
+								379
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "background/micPermission.html",
+					"settings":
+					{
+						"buffer_size": 207,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								181,
+								191
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "background/micPermission.js",
+					"settings":
+					{
+						"buffer_size": 425,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								53,
+								422
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "options/options.js",
+					"settings":
+					{
+						"buffer_size": 10534,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								819,
+								819
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 600.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "background/shared.js",
+					"settings":
+					{
+						"buffer_size": 928,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								456,
+								456
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "/C/Users/Michał/Desktop/sticky_notes.sticky_notes",
+					"settings":
+					{
+						"buffer_size": 846,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 36.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.5,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 66.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 209.0,
+	"status_bar_visible": true
+}

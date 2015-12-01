@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript" src="urlize.js"></script>
+	<script type="text/javascript" src="general.js"></script>
+	<script type="text/javascript" src="note.js"></script>
+	<style type="text/css">
+	@font-face{
+		font-family:;
+		src:url(../fonts/);
+	}
+	body{
+		font-family: "Segoe Print";
+		src: url();
+		overflow:hidden;
+	}
+	.globalBox{
+		overflow: hidden;
+		position:absolute;
+		top:0px;
+		left:0px;
+		width:100%;
+		height:100%;
+		/*-webkit-app-region: drag;*/
+		background: #f7f945 url("../img/resize_corner.png") no-repeat right bottom;
+		background-size:20px 20px;
+	}
+	.toolbar{
+		width:100%;
+		min-height:25px;
+		background-image:url("../img/shade.png");
+		background-repeat: repeat;
+		clear: both;
+		-webkit-app-region: drag;
+	}
+	.toolbar .button{
+		height:25px;
+		width:25px;
+		background-repeat: no-repeat;
+		-webkit-app-region: no-drag;
+	}
+	#buttonAdd:hover{
+		background: url('../img/button_add_hover.png') !important;
+	}
+	#buttonClose{
+		background: url('../img/button_close.png');
+	}
+	#buttonClose:hover{
+		background: url('../img/button_close_hover.png');
+	}
+	#buttonCloseAll{
+		background: url(../img/button_close_all.png);
+	}
+	#buttonCloseAll:hover{
+		background: url(../img/button_close_all_hover.png);
+	}
+	#buttonDel:hover{
+		background: url('../img/button_del_hover.png') !important;
+	}
+	#buttonMenu:hover{
+		background: url('../img/button_menu_hover.png') !important;
+	}
+	#buttonFont:hover{
+		background: url('../img/button_font_hover.png') !important;
+	}
+	#buttonFontSizeMinus:hover{
+		background: url('../img/button_font_size_minus_hover.png') !important;
+	}
+	#buttonFontSizePlus:hover{
+		background: url('../img/button_font_size_plus_hover.png') !important;
+	}
+	#buttonGoToOptions:hover{
+		background: url('../img/button_options_hover.png') !important;
+	}
+	#buttonFacebook:hover{
+		background: url('../img/button_facebook_hover.png') !important;
+	}
+	#buttonDonateUSD:hover{
+		background: url('../img/button_USD_hover.png') !important;
+	}
+	#buttonDonateEUR:hover{
+		background: url('../img/button_EUR_hover.png') !important;
+	}
+	#buttonWebstore:hover{
+		background: url('../img/button_webstore_hover.png') !important;
+	}
+	#buttonMinimize:hover{
+		background:url('../img/button_minimize_hover.png') !important;
+	}
+	#buttonMaximize:hover{
+		background:url('../img/button_maximize_hover.png') !important;
+	}
+	.buttonYes{
+		background: url('../img/button_yes.png') !important;
+	}
+	.buttonYes:hover{
+		background: url('../img/button_yes_hover.png') !important;
+	}
+	.buttonNo{
+		background: url('../img/button_no.png') !important;
+	}
+	.buttonNo:hover{
+		background: url('../img/button_no_hover.png') !important;
+	}
+	.colorbutton:hover,#buttonColor:hover,.fontbutton:hover{
+		background: url('../img/button_hover.png') !important;
+	}
+	.fontbutton{
+		padding:6px;
+		width:13px !important;
+		height:13px !important;
+	}
+	.fontsizebutton{
+		padding: 2px 0px 0px 8px;
+		width:17px !important;
+		height:23px !important;	
+	}
+	.buttonclosesaveon{
+		background: url(../img/button_sync_true.png) !important;
+		background-position: center;
+		-webkit-animation:sync 0.5s linear infinite normal running;
+	}
+	.buttonclosesaveon-delayed{
+		background: url(../img/button_sync_true.png) !important;
+		background-position: center;
+		-webkit-animation:sync 1.5s linear infinite normal running;
+	}
+	.right{
+		float:right;
+	}
+	.left{
+		float:left;
+	}
+	@-webkit-keyframes sync{
+	0%{
+		-webkit-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100%{
+		-webkit-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+	.textbox{
+		clear:both;
+		-webkit-app-region: no-drag;
+	}
+	#notetextarea,.note_area{
+		border:none;
+		outline:none;
+		background: none;
+		resize:none;
+		padding:5px;
+		overflow-y:auto;
+		overflow-x:hidden;
+		word-wrap: break-word;
+		white-space: pre-wrap;
+		font:inherit;
+		cursor:auto;
+	}
+	#notetextarea:empty:before {
+		content:"Your note here...";
+		color: #A1A1A1;
+	}
+	.dot{
+		border-radius: 100%;
+	}
+	.menu{
+		clear:both;
+		-webkit-app-region: no-drag;
+	}
+	.menucollection{
+		display:none;
+		padding:0;
+		margin:0;
+		overflow: hidden;
+	}
+	.sortable{
+		-webkit-user-drag:element;
+	}
+	::-webkit-scrollbar {
+		width: 15px;
+	}
+	::-webkit-scrollbar-corner {
+		display: none;
+		border-radius: 10px;
+		background-color: #F7F7F7;
+	}
+	::-webkit-scrollbar-track {
+		/* -webkit-box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.45); */
+		/* border-radius: 3px; */
+		/* background-color: rgba(132, 132, 132, 0.27); */
+	}
+	::-webkit-scrollbar-thumb {
+		border-radius: 3px;
+		-webkit-box-shadow: inset 0 0 1px #565656;
+		background-image: url("../img/shade.png");
+	}
+	.drop_menu{
+		display:block;
+		border-radius: 10px;
+		background-image: url("../img/shade.png");
+		padding: 5px 10px 5px 10px;
+	}
+	.drop_menu>li{
+		list-style: none;
+	}
+	.windowActionsBox{
+		display: none;
+		margin: 0px;
+		padding: 0px;
+		z-index: 10;
+		overflow: hidden;
+	}
+	.windowActionBoxToolbar{
+		top:0px;
+		background:none;
+		width:50px;
+		float: right;
+	}
+	.windowActionsBoxDrop{
+
+		position:fixed;
+		border-radius: 0px 0px 0px 4px;
+		right:0px;
+		top:25px;
+		background-image: url("../img/shade.png");
+		width:25px;
+	}
+	.windowActionsBox>li{
+		list-style: none;
+		display:block;
+		height:25px;
+		width:25px;
+		float: right;
+		-webkit-app-region: no-drag;
+	}
+	</style>
+</head>
+<body>
+	<ul class="windowActionsBox" id="windowActionsBox">
+		<li class="button" title="minimize" id="buttonMinimize" style="background:url(../img/button_minimize.png);">&nbsp;</li>
+		<li class="button" title="maximize" id="buttonMaximize" style="background:url(../img/button_maximize.png);">&nbsp;</li>
+	</ul>
+	<div class="globalBox">
+		<div class="toolbar" id="toolbar">
+			<div class="button left" id="buttonAdd" style="background: url('../img/button_add.png');" title="New!"></div>
+			<div class="button left" id="buttonDel" style="background: url('../img/button_del.png');" title="Remove!"></div>
+			<div class="button left menubutton" menu="menuColors" id="buttonColor" style="" title="Colors..."><div class="dot" style="width:13px;height:13px;margin:6px;"></div></div>
+			<div class="button left menubutton" menu="menuFonts" id="buttonFont" style="background: url('../img/button_font.png');" title="Fonts..."></div>
+			<div class="button left menubutton" menu="menuMenu" id="buttonMenu" style="background: url('../img/button_menu.png');" title="Menu! Drop item from this menu on this icon to pin it to the toolbar."></div>
+			<virtualseparator id="customButtonsEndPoint" style="display:none;"></virtualseparator>
+			<div class="button right" id="buttonClose" title="Hide!"></div>
+			<div class="menu">
+				<div class="menucollection" id="menuMenu">
+					<div class="button left buttonNo sortable" id="buttonAlwaysOnTop" title="Always on top." draggable="true"></div>
+					<a href="/options/main.html" target="_blank" class="button left sortable" id="buttonGoToOptions" title="Options!" style="background: url('../img/button_options.png') no-repeat center center; cursor:pointer;"></a>
+					<a href="https://www.facebook.com/pages/Sticky-Notes/592564470871260" target="_blank" class="button left sortable" id="buttonFacebook" title="Visit facebook page!" style="background: url('../img/button_facebook.png') no-repeat center center; cursor:pointer;"></a>
+					<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=T8XHWPYMB82EJ" target="_blank" class="button left sortable" id="buttonDonateUSD" title="Donate us via PayPal (USD)!" style="background: url('../img/button_USD.png') no-repeat center center; cursor:pointer;"></a>
+					<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZTDPNNPMBRHJ4" target="_blank" class="button left sortable" id="buttonDonateEUR" title="Donate us via PayPal (EUR)!" style="background: url('../img/button_EUR.png') no-repeat center center; cursor:pointer;"></a>
+					<a href="https://chrome.google.com/webstore/detail/sticky-notes/nbjdhgkkhefpifbifjiflpaajchdkhpg/reviews" target="_blank" class="button left sortable" id="buttonWebstore" title="Share opinion!" style="background: url('../img/button_webstore.png') no-repeat center center; cursor:pointer;"></a>
+					<div class="button left sortable" id="buttonCloseAll" title="Hide all notes!" draggable="true"></div>
+
+					<!--<div class="button left" id="buttonTextToSpeech" title="Listen to your note!" style="background: url('../img/button_facebook.png') no-repeat center center;"></div>-->
+					<!--<div class="button left" id="buttonEnableInBrowser" title="Enable in browser!" style="background: url('../img/button_facebook.png') no-repeat center center;"></div>-->
+
+				</div>
+				<div class="menucollection" id="menuColors"></div>
+				<div class="menucollection" id="menuFonts">
+					<div class="button left fontsizebutton" id="buttonFontSizeMinus" font-size-change="-1" title="Size +" style="background: url(../img/button_font_size_minus.png);"></div>
+					<div class="button left fontsizebutton" id="buttonFontSizePlus" font-size-change="1" title="Size -" style="background: url(../img/button_font_size_plus.png);"></div>
+					<div class="button left fontbutton" font-family='"Courier New", Courier, monospace' title="" style="font-size: 18px; padding:4px 0px 0px 6px!important;width:19px !important;height:21px !important;">f</div>
+					<div class="button left fontbutton" font-family='"Lucida Console", Monaco, monospace' title="" style="font-size: 14px; padding:7px 7px 6px 7px !important;width:11px !important;height:12px !important;">f</div>
+					<div class="button left fontbutton" font-family="Arial, Helvetica, sans-serif" title="" style="font-size: 16px; padding:4px 0px 0px 10px !important;width:15px !important;height:20px !important;">f</div>
+					<div class="button left fontbutton" font-family="'Comic Sans MS', cursive, sans-serif" title="" style="font-size: 15px; padding:2px 0px 0px 9px !important;width:16px !important;height:23px !important;">f</div>
+					<div class="button left fontbutton" font-family='"Arial Black", Gadget, sans-serif' title="" style="font-size: 16px; padding:5px 0px 0px 10px!important;width:15px !important;height:20px !important;">f</div>
+					<div class="button left fontbutton" font-family='Impact, Charcoal, sans-serif' title="" style="font-size: 15px; padding:4px 0px 0px 10px!important;width:15px !important;height:21px !important;">f</div>
+					<div class="button left fontbutton" font-family='"Lucida Sans Unicode", "Lucida Grande", sans-serif' title="" style="font-size: 16px; padding:1px 0px 0px 9px!important;width:16px !important;height:24px !important;">f</div>
+					<div class="button left fontbutton" font-family='Tahoma, Geneva, sans-serif' title="" style="font-size: 15px; padding:4px 0px 0px 9px!important;width:16px !important;height:21px !important;">f</div>
+					<div class="button left fontbutton" font-family='"Trebuchet MS", Helvetica, sans-serif' title="" style="font-size: 17px; padding:4px 0px 0px 9px!important;width:16px !important;height:21px !important;">f</div>
+					<div class="button left fontbutton" font-family='Verdana, Geneva, sans-serif' title="" style="font-size: 16px; padding:4px 0px 0px 10px!important;width:15px !important;height:21px !important;">f</div>
+					<div class="button left fontbutton" font-family='"Times New Roman", Times, serif' title="" style="font-size: 17px; padding:4px 0px 0px 8px!important;width:17px !important;height:21px !important;">f</div>
+					<div class="button left fontbutton" font-family='"Palatino Linotype", "Book Antiqua", Palatino, serif' title="" style="font-size: 17px; padding:1px 0px 0px 9px!important;width:16px !important;height:24px !important;">f</div>
+					<div class="button left fontbutton" font-family='Georgia, serif' title="" style="font-size: 16px; padding:4px 0px 0px 9px!important;width:16px !important;height:21px !important;">f</div>
+				</div>
+			</div>
+		</div>
+		<div class="textbox" id="noteBox">
+			<div autofocus id="notetextarea" contenteditable></div>
+			<div id="noteclickarea" style="display:none;" class="note_area"></div>
+		</div>
+	</div>
+</body>
+</html>

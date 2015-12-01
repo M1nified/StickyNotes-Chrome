@@ -1,0 +1,1 @@
+"use strict";$(document).on("click",".copybutton",function(){var t=$(this).data("target");$("#"+t).select(),document.execCommand("copy"),console.log("COPPIERD")});

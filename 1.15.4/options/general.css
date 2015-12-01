@@ -1,0 +1,105 @@
+html{
+	overflow-y:auto; 
+}
+html,body{
+	margin:0px;
+	padding:0px;
+}
+.box1{
+	display: block;
+	clear: both;
+	background-color: #E4E4E4;
+	border-radius: 15px;
+	padding: 10px 30px 10px 30px;
+	margin: 0px 80px 40px 80px;
+	-webkit-box-shadow: 0 0 10px #C8BE00;/*#00C211*/
+}
+.box1>p,.box1>ul{
+	margin-left: 25px;
+}
+.box1 add:before{
+	content: "[NEW] ";
+	color:green;
+	font-weight: bold;
+}
+.box1 remove:before{
+	content: "[REMOVED] ";
+	color:#C23C3C;
+	font-weight: bold;
+}
+.box1 change:before{
+	content: "[UPDATED] ";
+	color:#EF7F00;
+	font-weight: bold;
+}
+.full-buttons button{
+	width:100%;
+}
+h1,h2{
+	text-align: center;
+}
+.menu1{
+	display: block;
+	/* clear: both; */
+	/* border-radius: 15px; */
+	padding: 10px 30px 10px 30px;
+	margin: 0px 80px 0px 80px;
+	text-align: center;
+}
+.menu1>a{
+	/* display: block; */
+	/* float: left; */
+	background-color: #F5F5F5;
+	border-radius: 5px;
+	padding: 10px 30px 10px 30px;
+	margin: 0px 0px 0px 0px;
+	-webkit-box-shadow: 0 0 10px #CBC2AF;
+	text-decoration: none;
+	font-weight: bold;
+	color:black;
+}
+.menu1>a.current{
+	background-color: #F5F5F5;
+	-webkit-box-shadow: inset 0px 0px 7px #94EC9F;
+	/* border-radius: 5px 5px 0px 0px; */
+}
+.menu1>a:not(.current):hover{
+	background-color: #F5F5F5;
+	-webkit-box-shadow: inset 0 0 10px #D2D2D2;
+}
+a[href='options.html']{
+	/*pointer-events:none;*/
+}
+.contentFrame{
+	-webkit-box-shadow: inset 0px 0px 14px 0px #94EC9F;
+	margin: -19px 0px 0px 0px;
+	border-radius: 15px 15px 0px 0px;
+	padding: 15px 0px 40px 0px;
+	background-color: #F5F5F5;
+}
+.donate{
+	display: inline;
+	margin-left: 25px;
+}
+.ccenter{
+	text-align: center;
+}
+.ccenter>p{
+	margin-left: initial;
+}
+ul.servicemenu{
+	list-style: none;
+}
+ul.servicemenu li{
+	margin-bottom:5px;
+}
+ul.servicemenu li button{
+	min-width:300px;
+}
+a.clicker{
+	cursor:pointer;
+	font-weight: bold;
+}
+.red{
+	color:red;
+}
