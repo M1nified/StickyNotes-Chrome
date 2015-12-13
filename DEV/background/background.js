@@ -243,7 +243,7 @@ var synchronizeWithPWJ = function(notesoffline){
 		data:{pair_code:pwj_pair_code}
 	}).done(function(data){
 		//pobrano notatki z pwj
-		//console.log(data)
+		console.log(data)
 		var offline = {};
 		for(i in notesoffline){
 			offline[notesoffline[i].id] = notesoffline[i];
@@ -275,7 +275,7 @@ var sendNotesToPWJ = function(notes){
 		dataType:'text',
 		data:d
 	}).done(function(data){
-		//console.log(data)
+		console.log(data)
 		clearRemovedFromIndexedDB();
 		//notes were saved
 		//console.log(data)
