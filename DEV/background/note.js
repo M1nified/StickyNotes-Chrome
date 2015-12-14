@@ -9,6 +9,14 @@ speachrecognitionon = false;
 speechToTextActiveLang = "en-US";
 purchasedelementslocal = {};
 $(document).ready(function(){
+	// $("#buttonTest").click(function(){
+	// 	chrome.permissions.request({permissions:['audioCapture']},function(g){
+	// 		if(chrome.runtime.lasterror){
+	// 			console.log(chrome.runtime.lasterror)
+	// 		}
+	// 		console.log(g);
+	// 	});
+	// })
 	chrome.storage.sync.get(null,function(data){console.log(data)});
 	updateColor();
 	setTextarea();
@@ -373,20 +381,38 @@ var setSpeechToTextLangsList = function(){
 	})
 }
 var speechToTextInitiate = function(){
-	if(speachrecognitionon === true){
-		speechToTextOff();
-	}else{
-		chrome.storage.sync.get('speechToTextLang',function(lang){
-			console.log(lang)
-			lang = lang.speechToTextLang;
-			if(!lang){
-				$("#speechToTextLangSelBox").fadeIn(200);
-			}else{
-				speechToTextActiveLang = lang;
-				speechToTextOn();
-			}
-		})
+	var init = function(){
+		if(speachrecognitionon === true){
+			speechToTextOff();
+		}else{
+			chrome.storage.sync.get('speechToTextLang',function(lang){
+				console.log(lang)
+				lang = lang.speechToTextLang;
+				if(!lang){
+					$("#speechToTextLangSelBox").fadeIn(200);
+				}else{
+					speechToTextActiveLang = lang;
+					speechToTextOn();
+				}
+			})
+		}
 	}
+	// if(typeof audioCapture === 'undefined' || !audioCapture){
+		chrome.permissions.request({permissions:['audioCapture']},function(granted){
+			// console.log(granted);
+			// if(chrome.runtime.lasterror){
+			// 	console.log(chrome.runtime.lasterror)
+			// }else{
+			// 	// init()
+			// }
+			if(granted){
+				// audioCapture = true;
+				init();
+			}
+		});
+	// }else{
+	// 	init();
+	// }
 }
 var speechToTextOn = function(){
 	console.log("try")
@@ -460,7 +486,8 @@ var speechToTextOn = function(){
 		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 		navigator.getUserMedia({audio:true}, function(stream) {
 			console.log("GRANTED")
-			stream.stop();
+			console.log(stream);
+			//stream.stop();
 				recognition.start();// Now you know that you have audio permission. Do whatever you want...
 			}, function(err) {
 				console.log("DENIED")

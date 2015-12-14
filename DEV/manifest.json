@@ -16,6 +16,7 @@
   "name": "Sticky Notes",
   "offline_enabled": true,
   "optional_permissions": [
+    "audioCapture",
     "background"
   ],
   "permissions": [
@@ -33,11 +34,10 @@
     "tts",
     "clipboardWrite",
     "clipboardRead",
-    "audioCapture",
     "webview",
     "http://prowebject.com/*",
     "https://www.paypalobjects.com/*"
   ],
   "short_name": "Sticky Notes",
-  "version": "1.16.1.30"
+  "version": "1.16.1.31"
 }
