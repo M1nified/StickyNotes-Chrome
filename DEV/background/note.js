@@ -450,7 +450,7 @@ var speechToTextOn = function(){
 			}
 			if(final_transcript.trim() !== ""){
 				(function(range,text){
-					console.log(text);
+					// console.log(text);
 					/* chrome.runtime.sendMessage({func:"toClipboard",val:final_transcript},function(response){
 						if(response && response.status === true){
 							restoreSelection(selection);
@@ -463,7 +463,7 @@ var speechToTextOn = function(){
 					if(range){
 							insertText(text,range);
 					}else{
-						console.error("NO SELECTION");
+						// console.error("NO SELECTION");
 					}
 					$("#pendingOperations1").hide();
 					saveNoteDelayed();
@@ -476,7 +476,7 @@ var speechToTextOn = function(){
 			//setTimeout(function(){recognition.start();},1000);
 		}
 		recognition.onend = function() {
-			console.log("END")
+			// console.log("END")
 			$("#pendingOperations1").hide();
 			if(speachrecognitionon === true){
 				recognition.start();
@@ -485,8 +485,8 @@ var speechToTextOn = function(){
 		//recognition.start();
 		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 		navigator.getUserMedia({audio:true}, function(stream) {
-			console.log("GRANTED")
-			console.log(stream);
+			// console.log("GRANTED")
+			// console.log(stream);
 			//stream.stop();
 				recognition.start();// Now you know that you have audio permission. Do whatever you want...
 			}, function(err) {
