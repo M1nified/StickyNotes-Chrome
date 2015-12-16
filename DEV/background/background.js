@@ -58,7 +58,7 @@ class App{
 			if(data && data.allLaunch){
 				Notes.launchNotes(this.notes);
 			}else{
-				chrome.app.window.create('background/noteslauncher.html',{id:"notes_launcher",innerBounds:{width:430,height:540},frame:{color:"#8C8C8C"}},function(createdWindow){
+				chrome.app.window.create('noteslauncher/noteslauncher.html',{id:"notes_launcher",innerBounds:{width:430,height:540},frame:{color:"#8C8C8C"}},function(createdWindow){
 					createdWindow.contentWindow.notes = this.notes;
 				}.bind(this))
 			}
@@ -71,4 +71,4 @@ class BackgroundListeners{
 	}
 }
 var stickynotes = new StickyNotes();
-var stickynotes = new StickyNotes();
+// var stickynotes = new StickyNotes();

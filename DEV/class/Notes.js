@@ -5,7 +5,7 @@ class Notes{
     return d.valueOf()+"_"+Math.random().toString().slice(2);
   }
   static openNewNote(presetcolor,presetfont){
-    chrome.app.window.create('/background/note.html',{
+    chrome.app.window.create('/note/note.html',{
       id:this.randomId,
       frame:none,
       bounds:{width:250,height:240},
@@ -35,7 +35,7 @@ class Notes{
     }
     for(let note of notes){
       ((note)=>{
-        chrome.app.window.create('/background/note.html',{
+        chrome.app.window.create('/note/note.html',{
           id:note.id,
           frame:'none'
         },function launchNoteCallback(createdWindow){
@@ -51,6 +51,6 @@ class Notes{
 
   }
   static updateDisplayedNote(){
-    
+
   }
 }

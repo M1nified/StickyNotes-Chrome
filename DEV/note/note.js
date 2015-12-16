@@ -603,7 +603,7 @@ var setMenuColors = function(){
 	})
 	$("#menuColors").append('<div class="button left colorbutton storedependent" id="BuyBgColors" style="" title="Get more colors!"><div class="dot" style="width:13px;height:13px;margin:6px;background-color:#000000; animation:multicolor 5s infinite linear"></div></div>');
 	$("#BuyBgColors").on("click",function(elem){
-		chrome.app.window.create("background/purchase.html#bgcolors",{innerBounds:{width:800,height:600}});
+		chrome.app.window.create("store/purchase.html#bgcolors",{innerBounds:{width:800,height:600}});
 	})
 
 	if(purchasedelementslocal.color_palette_background){

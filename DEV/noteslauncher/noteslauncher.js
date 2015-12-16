@@ -37,7 +37,7 @@ $(function(){
 		if(note && note[0]){
 			note = note[0];
 			(function(note){
-				chrome.app.window.create('background/note.html',{id:note.id,frame:'none'},function(createdWindow){
+				chrome.app.window.create('/note/note.html',{id:note.id,frame:'none'},function(createdWindow){
 					createdWindow.contentWindow.note = note;
 					chrome.app.window.get(note.id).onClosed.addListener(function(){
 						syncAll();
@@ -59,7 +59,7 @@ $(function(){
 		chrome.app.window.create("/options/main.html",{innerBounds:{width:800,height:600}});
 	})
 	$(".openstore").on('click',function(){
-		chrome.app.window.create("/background/purchase.html",{innerBounds:{width:800,height:600}});
+		chrome.app.window.create("/store/purchase.html",{innerBounds:{width:800,height:600}});
 	})
 	$(".opendonate").on('click',function(){
 
@@ -74,7 +74,7 @@ var openAllNotes = function(callback){
 				continue;
 			}
 			(function(note){
-				chrome.app.window.create('background/note.html',{id:note.id,frame:'none'},function(createdWindow){
+				chrome.app.window.create('/note/note.html',{id:note.id,frame:'none'},function(createdWindow){
 					createdWindow.contentWindow.note = note;
 					chrome.app.window.get(note.id).onClosed.addListener(function(){
 						syncAll();

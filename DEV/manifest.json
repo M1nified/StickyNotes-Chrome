@@ -1,7 +1,17 @@
 {
   "app": {
     "background": {
-      "page": "/background/background.html"
+      "scripts": [
+          "lib/jquery.min.js",
+          "lib/buy.js",
+          "class/IndexedDB.js",
+          "class/Sync.js",
+          "class/Store.js",
+          "class/Notes.js",
+          "background/general.js",
+          "background/notifications.js",
+          "background/background.js"
+        ]
     }
   },
   "author": "ProWebJect - Michal Gora",

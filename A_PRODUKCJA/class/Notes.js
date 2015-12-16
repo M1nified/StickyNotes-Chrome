@@ -18,7 +18,7 @@ var Notes = (function () {
   }, {
     key: 'openNewNote',
     value: function openNewNote(presetcolor, presetfont) {
-      chrome.app.window.create('/background/note.html', {
+      chrome.app.window.create('/note/note.html', {
         id: this.randomId,
         frame: none,
         bounds: { width: 250, height: 240 },
@@ -79,7 +79,7 @@ var Notes = (function () {
           var note = _step2.value;
 
           (function (note) {
-            chrome.app.window.create('/background/note.html', {
+            chrome.app.window.create('/note/note.html', {
               id: note.id,
               frame: 'none'
             }, function launchNoteCallback(createdWindow) {

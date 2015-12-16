@@ -22,9 +22,7 @@ class Store {
   }
   static setIsStoreOpen(state){
   	chrome.storage.local.set({isStoreOpen:state});
-  	this.availabilityCheckTimeout = setTimeout(function(){
-      this.availabilityCheck();
-    },30000);
+  	this.availabilityCheckTimeout = setTimeout(this.availabilityCheck.bind(this),30000);
   }
   static onSkuDetails(sku){
   	try{

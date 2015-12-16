@@ -31,9 +31,7 @@ var Store = (function () {
     key: 'setIsStoreOpen',
     value: function setIsStoreOpen(state) {
       chrome.storage.local.set({ isStoreOpen: state });
-      this.availabilityCheckTimeout = setTimeout(function () {
-        this.availabilityCheck();
-      }, 30000);
+      this.availabilityCheckTimeout = setTimeout(this.availabilityCheck.bind(this), 30000);
     }
   }, {
     key: 'onSkuDetails',
