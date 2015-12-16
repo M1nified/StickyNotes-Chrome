@@ -84,6 +84,7 @@ var Store = (function () {
         if (data && data.purchasedinapp) {
           newlist = data.purchasedinapp;
         }
+
         newlist.speech_to_text = true;
         chrome.storage.sync.set({ purchasedinapp: newlist });
       });

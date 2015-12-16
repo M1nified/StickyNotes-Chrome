@@ -18,7 +18,7 @@ var GLOBALS = {
 class StickyNotes{
 	constructor(){
 		this.setOnLaunched();
-		this.listeners = new BackgroundListeners();
+		BackgroundListeners.run();
 		Store.run();
 	}
 	setOnLaunched(){
@@ -66,8 +66,26 @@ class App{
 	}
 }
 class BackgroundListeners{
-	constructor(){
+	static run(){
 		console.log('LISTENERS');
+		chrome.runtime.onMessage.addListener(this.runtimeOnMessage)
+
+	}
+	static runtimeOnMessage(msg,sender,sendResponse){
+		switch(msg.func){
+			case "openNewNote":
+			Notes.openNewNote(msg.presetcolor,msg.presetfont);
+			break;
+			case "syncAll":
+			Sync.synchronizeNow();
+			break;
+			case "syncAllDelayed":
+			Sync.synchronize();
+			break;
+			case "toClipboard":
+			toClipboard(msg.val,sendResponse);
+			break;
+		}
 	}
 }
 var stickynotes = new StickyNotes();

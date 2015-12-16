@@ -25,7 +25,7 @@ var Sync = (function () {
       clearTimeout(this.synctimeout);
       this.synctimeout = setTimeout(function () {
         _this.synchronizeNow(notes);
-      }, 0);
+      }, 10000);
     }
   }, {
     key: "synchronizeNow",
@@ -254,6 +254,22 @@ var SyncViaGoogleDrive = (function (_SyncMethod2) {
       _get(Object.getPrototypeOf(SyncViaGoogleDrive), "synchronize", this).call(this, _notes).then(function () {
         console.log(_this9.offline);
       });
+    }
+  }, {
+    key: "listenForChanges",
+    value: function listenForChanges() {
+      chrome.syncFileSystem.onFileStatusChanged.addListener((function (details) {
+        this.onFileStatusChanged(details);
+      }).bind(this));
+    }
+  }, {
+    key: "onFileStatusChanged",
+    value: function onFileStatusChanged(details) {
+      if (/note_(\w|_)+/.test(details.fileEntry.name) && details.direction === "remote_to_local") {
+        updateFileSingle(details.fileEntry);
+      } else if (details.fileEntry.name === "purchasedinapp" && details.direction === "remote_to_local") {
+        updatePurchasedElements();
+      }
     }
   }]);
 

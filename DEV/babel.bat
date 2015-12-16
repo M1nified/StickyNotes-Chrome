@@ -1,1 +1,1 @@
-node _babel.js
+node D:\corpse\projekty\project_watcher\project-watcher.js

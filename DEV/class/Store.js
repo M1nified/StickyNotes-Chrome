@@ -61,12 +61,12 @@ class Store {
   }
   static onLicenseUpdateFail(resp){
   	//console.log(resp);
-  	//TYMCZASOWE DARMOWE ROZPOZNAWANIE MOWY
   	chrome.storage.sync.get('purchasedinapp',function(data){
   		var newlist = {};
   		if(data && data.purchasedinapp){
   			newlist = data.purchasedinapp;
   		}
+      //TYMCZASOWE DARMOWE ROZPOZNAWANIE MOWY
   		newlist.speech_to_text = true;
   		chrome.storage.sync.set({purchasedinapp:newlist});
   	})

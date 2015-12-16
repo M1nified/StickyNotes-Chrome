@@ -14,7 +14,7 @@ var StickyNotes = (function () {
 		_classCallCheck(this, StickyNotes);
 
 		this.setOnLaunched();
-		this.listeners = new BackgroundListeners();
+		BackgroundListeners.run();
 		Store.run();
 	}
 
@@ -84,10 +84,38 @@ var App = (function () {
 	return App;
 })();
 
-var BackgroundListeners = function BackgroundListeners() {
-	_classCallCheck(this, BackgroundListeners);
+var BackgroundListeners = (function () {
+	function BackgroundListeners() {
+		_classCallCheck(this, BackgroundListeners);
+	}
 
-	console.log('LISTENERS');
-};
+	_createClass(BackgroundListeners, null, [{
+		key: 'run',
+		value: function run() {
+			console.log('LISTENERS');
+			chrome.runtime.onMessage.addListener(this.runtimeOnMessage);
+		}
+	}, {
+		key: 'runtimeOnMessage',
+		value: function runtimeOnMessage(msg, sender, sendResponse) {
+			switch (msg.func) {
+				case "openNewNote":
+					Notes.openNewNote(msg.presetcolor, msg.presetfont);
+					break;
+				case "syncAll":
+					Sync.synchronizeNow();
+					break;
+				case "syncAllDelayed":
+					Sync.synchronize();
+					break;
+				case "toClipboard":
+					toClipboard(msg.val, sendResponse);
+					break;
+			}
+		}
+	}]);
+
+	return BackgroundListeners;
+})();
 
 var stickynotes = new StickyNotes();

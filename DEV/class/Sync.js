@@ -1,10 +1,10 @@
 'use strict';
 class Sync {
-  static synchronize(notes=null){
+  static synchronize(notes=null){//this one is delayed to prevent spam
     clearTimeout(this.synctimeout);
     this.synctimeout = setTimeout(()=>{
       this.synchronizeNow(notes)
-    },0)
+    },10000)
   }
   static synchronizeNow(notes=null){
     clearTimeout(this.synctimeout);
@@ -127,5 +127,21 @@ class SyncViaGoogleDrive extends SyncMethod{
     super.synchronize(_notes).then(()=>{
       console.log(this.offline);
     })
+  }
+  static listenForChanges(){
+    if(this.listening){
+      return;
+    }
+    this.listening = true;
+    chrome.syncFileSystem.onFileStatusChanged.addListener(function(details){
+    	this.onFileStatusChanged(details);
+    }.bind(this))
+  }
+  static onFileStatusChanged(details){
+    if(/note_(\w|_)+/.test(details.fileEntry.name) && details.direction === "remote_to_local"){
+  		updateFileSingle(details.fileEntry);
+  	}else if(details.fileEntry.name === "purchasedinapp" && details.direction === "remote_to_local"){
+  		updatePurchasedElements();
+  	}
   }
 }

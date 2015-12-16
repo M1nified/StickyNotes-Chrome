@@ -1,0 +1,22 @@
+{
+  "babel": [
+    "background/background.js",
+    "class/IndexedDB.js",
+    "class/Notes.js",
+    "class/Sync.js",
+    "class/Store.js"
+  ],
+  "babel_options": {
+    "auxiliaryCommentBefore": "ProWebJect - Michal Gora",
+    "babelrc": true,
+    "comments": false
+  },
+  "copy": [
+    "manifest.json",
+    "*.html",
+    "*.min.js"
+  ],
+  "destination_path": "../A_PRODUKCJA/",
+  "module_path": "C:/Users/georg/AppData/Roaming/npm/node_modules",
+  "source_path": "."
+}
