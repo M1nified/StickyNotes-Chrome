@@ -384,7 +384,7 @@ var memoryIndexedDBClear = function(){
 				items.push(cursor.value);
 				cursor.continue();
 			}
-			for(i in items){
+			for(var i in items){
 				store.delete(items[i].id);
 			}
 		};

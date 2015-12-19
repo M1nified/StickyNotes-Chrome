@@ -10,66 +10,53 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Sync = (function () {
-  function Sync() {
-    _classCallCheck(this, Sync);
+var Sync = {
+  synchronize: function synchronize() {
+    var _this = this;
+
+    var notes = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+
+    clearTimeout(this.synctimeout);
+    this.synctimeout = setTimeout(function () {
+      _this.synchronizeNow(notes);
+    }, 10000);
+  },
+  synchronizeNow: function synchronizeNow() {
+    var notes = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+
+    clearTimeout(this.synctimeout);
+    this.findTheWay().then(function (syncclass) {
+      syncclass.synchronize(notes);
+    });
+  },
+  findTheWay: function findTheWay() {
+    var _this2 = this;
+
+    var loop = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+
+    var promise = new Promise(function (resolve, reject) {
+      if (_this2.pwj_sync === true) {
+        resolve(SyncViaProWebJect);
+      } else if (_this2.pwj_sync === false) {
+        resolve(SyncViaGoogleDrive);
+      } else if (loop === false) {
+        chrome.storage.sync.get(["pwj_sync", "pwj_pair_code"], function (data) {
+          if (data && data.pwj_sync && data.pwj_pair_code) {
+            _this2.pwj_sync = data.pwj_sync;
+            _this2.pwj_pair_code = data.pwj_pair_code;
+          } else {
+            _this2.pwj_sync = false;
+            _this2.pwj_pair_code = null;
+          }
+          resolve(_this2.findTheWay(true));
+        });
+      } else {
+        reject();
+      }
+    });
+    return promise;
   }
-
-  _createClass(Sync, null, [{
-    key: "synchronize",
-    value: function synchronize() {
-      var _this = this;
-
-      var notes = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
-
-      clearTimeout(this.synctimeout);
-      this.synctimeout = setTimeout(function () {
-        _this.synchronizeNow(notes);
-      }, 10000);
-    }
-  }, {
-    key: "synchronizeNow",
-    value: function synchronizeNow() {
-      var notes = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
-
-      clearTimeout(this.synctimeout);
-      this.findTheWay().then(function (syncclass) {
-        syncclass.synchronize(notes);
-      });
-    }
-  }, {
-    key: "findTheWay",
-    value: function findTheWay() {
-      var _this2 = this;
-
-      var loop = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
-
-      var promise = new Promise(function (resolve, reject) {
-        if (_this2.pwj_sync === true) {
-          resolve(SyncViaProWebJect);
-        } else if (_this2.pwj_sync === false) {
-          resolve(SyncViaGoogleDrive);
-        } else if (loop === false) {
-          chrome.storage.sync.get(["pwj_sync", "pwj_pair_code"], function (data) {
-            if (data && data.pwj_sync && data.pwj_pair_code) {
-              _this2.pwj_sync = data.pwj_sync;
-              _this2.pwj_pair_code = data.pwj_pair_code;
-            } else {
-              _this2.pwj_sync = false;
-              _this2.pwj_pair_code = null;
-            }
-            resolve(_this2.findTheWay(true));
-          });
-        } else {
-          reject();
-        }
-      });
-      return promise;
-    }
-  }]);
-
-  return Sync;
-})();
+};
 
 var SyncMethod = (function () {
   function SyncMethod() {
@@ -222,7 +209,7 @@ var SyncViaProWebJect = (function (_SyncMethod) {
           data: d
         }).done(function (data) {
           console.log(data);
-          IndexedDB.clearRemoved();
+          IndexedDB.clearRemovedNotes();
         });
       });
       return promise;
@@ -258,6 +245,10 @@ var SyncViaGoogleDrive = (function (_SyncMethod2) {
   }, {
     key: "listenForChanges",
     value: function listenForChanges() {
+      if (this.listening) {
+        return;
+      }
+      this.listening = true;
       chrome.syncFileSystem.onFileStatusChanged.addListener((function (details) {
         this.onFileStatusChanged(details);
       }).bind(this));

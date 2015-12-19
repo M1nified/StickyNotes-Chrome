@@ -9,28 +9,15 @@ var GLOBALS = {
 	pwj_pair_code: null
 };
 
-var StickyNotes = (function () {
-	function StickyNotes() {
-		_classCallCheck(this, StickyNotes);
+var StickyNotes = function StickyNotes() {
+	_classCallCheck(this, StickyNotes);
 
-		this.setOnLaunched();
-		BackgroundListeners.run();
-		Store.run();
-	}
-
-	_createClass(StickyNotes, [{
-		key: 'setOnLaunched',
-		value: function setOnLaunched() {
-			chrome.app.runtime.onLaunched.addListener((function onLaunched() {
-				this.background = new App();
-			}).bind(this));
-		}
-	}]);
-
-	return StickyNotes;
-})();
-
-StickyNotes.STORE = null;
+	chrome.app.runtime.onLaunched.addListener((function onLaunched() {
+		this.background = new App();
+	}).bind(this));
+	BackgroundListeners.run();
+	Store.run();
+};
 
 var App = (function () {
 	function App() {

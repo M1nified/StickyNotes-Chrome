@@ -1,18 +1,18 @@
 'use strict';
-class Sync {
-  static synchronize(notes=null){//this one is delayed to prevent spam
+var Sync = {
+  synchronize : function(notes=null){//this one is delayed to prevent spam
     clearTimeout(this.synctimeout);
     this.synctimeout = setTimeout(()=>{
       this.synchronizeNow(notes)
     },10000)
-  }
-  static synchronizeNow(notes=null){
+  },
+  synchronizeNow : function(notes=null){
     clearTimeout(this.synctimeout);
     this.findTheWay().then((syncclass)=>{
       syncclass.synchronize(notes);
     })
-  }
-  static findTheWay(loop = false){
+  },
+  findTheWay : function(loop = false){
     let promise = new Promise((resolve,reject)=>{
       if(this.pwj_sync === true){
         resolve(SyncViaProWebJect);
@@ -112,7 +112,7 @@ class SyncViaProWebJect extends SyncMethod{
     		data:d
     	}).done(function(data){
     		console.log(data)
-    		IndexedDB.clearRemoved();
+    		IndexedDB.clearRemovedNotes();
     		//notes were saved
     	})
     });

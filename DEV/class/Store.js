@@ -1,13 +1,13 @@
 'use strict';
-class Store {
-  static run(){
+var Store = {
+  run : function(){
     if(!this.runnning){
       this.runnning = true;
       console.log('MAKE ME SHOP');
       this.availabilityCheck();
     }
-  }
-  static availabilityCheck(){
+  },
+  availabilityCheck : function(){
   	//console.log("CHECK")
   	/*if(!navigator.onLine){
   		setIsStoreOpen(false);
@@ -19,12 +19,12 @@ class Store {
   		'success':this.onSkuDetails.bind(this),
   		'failure':this.onSkuDetailsFail.bind(this)
   	})
-  }
-  static setIsStoreOpen(state){
+  },
+  setIsStoreOpen : function(state){
   	chrome.storage.local.set({isStoreOpen:state});
   	this.availabilityCheckTimeout = setTimeout(this.availabilityCheck.bind(this),30000);
-  }
-  static onSkuDetails(sku){
+  },
+  onSkuDetails : function(sku){
   	try{
   		if(sku.response.details.inAppProducts.length>0){
   			this.setIsStoreOpen(true);
@@ -34,18 +34,18 @@ class Store {
   	}catch(err){
   		this.setIsStoreOpen(false);
   	}
-  }
-  static onSkuDetailsFail(sku){
+  },
+  onSkuDetailsFail : function(sku){
   	this.setIsStoreOpen(false);
-  }
-  static updatePurchasedElements(){
+  },
+  updatePurchasedElements : function(){
   	google.payments.inapp.getPurchases({
   		'parameters': {'env': 'prod'},
   		'success': this.onLicenseUpdate.bind(this),
   		'failure': this.onLicenseUpdateFail.bind(this)
   	});
-  }
-  static onLicenseUpdate(resp){
+  },
+  onLicenseUpdate : function(resp){
     var prodsArr = resp.response.details;
   	var appid = chrome.runtime.id.toString();
   	var newlist = {};
@@ -58,8 +58,8 @@ class Store {
   	}
   	newlist.speech_to_text = true;//TYMCZASOWE DARMOWE ROZPOZNAWANIE MOWY
   	chrome.storage.sync.set({purchasedinapp:newlist});
-  }
-  static onLicenseUpdateFail(resp){
+  },
+  onLicenseUpdateFail : function(resp){
   	//console.log(resp);
   	chrome.storage.sync.get('purchasedinapp',function(data){
   		var newlist = {};

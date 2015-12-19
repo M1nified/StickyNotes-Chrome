@@ -19,8 +19,8 @@ var Notes = (function () {
     key: 'openNewNote',
     value: function openNewNote(presetcolor, presetfont) {
       chrome.app.window.create('/note/note.html', {
-        id: this.randomId,
-        frame: none,
+        id: this.randomId(),
+        frame: 'none',
         bounds: { width: 250, height: 240 },
         resizable: true
       }, function openNewNoteCallback(createdWindow) {

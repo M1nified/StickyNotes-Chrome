@@ -17,17 +17,14 @@ var GLOBALS = {
 // Chrome.Storage.test();
 class StickyNotes{
 	constructor(){
-		this.setOnLaunched();
-		BackgroundListeners.run();
-		Store.run();
-	}
-	setOnLaunched(){
 		chrome.app.runtime.onLaunched.addListener(function onLaunched(){
 			this.background = new App();
 		}.bind(this));
+		BackgroundListeners.run();
+		Store.run();
 	}
 }
-StickyNotes.STORE = null;
+// StickyNotes.STORE = null;
 class App{
 	constructor(){
 		console.log('LAUNCH');

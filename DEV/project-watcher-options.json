@@ -4,7 +4,9 @@
     "class/IndexedDB.js",
     "class/Notes.js",
     "class/Sync.js",
-    "class/Store.js"
+    "class/Store.js",
+    "class/SyncFileSystem.js",
+    "options/options.js"
   ],
   "babel_options": {
     "auxiliaryCommentBefore": "ProWebJect - Michal Gora",
