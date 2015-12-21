@@ -22,6 +22,7 @@ class StickyNotes{
 		}.bind(this));
 		BackgroundListeners.run();
 		Store.run();
+		Sync.synchronizeNow();
 	}
 }
 // StickyNotes.STORE = null;
@@ -31,23 +32,24 @@ class App{
 		this.initLaunching();
 	}
 	initLaunching(){
-		chrome.storage.sync.get(['pwj_sync','pwj_pair_code'],function initLaunching2(data){
-			if(data && data.pwj_sync && data.pwj_pair_code){
-				GLOBALS.pwj_sync = data.pwj_sync;
-				GLOBALS.pwj_pair_code = data.pwj_pair_code;
-			}else{
-				GLOBALS.pwj_sync = false;
-				GLOBALS.pwj_pair_code = null;
-			}
-			this.continueLaunching();
-		}.bind(this))
+		// chrome.storage.sync.get(['pwj_sync','pwj_pair_code'],function initLaunching2(data){
+		// 	if(data && data.pwj_sync && data.pwj_pair_code){
+		// 		GLOBALS.pwj_sync = data.pwj_sync;
+		// 		GLOBALS.pwj_pair_code = data.pwj_pair_code;
+		// 	}else{
+		// 		GLOBALS.pwj_sync = false;
+		// 		GLOBALS.pwj_pair_code = null;
+		// 	}
+		// }.bind(this))
+		Sync.updateTheWay();
+		this.continueLaunching();
 	}
 	continueLaunching(){
 		IndexedDB.getNotes().then((notes)=>{
 			console.log(notes);
 			this.notes = notes;
 			this.properLaunching();
-			Sync.synchronize(notes);
+			Sync.synchronizeNow(notes);
 		})
 	}
 	properLaunching(){
@@ -62,13 +64,13 @@ class App{
 		}.bind(this))
 	}
 }
-class BackgroundListeners{
-	static run(){
+var BackgroundListeners = {
+	run : function(){
 		console.log('LISTENERS');
 		chrome.runtime.onMessage.addListener(this.runtimeOnMessage)
-
-	}
-	static runtimeOnMessage(msg,sender,sendResponse){
+		chrome.storage.onChanged.addListener(this.storageOnChanged)
+	},
+	runtimeOnMessage : (msg,sender,sendResponse)=>{
 		switch(msg.func){
 			case "openNewNote":
 			Notes.openNewNote(msg.presetcolor,msg.presetfont);
@@ -82,6 +84,19 @@ class BackgroundListeners{
 			case "toClipboard":
 			toClipboard(msg.val,sendResponse);
 			break;
+		}
+	},
+	storageOnChanged : (changes,areaName)=>{
+		if(changes.pwj_sync || changes.pwj_pair_code){
+			Sync.updateTheWay();
+		}
+		if(areaName === 'sync'){
+			let keys = Object.keys(changes)
+			for(let key of keys){
+				if(options[key] !== undefined){
+					options[key] = changes[key].newValue
+				}
+			}
 		}
 	}
 }

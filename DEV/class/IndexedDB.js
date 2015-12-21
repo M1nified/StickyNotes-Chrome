@@ -81,7 +81,7 @@ var IndexedDB = {
 			var tx=db.transaction("notes","readwrite");
 			var store = tx.objectStore("notes");
 			var index = store.index("by_id");
-			for(let note in notes){
+			for(let note in notes){//WTF
 				if(note.removed === true){
 					try{
 						store.delete(note.id);

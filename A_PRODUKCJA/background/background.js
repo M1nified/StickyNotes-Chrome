@@ -17,6 +17,7 @@ var StickyNotes = function StickyNotes() {
 	}).bind(this));
 	BackgroundListeners.run();
 	Store.run();
+	Sync.synchronizeNow();
 };
 
 var App = (function () {
@@ -30,16 +31,8 @@ var App = (function () {
 	_createClass(App, [{
 		key: 'initLaunching',
 		value: function initLaunching() {
-			chrome.storage.sync.get(['pwj_sync', 'pwj_pair_code'], (function initLaunching2(data) {
-				if (data && data.pwj_sync && data.pwj_pair_code) {
-					GLOBALS.pwj_sync = data.pwj_sync;
-					GLOBALS.pwj_pair_code = data.pwj_pair_code;
-				} else {
-					GLOBALS.pwj_sync = false;
-					GLOBALS.pwj_pair_code = null;
-				}
-				this.continueLaunching();
-			}).bind(this));
+			Sync.updateTheWay();
+			this.continueLaunching();
 		}
 	}, {
 		key: 'continueLaunching',
@@ -50,7 +43,7 @@ var App = (function () {
 				console.log(notes);
 				_this.notes = notes;
 				_this.properLaunching();
-				Sync.synchronize(notes);
+				Sync.synchronizeNow(notes);
 			});
 		}
 	}, {
@@ -71,38 +64,61 @@ var App = (function () {
 	return App;
 })();
 
-var BackgroundListeners = (function () {
-	function BackgroundListeners() {
-		_classCallCheck(this, BackgroundListeners);
-	}
-
-	_createClass(BackgroundListeners, null, [{
-		key: 'run',
-		value: function run() {
-			console.log('LISTENERS');
-			chrome.runtime.onMessage.addListener(this.runtimeOnMessage);
+var BackgroundListeners = {
+	run: function run() {
+		console.log('LISTENERS');
+		chrome.runtime.onMessage.addListener(this.runtimeOnMessage);
+		chrome.storage.onChanged.addListener(this.storageOnChanged);
+	},
+	runtimeOnMessage: function runtimeOnMessage(msg, sender, sendResponse) {
+		switch (msg.func) {
+			case "openNewNote":
+				Notes.openNewNote(msg.presetcolor, msg.presetfont);
+				break;
+			case "syncAll":
+				Sync.synchronizeNow();
+				break;
+			case "syncAllDelayed":
+				Sync.synchronize();
+				break;
+			case "toClipboard":
+				toClipboard(msg.val, sendResponse);
+				break;
 		}
-	}, {
-		key: 'runtimeOnMessage',
-		value: function runtimeOnMessage(msg, sender, sendResponse) {
-			switch (msg.func) {
-				case "openNewNote":
-					Notes.openNewNote(msg.presetcolor, msg.presetfont);
-					break;
-				case "syncAll":
-					Sync.synchronizeNow();
-					break;
-				case "syncAllDelayed":
-					Sync.synchronize();
-					break;
-				case "toClipboard":
-					toClipboard(msg.val, sendResponse);
-					break;
+	},
+	storageOnChanged: function storageOnChanged(changes, areaName) {
+		if (changes.pwj_sync || changes.pwj_pair_code) {
+			Sync.updateTheWay();
+		}
+		if (areaName === 'sync') {
+			var keys = Object.keys(changes);
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+
+			try {
+				for (var _iterator = keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var key = _step.value;
+
+					if (options[key] !== undefined) {
+						options[key] = changes[key].newValue;
+					}
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
 			}
 		}
-	}]);
-
-	return BackgroundListeners;
-})();
-
+	}
+};
 var stickynotes = new StickyNotes();

@@ -3,6 +3,7 @@
     "background/background.js",
     "class/IndexedDB.js",
     "class/Notes.js",
+    "class/Notifications.js",
     "class/Sync.js",
     "class/Store.js",
     "class/SyncFileSystem.js",

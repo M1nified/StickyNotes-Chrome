@@ -19,6 +19,28 @@ var Sync = {
       }else if(this.pwj_sync === false){
         resolve(SyncViaGoogleDrive)
       }else if(loop===false){
+        this.updateTheWay().then(()=>{
+          resolve(this.findTheWay(true));
+        })
+        // chrome.storage.sync.get(["pwj_sync","pwj_pair_code"],(data)=>{
+        //   if(data && data.pwj_sync && data.pwj_pair_code){
+        //     this.pwj_sync = data.pwj_sync;
+      	// 		this.pwj_pair_code = data.pwj_pair_code;
+      	// 	}else{
+      	// 		this.pwj_sync = false;
+      	// 		this.pwj_pair_code = null;
+      	// 	}
+        //   resolve(this.findTheWay(true));
+        // })
+      }else{
+        reject();
+      }
+    })
+    return promise;
+  },
+  updateTheWay : function(way=null){
+    let promise = new Promise((resolve,reject)=>{
+      if(!way){
         chrome.storage.sync.get(["pwj_sync","pwj_pair_code"],(data)=>{
           if(data && data.pwj_sync && data.pwj_pair_code){
             this.pwj_sync = data.pwj_sync;
@@ -27,9 +49,12 @@ var Sync = {
       			this.pwj_sync = false;
       			this.pwj_pair_code = null;
       		}
-          resolve(this.findTheWay(true));
+          resolve(true);
         })
       }else{
+        // if(way === 'pwj'){
+        //   this.pwj_sync =
+        // }
         reject();
       }
     })
@@ -52,7 +77,7 @@ class SyncMethod{
     })
     return promise;
   }
-  static cmp(){
+  static cmp(){//cmp this.online with this.offline and store final version as this.final
     console.log(this);
     console.log('ONLINE',this.online);
     console.log('OFFLINE',this.offline);
@@ -61,12 +86,13 @@ class SyncMethod{
     //   notesoffline[off.id] = off;
     // }
     var notes = {};
-    for(let on of this.online){//wstawianie aktualnych w online
-      let id = on.note_object.id;
-      on.note_object = JSON.parse(on.note_object);
-      on.last_update = parseInt(on.last_update);
-      if(!Boolean(on.note_object.removed) && (!this.offline[id] || this.offline[id].date < on.note_object.date || this.offline[id].date < on.last_update)){
-        notes[id]=on.note_object;
+    for(let noteonline of this.online){//wstawianie aktualnych w online
+      // console.log(noteonline);
+      let id = noteonline.id;
+      // noteonline = JSON.parse(noteonline);
+      noteonline.last_update = parseInt(noteonline.last_update);
+      if(!Boolean(noteonline.removed) && (!this.offline[id] || this.offline[id].date < noteonline.date || this.offline[id].date < noteonline.last_update)){
+        notes[id]=noteonline;
       }
     }
     for(let off of this.offline){//wstawianie pozostalych online
@@ -96,7 +122,16 @@ class SyncViaProWebJect extends SyncMethod{
     		method:'post',
     		data:{pair_code:Sync.pwj_pair_code}
     	}).done((data)=>{
-        this.online = data;
+        this.online = [];
+        for(let note of data){
+          let obj;
+          try {
+            obj = JSON.parse(note.note_object);
+            this.online.push(obj);
+          } catch (e) {
+            obj = null;
+          }
+        }
         resolve();
       })
     })
@@ -118,14 +153,23 @@ class SyncViaProWebJect extends SyncMethod{
     });
     return promise;
   }
-  static cmp(){
-    super.cmp();
-  }
+  // static cmp(){
+  //   super.cmp();
+  // }
 }
 class SyncViaGoogleDrive extends SyncMethod{
   static synchronize(_notes){
     super.synchronize(_notes).then(()=>{
-      console.log(this.offline);
+      // console.log(this.offline);
+      SyncFileSystem.requestFileSystem().then(SyncFileSystem.getFileEntries)
+      .then(SyncFileSystem.getNotesFromEntries)
+      .then((notes)=>{
+        this.online = notes;
+        this.cmp();
+        console.log(this.final);
+        IndexedDB.putNotes(this.final)
+        SyncFileSystem.putNotes(this.final)
+      })
     })
   }
   static listenForChanges(){
