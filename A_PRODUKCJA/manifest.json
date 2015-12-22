@@ -24,7 +24,7 @@
   },
   "manifest_version": 2,
   "minimum_chrome_version": "35",
-  "name": "Sticky Notes",
+  "name": "Sticky Notes Test",
   "offline_enabled": true,
   "optional_permissions": [
     "audioCapture",
@@ -49,6 +49,6 @@
     "http://prowebject.com/*",
     "https://www.paypalobjects.com/*"
   ],
-  "short_name": "Sticky Notes",
-  "version": "1.17.0.0"
+  "short_name": "Sticky Notes Test",
+  "version": "1.17.0.1"
 }
