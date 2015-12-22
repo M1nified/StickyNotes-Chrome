@@ -21,5 +21,6 @@
   ],
   "destination_path": "../A_PRODUKCJA/",
   "module_path": "C:/Users/georg/AppData/Roaming/npm/node_modules",
-  "source_path": "."
+  "source_path": ".",
+  "initial_run":true
 }

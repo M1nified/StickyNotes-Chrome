@@ -1,1 +1,1 @@
-node D:\corpse\projekty\project_watcher\project-watcher.js
+node D:\corpse\projekty\project_watcher\ProjectWatcher.js -O project-watcher-options.json
