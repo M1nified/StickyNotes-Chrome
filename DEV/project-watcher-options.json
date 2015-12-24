@@ -20,7 +20,7 @@
     "*.min.js"
   ],
   "destination_path": "../A_PRODUKCJA/",
-  "module_path": "C:/Users/georg/AppData/Roaming/npm/node_modules",
+  "module_path": "C:/Users/Michał/AppData/Roaming/npm/node_modules",
   "source_path": ".",
   "initial_run":true
 }
