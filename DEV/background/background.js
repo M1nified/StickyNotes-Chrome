@@ -3,7 +3,8 @@
 // import IndexedDB from '../class/IndexedDB.js'
 var GLOBALS = {
 	pwj_sync : false,
-	pwj_pair_code : null
+	pwj_pair_code : null,
+	options : {}
 }
 // class Chrome{
 // 	static get Storage(){
@@ -89,15 +90,17 @@ var BackgroundListeners = {
 	storageOnChanged : (changes,areaName)=>{
 		if(changes.pwj_sync || changes.pwj_pair_code){
 			Sync.updateTheWay();
+		}else if (changes.purchasedinapp) {
+			Store.updatePurchasedElements();
 		}
-		if(areaName === 'sync'){
-			let keys = Object.keys(changes)
-			for(let key of keys){
-				if(options[key] !== undefined){
-					options[key] = changes[key].newValue
-				}
-			}
-		}
+		// if(areaName === 'sync'){
+		// 	let keys = Object.keys(changes)
+		// 	for(let key of keys){
+		// 		if(options[key] !== undefined){
+		// 			options[key] = changes[key].newValue
+		// 		}
+		// 	}
+		// }
 	}
 }
 var stickynotes = new StickyNotes();

@@ -84,15 +84,16 @@ var SyncMethod = (function () {
     value: function synchronize(_notes) {
       var _this4 = this;
 
-      console.log(this.name);
+      console.log('SYNCHRONIZE as ', this.name);
       var promise = new Promise(function (resolve, reject) {
-        _this4.offline = _notes;
         if (!_notes) {
           IndexedDB.getNotes().then(function (n) {
             _this4.offline = n;
+            console.log('OFFLINE:', _this4.offline);
             resolve();
           });
         } else {
+          _this4.offline = _notes;
           resolve();
         }
       });
@@ -282,7 +283,7 @@ var SyncViaGoogleDrive = (function (_SyncMethod2) {
 
       _get(Object.getPrototypeOf(SyncViaGoogleDrive), "synchronize", this).call(this, _notes).then(function () {
         SyncFileSystem.requestFileSystem().then(SyncFileSystem.getFileEntries).then(SyncFileSystem.getNotesFromEntries).then(function (notes) {
-          _this10.online = notes;
+          _this10.online = notes || [];
           _this10.cmp();
           console.log(_this10.final);
           IndexedDB.putNotes(_this10.final);
@@ -306,8 +307,6 @@ var SyncViaGoogleDrive = (function (_SyncMethod2) {
     value: function onFileStatusChanged(details) {
       if (/note_(\w|_)+/.test(details.fileEntry.name) && details.direction === "remote_to_local") {
         updateFileSingle(details.fileEntry);
-      } else if (details.fileEntry.name === "purchasedinapp" && details.direction === "remote_to_local") {
-        updatePurchasedElements();
       }
     }
   }]);

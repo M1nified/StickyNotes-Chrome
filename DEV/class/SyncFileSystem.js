@@ -28,6 +28,7 @@ var SyncFileSystem = {
           console.log(results);
           if(!results.length){
             // console.log(1);
+            console.log(fileEntries);
             resolve(fileEntries);
             // useFileEntries(fileEntries.sort(),notesoffline);
           }else{
@@ -51,34 +52,51 @@ var SyncFileSystem = {
       // console.log('PROMISE',this);
       let notes = [];
       let readstacksize = 0;
-      fileEntries.forEach((fileEntry,index)=>{
-        if(/note_(\w|_)+/.test(fileEntry.name)){
-          readstacksize++;
-          fileEntry.file((file)=>{
-            let reader = new FileReader();
-            // console.log(readstacksize);
-            reader.onloadend = function(event){
-              readstacksize--;
-              // console.log(this);
-              let json=null;
-              try {
-                json = JSON.parse(this.result);
-              } catch (e) {
-                json = null;
+      let loopedcount = 0;
+      if(!fileEntries || fileEntries.length===0){
+        resolve([]);
+      }else{
+        fileEntries.forEach((fileEntry,index)=>{
+          loopedcount++;
+          if(/note_(\w|_)+/.test(fileEntry.name)){
+            readstacksize++;
+            fileEntry.file((file)=>{
+              let reader = new FileReader();
+              // console.log(readstacksize);
+              reader.onloadend = function(event){
+                readstacksize--;
+                // console.log(this);
+                let json=null;
+                try {
+                  json = JSON.parse(this.result);
+                } catch (e) {
+                  json = null;
+                }
+                if(json!==null){
+                  notes.push(json);
+                  // console.log('x: ',notes);
+                }
+                // console.log(index);
+                if(loopedcount===fileEntries.length && readstacksize===0){
+                  resolve(notes);
+                }
               }
-              if(json!==null){
-                notes.push(json);
-                // console.log('x: ',notes);
+              reader.onerror = function(event){
+                readstacksize--;
+                console.error('FileReader onerror triggered: E10',event);
+                if(loopedcount===fileEntries.length && readstacksize===0){
+                  resolve(notes);
+                }
               }
-              // console.log(index);
-              if(readstacksize===0){
-                resolve(notes);
-              }
+              reader.readAsText(file);
+            })
+          }else{
+            if(loopedcount===fileEntries.length && readstacksize===0){
+              resolve(notes);
             }
-            reader.readAsText(file);
-          })
-        }
-      })
+          }
+        })
+      }
     })
     return promise;
   },

@@ -63,15 +63,16 @@ var Sync = {
 }
 class SyncMethod{
   static synchronize(_notes){
-    console.log(this.name);
+    console.log('SYNCHRONIZE as ',this.name);
     let promise = new Promise((resolve,reject)=>{
-      this.offline = _notes;
       if(!_notes){
         IndexedDB.getNotes().then((n)=>{
           this.offline = n;
+          console.log('OFFLINE:',this.offline);
           resolve();
         })
       }else{
+        this.offline = _notes;
         resolve();
       }
     })
@@ -161,10 +162,11 @@ class SyncViaGoogleDrive extends SyncMethod{
   static synchronize(_notes){
     super.synchronize(_notes).then(()=>{
       // console.log(this.offline);
-      SyncFileSystem.requestFileSystem().then(SyncFileSystem.getFileEntries)
+      SyncFileSystem.requestFileSystem()
+      .then(SyncFileSystem.getFileEntries)
       .then(SyncFileSystem.getNotesFromEntries)
       .then((notes)=>{
-        this.online = notes;
+        this.online = notes || [];
         this.cmp();
         console.log(this.final);
         IndexedDB.putNotes(this.final)
@@ -184,8 +186,6 @@ class SyncViaGoogleDrive extends SyncMethod{
   static onFileStatusChanged(details){
     if(/note_(\w|_)+/.test(details.fileEntry.name) && details.direction === "remote_to_local"){
   		updateFileSingle(details.fileEntry);
-  	}else if(details.fileEntry.name === "purchasedinapp" && details.direction === "remote_to_local"){
-  		updatePurchasedElements();
   	}
   }
 }

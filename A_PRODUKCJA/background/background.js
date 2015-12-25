@@ -6,7 +6,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var GLOBALS = {
 	pwj_sync: false,
-	pwj_pair_code: null
+	pwj_pair_code: null,
+	options: {}
 };
 
 var StickyNotes = function StickyNotes() {
@@ -89,35 +90,8 @@ var BackgroundListeners = {
 	storageOnChanged: function storageOnChanged(changes, areaName) {
 		if (changes.pwj_sync || changes.pwj_pair_code) {
 			Sync.updateTheWay();
-		}
-		if (areaName === 'sync') {
-			var keys = Object.keys(changes);
-			var _iteratorNormalCompletion = true;
-			var _didIteratorError = false;
-			var _iteratorError = undefined;
-
-			try {
-				for (var _iterator = keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-					var key = _step.value;
-
-					if (options[key] !== undefined) {
-						options[key] = changes[key].newValue;
-					}
-				}
-			} catch (err) {
-				_didIteratorError = true;
-				_iteratorError = err;
-			} finally {
-				try {
-					if (!_iteratorNormalCompletion && _iterator.return) {
-						_iterator.return();
-					}
-				} finally {
-					if (_didIteratorError) {
-						throw _iteratorError;
-					}
-				}
-			}
+		} else if (changes.purchasedinapp) {
+			Store.updatePurchasedElements();
 		}
 	}
 };

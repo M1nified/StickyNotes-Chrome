@@ -28,6 +28,7 @@ var SyncFileSystem = {
         dirReader.readEntries(function (results) {
           console.log(results);
           if (!results.length) {
+            console.log(fileEntries);
             resolve(fileEntries);
           } else {
               fileEntries = fileEntries.concat(results);
@@ -47,33 +48,50 @@ var SyncFileSystem = {
     var promise = new Promise(function (resolve, reject) {
       var notes = [];
       var readstacksize = 0;
-      fileEntries.forEach(function (fileEntry, index) {
-        if (/note_(\w|_)+/.test(fileEntry.name)) {
-          readstacksize++;
-          fileEntry.file(function (file) {
-            var reader = new FileReader();
+      var loopedcount = 0;
+      if (!fileEntries || fileEntries.length === 0) {
+        resolve([]);
+      } else {
+        fileEntries.forEach(function (fileEntry, index) {
+          loopedcount++;
+          if (/note_(\w|_)+/.test(fileEntry.name)) {
+            readstacksize++;
+            fileEntry.file(function (file) {
+              var reader = new FileReader();
 
-            reader.onloadend = function (event) {
-              readstacksize--;
+              reader.onloadend = function (event) {
+                readstacksize--;
 
-              var json = null;
-              try {
-                json = JSON.parse(this.result);
-              } catch (e) {
-                json = null;
-              }
-              if (json !== null) {
-                notes.push(json);
-              }
+                var json = null;
+                try {
+                  json = JSON.parse(this.result);
+                } catch (e) {
+                  json = null;
+                }
+                if (json !== null) {
+                  notes.push(json);
+                }
 
-              if (readstacksize === 0) {
-                resolve(notes);
-              }
-            };
-            reader.readAsText(file);
-          });
-        }
-      });
+                if (loopedcount === fileEntries.length && readstacksize === 0) {
+                  resolve(notes);
+                }
+              };
+              reader.onerror = function (event) {
+                readstacksize--;
+                console.error('FileReader onerror triggered: E10', event);
+                if (loopedcount === fileEntries.length && readstacksize === 0) {
+                  resolve(notes);
+                }
+              };
+              reader.readAsText(file);
+            });
+          } else {
+            if (loopedcount === fileEntries.length && readstacksize === 0) {
+              resolve(notes);
+            }
+          }
+        });
+      }
     });
     return promise;
   },
