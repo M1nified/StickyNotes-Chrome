@@ -1,13 +1,14 @@
-colors = ['#FFF','#f7f945','#FEFF87','#87E7FF','#C0A2D8','#8BE48E','#53e3de','#ff9e2b'];
-color = "#FFF";
-savetimeout = null;
-hidemenutimeout = null;
-save = true;
+var colors = ['#FFF','#f7f945','#FEFF87','#87E7FF','#C0A2D8','#8BE48E','#53e3de','#ff9e2b'];
+var color = "#FFF";
+var savetimeout = null;
+var hidemenutimeout = null;
+var save = true;
 chrome.app.window.current().outerBounds.setMinimumSize(160,160);
-sortedMenuItemsReady = false;
-speachrecognitionon = false;
-speechToTextActiveLang = "en-US";
-purchasedelementslocal = {};
+var sortedMenuItemsReady = false;
+var speachrecognitionon = false;
+var speechToTextActiveLang = "en-US";
+var purchasedelementslocal = {};
+var grabbed = null;
 $(document).ready(function(){
 	// $("#buttonTest").click(function(){
 	// 	chrome.permissions.request({permissions:['audioCapture']},function(g){
@@ -28,7 +29,6 @@ $(document).ready(function(){
 	setPurchasedItems();
 	checkStoreState();
 //$("#buttonTextToSpeech").click(function(){chrome.tts.speak($("#notetextarea").text());})
-grabbed = null;
 $(".sortable").on("dragstart",function(event){
 	grabbed = event.target;
 });
@@ -128,7 +128,7 @@ $("#removeRemove").click(function(event){
 $("#buttonCloseAll").click(function(event){
 	var allwindows = chrome.app.window.getAll();
 	console.log(allwindows)
-	for(i in allwindows){
+	for(var i in allwindows){
 		(function(thewindow){
 			if(typeof thewindow.contentWindow.saveNote ==="function") {
 				thewindow.contentWindow.saveNote(function(){thewindow.close();})
@@ -212,11 +212,11 @@ if(typeof(note) != 'undefined' && note != null){
 $("#notetextarea").on('keypress keyup',function(event){
 	saveNoteDelayed();
 })
-k17Delay = null;
-k17 = false;
-k17selectionstart = null;
-k17selectionend = null;
-k17counter = 0;
+var k17Delay = null;
+var k17 = false;
+var k17selectionstart = null;
+var k17selectionend = null;
+var k17counter = 0;
 $(window).on('keydown keyup',function(event){//functional keys
 	var k17Down = function(){
 		var notetextarea = $("#notetextarea");
@@ -312,7 +312,7 @@ chrome.storage.onChanged.addListener(function(changes,areaName){
 		setStoreState(changes.isStoreOpen.newValue);
 	}
 });
-hideWindowActionsTimeout = null;
+var hideWindowActionsTimeout = null;
 var setWindowActions = function(){
 	if($("#toolbar > .button, #windowActionsBox > .button").length * 25 <= $(window).width()){
 		//console.log("A");
@@ -550,7 +550,7 @@ var closeThisNote = function(){
 	var openRequest = indexedDB.open("notes");
 	openRequest.onsuccess = function(e) {
 		//console.log("Success!");
-		db = e.target.result;
+		var db = e.target.result;
 		var tx=db.transaction("notes","readwrite");
 		var store = tx.objectStore("notes");
 		var index = store.index("by_id");
@@ -655,7 +655,7 @@ var saveNote = function(callback){
 	var openRequest = indexedDB.open("notes");
 	openRequest.onsuccess = function(e) {
 		//console.log("Success!");
-		db = e.target.result;
+		var db = e.target.result;
 		var tx=db.transaction("notes","readwrite");
 		var store = tx.objectStore("notes");
 		var index = store.index("by_id");
@@ -666,7 +666,7 @@ var saveNote = function(callback){
 			//console.log(request.result)
 			if(request.result === undefined){
 				//console.log('problem')
-				newnote = {};
+				var newnote = {};
 				newnote.id = note.id;
 				newnote.textarea = textarea;
 				newnote.width = $(window).width();
@@ -734,7 +734,7 @@ var saveNote = function(callback){
 var updateNote = function(){
 	var openRequest = indexedDB.open("notes");
 	openRequest.onsuccess = function(e) {
-		db = e.target.result;
+		var db = e.target.result;
 		var tx=db.transaction("notes","readwrite");
 		var store = tx.objectStore("notes");
 		var index = store.index("by_id");

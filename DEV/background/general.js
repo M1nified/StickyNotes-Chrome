@@ -46,7 +46,7 @@ function retMM(date){
 function retSS(date){
 	var s=date.getMinutes();
 	var ss = (s<10) ? "0"+s : s;
-	return ss;	
+	return ss;
 }
 //SELECTION BEGIN
 function saveSelection() {
@@ -64,7 +64,7 @@ function saveSelection() {
 function restoreSelection(range) {
     if (range) {
         if (window.getSelection) {
-            sel = window.getSelection();
+            var sel = window.getSelection();
             sel.removeAllRanges();
             sel.addRange(range);
         } else if (document.selection && range.select) {
@@ -82,7 +82,7 @@ function insertText(text,selection){
 	range.deleteContents();
 	var elem = document.createTextNode(text);
 	range.insertNode(elem);
-	sel = window.getSelection();
+	var sel = window.getSelection();
 	range.setStartAfter(elem);
 	range.setEndAfter(elem);
 	sel.removeAllRanges();
@@ -92,13 +92,13 @@ function insertElem(elem){
 	var range = saveSelection();
 	range.deleteContents();
 	range.insertNode(elem);
-	sel = window.getSelection();
+	var sel = window.getSelection();
 	range.setStartAfter(elem);
 	range.setEndAfter(elem);
 	sel.removeAllRanges();
 	sel.addRange(range);
 }
-DropMenu = function(){
+var DropMenu = function(){
 	var menu=this;
 	menu.elements=[];
 	menu.boss=[];
@@ -124,7 +124,7 @@ DropMenu = function(){
 			})
 			return true;
 		}
-		return false;	
+		return false;
 	}
 	menu.show = function(event){
 		if(event){
@@ -164,4 +164,4 @@ DropMenu = function(){
 	}
 	return this;
 };
-x=0;
+var x=0;

@@ -19,6 +19,7 @@ var StickyNotes = function StickyNotes() {
 	BackgroundListeners.run();
 	Store.run();
 	Sync.synchronizeNow();
+	Sync.syncLoop();
 };
 
 var App = (function () {

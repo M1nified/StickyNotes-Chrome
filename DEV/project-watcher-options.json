@@ -1,23 +1,34 @@
 {
   "babel": [
     "background/background.js",
+    "background/buttons.js",
+    "background/general_variables.js",
+    "background/general.js",
+    "background/shared.js",
+    "background/background.js",
     "class/IndexedDB.js",
     "class/Notes.js",
     "class/Notifications.js",
     "class/Sync.js",
     "class/Store.js",
     "class/SyncFileSystem.js",
-    "options/options.js"
+    "note/note.js",
+    "noteslauncher/noteslauncher.js",
+    "options/general.js",
+    "options/options.js",
+    "store/purchase.js"
   ],
   "babel_options": {
     "auxiliaryCommentBefore": "ProWebJect - Michal Gora",
     "babelrc": true,
     "comments": false
   },
+  "babel_uglify":false,
   "copy": [
     "manifest.json",
     "*.html",
-    "*.min.js"
+    "*.min.js",
+    "lib/buy.js"
   ],
   "destination_path": "../A_PRODUKCJA/",
   "module_path": "C:/Users/Michał/AppData/Roaming/npm/node_modules",

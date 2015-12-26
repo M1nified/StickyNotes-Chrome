@@ -3,7 +3,7 @@ $(document).ready(function(){
 	$("#btn-remove").on("click",function(){
 		$.get(info.link_remove,function(result){
 			console.log(result)
-			data = null;
+			var data = null;
 			try{
 				data = JSON.parse(result);
 			}catch(e){}

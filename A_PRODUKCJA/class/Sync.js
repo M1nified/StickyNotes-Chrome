@@ -22,26 +22,48 @@ var Sync = {
     }, 10000);
   },
   synchronizeNow: function synchronizeNow() {
+    var _this2 = this;
+
     var notes = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
 
-    clearTimeout(this.synctimeout);
-    this.findTheWay().then(function (syncclass) {
-      syncclass.synchronize(notes);
+    var promise = new Promise(function (resolve, reject) {
+      clearTimeout(_this2.synctimeout);
+      _this2.findTheWay().then(function (syncclass) {
+        console.log('after the way');
+        syncclass.synchronize(notes).then(function () {
+          resolve();
+        });
+      });
     });
+    return promise;
+  },
+  syncLoop: function syncLoop() {
+    var _this3 = this;
+
+    var timeout = arguments.length <= 0 || arguments[0] === undefined ? 10000 : arguments[0];
+
+    clearTimeout(this.syncLoopTimeout);
+    this.syncLoopTimeout = setTimeout(function () {
+      console.log('before synchronizeNow');
+      _this3.synchronizeNow().then(function () {
+        console.log('after synchronizeNow');
+        _this3.syncLoop();
+      });
+    }, timeout);
   },
   findTheWay: function findTheWay() {
-    var _this2 = this;
+    var _this4 = this;
 
     var loop = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 
     var promise = new Promise(function (resolve, reject) {
-      if (_this2.pwj_sync === true) {
+      if (_this4.pwj_sync === true) {
         resolve(SyncViaProWebJect);
-      } else if (_this2.pwj_sync === false) {
+      } else if (_this4.pwj_sync === false) {
         resolve(SyncViaGoogleDrive);
       } else if (loop === false) {
-        _this2.updateTheWay().then(function () {
-          resolve(_this2.findTheWay(true));
+        _this4.updateTheWay().then(function () {
+          resolve(_this4.findTheWay(true));
         });
       } else {
           reject();
@@ -50,7 +72,7 @@ var Sync = {
     return promise;
   },
   updateTheWay: function updateTheWay() {
-    var _this3 = this;
+    var _this5 = this;
 
     var way = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
 
@@ -58,11 +80,11 @@ var Sync = {
       if (!way) {
         chrome.storage.sync.get(["pwj_sync", "pwj_pair_code"], function (data) {
           if (data && data.pwj_sync && data.pwj_pair_code) {
-            _this3.pwj_sync = data.pwj_sync;
-            _this3.pwj_pair_code = data.pwj_pair_code;
+            _this5.pwj_sync = data.pwj_sync;
+            _this5.pwj_pair_code = data.pwj_pair_code;
           } else {
-            _this3.pwj_sync = false;
-            _this3.pwj_pair_code = null;
+            _this5.pwj_sync = false;
+            _this5.pwj_pair_code = null;
           }
           resolve(true);
         });
@@ -80,27 +102,27 @@ var SyncMethod = (function () {
   }
 
   _createClass(SyncMethod, null, [{
-    key: "synchronize",
+    key: 'synchronize',
     value: function synchronize(_notes) {
-      var _this4 = this;
+      var _this6 = this;
 
       console.log('SYNCHRONIZE as ', this.name);
       var promise = new Promise(function (resolve, reject) {
         if (!_notes) {
           IndexedDB.getNotes().then(function (n) {
-            _this4.offline = n;
-            console.log('OFFLINE:', _this4.offline);
+            _this6.offline = n;
+            console.log('OFFLINE:', _this6.offline);
             resolve();
           });
         } else {
-          _this4.offline = _notes;
+          _this6.offline = _notes;
           resolve();
         }
       });
       return promise;
     }
   }, {
-    key: "cmp",
+    key: 'cmp',
     value: function cmp() {
       console.log(this);
       console.log('ONLINE', this.online);
@@ -182,22 +204,26 @@ var SyncViaProWebJect = (function (_SyncMethod) {
   }
 
   _createClass(SyncViaProWebJect, null, [{
-    key: "synchronize",
+    key: 'synchronize',
     value: function synchronize(_notes) {
-      var _this6 = this;
+      var _this8 = this;
 
-      _get(Object.getPrototypeOf(SyncViaProWebJect), "synchronize", this).call(this, _notes).then(function () {
-        _this6.getOnline().then(function () {
-          _this6.cmp();
-          IndexedDB.putNotes(_this6.final);
-          _this6.sendOnline();
+      var promise = new Promise(function (resolve, reject) {
+        _get(Object.getPrototypeOf(SyncViaProWebJect), 'synchronize', _this8).call(_this8, _notes).then(function () {
+          _this8.getOnline().then(function () {
+            _this8.cmp();
+            IndexedDB.putNotes(_this8.final);
+            _this8.sendOnline();
+            resolve();
+          });
         });
       });
+      return promise;
     }
   }, {
-    key: "getOnline",
+    key: 'getOnline',
     value: function getOnline() {
-      var _this7 = this;
+      var _this9 = this;
 
       var promise = new Promise(function (resolve, reject) {
         $.ajax({
@@ -206,7 +232,7 @@ var SyncViaProWebJect = (function (_SyncMethod) {
           method: 'post',
           data: { pair_code: Sync.pwj_pair_code }
         }).done(function (data) {
-          _this7.online = [];
+          _this9.online = [];
           var _iteratorNormalCompletion3 = true;
           var _didIteratorError3 = false;
           var _iteratorError3 = undefined;
@@ -218,7 +244,7 @@ var SyncViaProWebJect = (function (_SyncMethod) {
               var obj = undefined;
               try {
                 obj = JSON.parse(note.note_object);
-                _this7.online.push(obj);
+                _this9.online.push(obj);
               } catch (e) {
                 obj = null;
               }
@@ -244,12 +270,12 @@ var SyncViaProWebJect = (function (_SyncMethod) {
       return promise;
     }
   }, {
-    key: "sendOnline",
+    key: 'sendOnline',
     value: function sendOnline() {
-      var _this8 = this;
+      var _this10 = this;
 
       var promise = new Promise(function () {
-        var d = { notes: _this8.final, pair_code: Sync.pwj_pair_code, clear: true };
+        var d = { notes: _this10.final, pair_code: Sync.pwj_pair_code, clear: true };
         $.ajax({
           url: 'http://prowebject.com/stickynotes/web/panel/backend/putNotes.php',
           method: 'post',
@@ -277,22 +303,26 @@ var SyncViaGoogleDrive = (function (_SyncMethod2) {
   }
 
   _createClass(SyncViaGoogleDrive, null, [{
-    key: "synchronize",
+    key: 'synchronize',
     value: function synchronize(_notes) {
-      var _this10 = this;
+      var _this12 = this;
 
-      _get(Object.getPrototypeOf(SyncViaGoogleDrive), "synchronize", this).call(this, _notes).then(function () {
-        SyncFileSystem.requestFileSystem().then(SyncFileSystem.getFileEntries).then(SyncFileSystem.getNotesFromEntries).then(function (notes) {
-          _this10.online = notes || [];
-          _this10.cmp();
-          console.log(_this10.final);
-          IndexedDB.putNotes(_this10.final);
-          SyncFileSystem.putNotes(_this10.final);
+      var promise = new Promise(function (resolve, reject) {
+        _get(Object.getPrototypeOf(SyncViaGoogleDrive), 'synchronize', _this12).call(_this12, _notes).then(function () {
+          SyncFileSystem.requestFileSystem().then(SyncFileSystem.getFileEntries).then(SyncFileSystem.getNotesFromEntries).then(function (notes) {
+            _this12.online = notes || [];
+            _this12.cmp();
+
+            IndexedDB.putNotes(_this12.final);
+            SyncFileSystem.putNotes(_this12.final);
+            resolve();
+          });
         });
       });
+      return promise;
     }
   }, {
-    key: "listenForChanges",
+    key: 'listenForChanges',
     value: function listenForChanges() {
       if (this.listening) {
         return;
@@ -303,7 +333,7 @@ var SyncViaGoogleDrive = (function (_SyncMethod2) {
       }).bind(this));
     }
   }, {
-    key: "onFileStatusChanged",
+    key: 'onFileStatusChanged',
     value: function onFileStatusChanged(details) {
       if (/note_(\w|_)+/.test(details.fileEntry.name) && details.direction === "remote_to_local") {
         updateFileSingle(details.fileEntry);

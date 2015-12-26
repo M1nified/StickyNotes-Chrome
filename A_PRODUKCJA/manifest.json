@@ -10,7 +10,6 @@
           "class/Sync.js",
           "class/SyncFileSystem.js",
           "background/general.js",
-          "background/notifications.js",
           "background/background.js"
         ]
     }
@@ -50,5 +49,5 @@
     "https://www.paypalobjects.com/*"
   ],
   "short_name": "Sticky Notes Test",
-  "version": "1.17.0.1"
+  "version": "1.17.0.2"
 }

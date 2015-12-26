@@ -2,13 +2,13 @@ $(function(){
 	//console.log(notes)
 
 	chrome.storage.sync.get(["allLaunch","isStoreOpen"],function(data){
-		allLaunch = data.allLaunch;
+		var allLaunch = data.allLaunch;
 		if(allLaunch === true){
 			$("#showalways").attr("checked",true);
 		}else if(allLaunch === false){
 			$("#showalways").attr("checked",false);
 		}
-		isStoreOpen = data.isStoreOpen;
+		var isStoreOpen = data.isStoreOpen;
 		if(!isStoreOpen){
 			$(".storedependent").css("display","none");
 		}

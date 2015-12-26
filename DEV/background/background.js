@@ -24,6 +24,7 @@ class StickyNotes{
 		BackgroundListeners.run();
 		Store.run();
 		Sync.synchronizeNow();
+		Sync.syncLoop();
 	}
 }
 // StickyNotes.STORE = null;

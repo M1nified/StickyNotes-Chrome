@@ -7,10 +7,26 @@ var Sync = {
     },10000)
   },
   synchronizeNow : function(notes=null){
-    clearTimeout(this.synctimeout);
-    this.findTheWay().then((syncclass)=>{
-      syncclass.synchronize(notes);
+    let promise = new Promise((resolve,reject)=>{
+      clearTimeout(this.synctimeout);
+      this.findTheWay().then((syncclass)=>{
+        console.log('after the way');
+        syncclass.synchronize(notes).then(()=>{
+          resolve();
+        })
+      })
     })
+    return promise;
+  },
+  syncLoop : function(timeout=10000){
+    clearTimeout(this.syncLoopTimeout);
+    this.syncLoopTimeout = setTimeout(()=>{
+      console.log('before synchronizeNow');
+      this.synchronizeNow().then(()=>{
+        console.log('after synchronizeNow');
+        this.syncLoop();
+      })
+    },timeout)
   },
   findTheWay : function(loop = false){
     let promise = new Promise((resolve,reject)=>{
@@ -107,13 +123,17 @@ class SyncMethod{
 }
 class SyncViaProWebJect extends SyncMethod{
   static synchronize(_notes){
-    super.synchronize(_notes).then(()=>{
-      this.getOnline().then(()=>{
-        this.cmp();
-        IndexedDB.putNotes(this.final);
-        this.sendOnline();
+    let promise = new Promise((resolve,reject)=>{
+      super.synchronize(_notes).then(()=>{
+        this.getOnline().then(()=>{
+          this.cmp();
+          IndexedDB.putNotes(this.final);
+          this.sendOnline();
+          resolve();//not really good, cos still not sure if quest has ended
+        })
       })
     })
+    return promise;
   }
   static getOnline(){
     var promise = new Promise((resolve,reject)=>{
@@ -160,19 +180,23 @@ class SyncViaProWebJect extends SyncMethod{
 }
 class SyncViaGoogleDrive extends SyncMethod{
   static synchronize(_notes){
-    super.synchronize(_notes).then(()=>{
-      // console.log(this.offline);
-      SyncFileSystem.requestFileSystem()
-      .then(SyncFileSystem.getFileEntries)
-      .then(SyncFileSystem.getNotesFromEntries)
-      .then((notes)=>{
-        this.online = notes || [];
-        this.cmp();
-        console.log(this.final);
-        IndexedDB.putNotes(this.final)
-        SyncFileSystem.putNotes(this.final)
+    let promise = new Promise((resolve,reject)=>{
+      super.synchronize(_notes).then(()=>{
+        // console.log(this.offline);
+        SyncFileSystem.requestFileSystem()
+        .then(SyncFileSystem.getFileEntries)
+        .then(SyncFileSystem.getNotesFromEntries)
+        .then((notes)=>{
+          this.online = notes || [];
+          this.cmp();
+          // console.log(this.final);
+          IndexedDB.putNotes(this.final)
+          SyncFileSystem.putNotes(this.final)
+          resolve();//not really good, cos still not sure if quest has ended
+        })
       })
     })
+    return promise;
   }
   static listenForChanges(){
     if(this.listening){
