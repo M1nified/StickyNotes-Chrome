@@ -6,6 +6,7 @@
           "lib/buy.js",
           "class/IndexedDB.js",
           "class/Notes.js",
+          "class/Notifications.js",
           "class/Store.js",
           "class/Sync.js",
           "class/SyncFileSystem.js",

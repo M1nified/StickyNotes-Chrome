@@ -19,6 +19,7 @@ var Sync = {
     return promise;
   },
   syncLoop : function(timeout=10000){
+    this.syncLoopIsGoing = true;
     clearTimeout(this.syncLoopTimeout);
     this.syncLoopTimeout = setTimeout(()=>{
       console.log('before synchronizeNow');
@@ -27,6 +28,10 @@ var Sync = {
         this.syncLoop();
       })
     },timeout)
+  },
+  syncLoopStop : function(){
+    this.syncLoopIsGoing = false;
+    clearTimeout(this.syncLoopTimeout);
   },
   findTheWay : function(loop = false){
     let promise = new Promise((resolve,reject)=>{
@@ -103,22 +108,29 @@ class SyncMethod{
     //   notesoffline[off.id] = off;
     // }
     var notes = {};
+    this.updated = [];
     for(let noteonline of this.online){//wstawianie aktualnych w online
       // console.log(noteonline);
       let id = noteonline.id;
       // noteonline = JSON.parse(noteonline);
       noteonline.last_update = parseInt(noteonline.last_update);
-      if(!Boolean(noteonline.removed) && (!this.offline[id] || this.offline[id].date < noteonline.date || this.offline[id].date < noteonline.last_update)){
+      if(!Boolean(noteonline.removed) && (!this.offline[id] || this.offline[id].date < noteonline.date /*|| this.offline[id].date < noteonline.last_update*/)){
         notes[id]=noteonline;
+        this.updated.push(id);
       }
     }
-    for(let off of this.offline){//wstawianie pozostalych online
+    for(let off of this.offline){//wstawianie pozostalych offline
       let id = off.id;
       if(!notes[id] && Boolean(off.removed)!==true){
         notes[id]=off;
       }
     }
     this.final = notes;
+  }
+  static notifyUpdates(){
+    if(this.updated && this.updated.length>1){
+      Notifications.simpleInfo(`${this.updated.length} notes were updated`);
+    }
   }
 }
 class SyncViaProWebJect extends SyncMethod{
@@ -129,6 +141,7 @@ class SyncViaProWebJect extends SyncMethod{
           this.cmp();
           IndexedDB.putNotes(this.final);
           this.sendOnline();
+          this.notifyUpdates();
           resolve();//not really good, cos still not sure if quest has ended
         })
       })
@@ -192,6 +205,7 @@ class SyncViaGoogleDrive extends SyncMethod{
           // console.log(this.final);
           IndexedDB.putNotes(this.final)
           SyncFileSystem.putNotes(this.final)
+          this.notifyUpdates();
           resolve();//not really good, cos still not sure if quest has ended
         })
       })

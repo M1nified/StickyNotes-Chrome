@@ -42,6 +42,7 @@ var Sync = {
 
     var timeout = arguments.length <= 0 || arguments[0] === undefined ? 10000 : arguments[0];
 
+    this.syncLoopIsGoing = true;
     clearTimeout(this.syncLoopTimeout);
     this.syncLoopTimeout = setTimeout(function () {
       console.log('before synchronizeNow');
@@ -50,6 +51,10 @@ var Sync = {
         _this3.syncLoop();
       });
     }, timeout);
+  },
+  syncLoopStop: function syncLoopStop() {
+    this.syncLoopIsGoing = false;
+    clearTimeout(this.syncLoopTimeout);
   },
   findTheWay: function findTheWay() {
     var _this4 = this;
@@ -129,6 +134,7 @@ var SyncMethod = (function () {
       console.log('OFFLINE', this.offline);
 
       var notes = {};
+      this.updated = [];
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
@@ -140,9 +146,10 @@ var SyncMethod = (function () {
           var id = noteonline.id;
 
           noteonline.last_update = parseInt(noteonline.last_update);
-          if (!Boolean(noteonline.removed) && (!this.offline[id] || this.offline[id].date < noteonline.date || this.offline[id].date < noteonline.last_update)) {
-            notes[id] = noteonline;
-          }
+          if (!Boolean(noteonline.removed) && (!this.offline[id] || this.offline[id].date < noteonline.date)) {
+              notes[id] = noteonline;
+              this.updated.push(id);
+            }
         }
       } catch (err) {
         _didIteratorError = true;
@@ -189,6 +196,13 @@ var SyncMethod = (function () {
 
       this.final = notes;
     }
+  }, {
+    key: 'notifyUpdates',
+    value: function notifyUpdates() {
+      if (this.updated && this.updated.length > 1) {
+        Notifications.simpleInfo(this.updated.length + ' notes were updated');
+      }
+    }
   }]);
 
   return SyncMethod;
@@ -214,6 +228,7 @@ var SyncViaProWebJect = (function (_SyncMethod) {
             _this8.cmp();
             IndexedDB.putNotes(_this8.final);
             _this8.sendOnline();
+            _this8.notifyUpdates();
             resolve();
           });
         });
@@ -315,6 +330,7 @@ var SyncViaGoogleDrive = (function (_SyncMethod2) {
 
             IndexedDB.putNotes(_this12.final);
             SyncFileSystem.putNotes(_this12.final);
+            _this12.notifyUpdates();
             resolve();
           });
         });

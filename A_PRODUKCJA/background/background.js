@@ -71,6 +71,16 @@ var BackgroundListeners = {
 		console.log('LISTENERS');
 		chrome.runtime.onMessage.addListener(this.runtimeOnMessage);
 		chrome.storage.onChanged.addListener(this.storageOnChanged);
+		this.customListener1 = setInterval(function () {
+			var windows = chrome.app.window.getAll();
+			if (windows.length === 0) {
+				Sync.syncLoopStop();
+			} else {
+				if (!Sync.syncLoopIsGoing) {
+					Sync.syncLoop();
+				}
+			}
+		}, 1000);
 	},
 	runtimeOnMessage: function runtimeOnMessage(msg, sender, sendResponse) {
 		switch (msg.func) {
