@@ -11,6 +11,8 @@ var GLOBALS = {
 };
 
 var StickyNotes = function StickyNotes() {
+	var _this = this;
+
 	_classCallCheck(this, StickyNotes);
 
 	chrome.app.runtime.onLaunched.addListener((function onLaunched() {
@@ -20,6 +22,16 @@ var StickyNotes = function StickyNotes() {
 	Store.run();
 	Sync.synchronizeNow();
 	Sync.syncLoop();
+	chrome.storage.sync.get("autorun", function (data) {
+		if (data && data.autorun === true) {
+			$(function () {
+				console.log('AUTORUN ENABLED');
+				_this.background = new App();
+			});
+		} else {
+			console.log('AUTORUN DISABELED');
+		}
+	});
 };
 
 var App = (function () {
@@ -39,12 +51,12 @@ var App = (function () {
 	}, {
 		key: 'continueLaunching',
 		value: function continueLaunching() {
-			var _this = this;
+			var _this2 = this;
 
 			IndexedDB.getNotes().then(function (notes) {
 				console.log(notes);
-				_this.notes = notes;
-				_this.properLaunching();
+				_this2.notes = notes;
+				_this2.properLaunching();
 				Sync.synchronizeNow(notes);
 			});
 		}
@@ -80,7 +92,7 @@ var BackgroundListeners = {
 					Sync.syncLoop();
 				}
 			}
-		}, 1000);
+		}, 3000);
 	},
 	runtimeOnMessage: function runtimeOnMessage(msg, sender, sendResponse) {
 		switch (msg.func) {

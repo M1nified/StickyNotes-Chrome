@@ -25,6 +25,16 @@ class StickyNotes{
 		Store.run();
 		Sync.synchronizeNow();
 		Sync.syncLoop();
+		chrome.storage.sync.get("autorun",(data)=>{
+			if(data && data.autorun === true){
+				$(()=>{
+					console.log('AUTORUN ENABLED');
+					this.background = new App();
+				})
+			}else{
+				console.log('AUTORUN DISABELED');
+			}
+		})
 	}
 }
 // StickyNotes.STORE = null;
@@ -82,7 +92,7 @@ var BackgroundListeners = {
 					Sync.syncLoop();
 				}
 			}
-		},1000)
+		},3000)
 	},
 	runtimeOnMessage : (msg,sender,sendResponse)=>{
 		switch(msg.func){

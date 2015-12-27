@@ -4,7 +4,7 @@ $(document).ready(function () {
 	displayNotifications1();
 	displayStartupPanel();
 	loadPWJsyncManager();
-
+	displayAutostart1();
 	setCheckboxListeners();
 	setSpeechToTextLangs();
 	loadNotesManager();
@@ -71,12 +71,10 @@ var loadPWJsyncManager = function loadPWJsyncManager() {
 	});
 };
 var displayAutostart1 = function displayAutostart1() {
-	chrome.storage.sync.get("autostart1", function (data) {
-		console.log(data);
-		if (data && typeof data.autostart1 == 'boolean') {
-			$("#autostart1").attr("checked", data.autostart1);
-		} else {
-			chrome.storage.sync.set({ autostart1: false });
+	chrome.storage.sync.get("autorun", function (data) {
+		console.log('displayAutostart1', data);
+		if (data && typeof data.autorun === 'boolean') {
+			$("#autostart1").attr("checked", data.autorun);
 		}
 	});
 };

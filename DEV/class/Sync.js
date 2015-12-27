@@ -109,12 +109,20 @@ class SyncMethod{
     // }
     var notes = {};
     this.updated = [];
+    let offlinemap = (function(notesarray){
+      let obj = {};
+      for(let note of notesarray){
+        obj[note.id] = note;
+      }
+      return obj;
+    })(this.offline);
     for(let noteonline of this.online){//wstawianie aktualnych w online
       // console.log(noteonline);
       let id = noteonline.id;
       // noteonline = JSON.parse(noteonline);
       noteonline.last_update = parseInt(noteonline.last_update);
-      if(!Boolean(noteonline.removed) && (!this.offline[id] || this.offline[id].date < noteonline.date /*|| this.offline[id].date < noteonline.last_update*/)){
+      console.log(`ON | OFF : ${noteonline.date} | ${offlinemap[id].date}`)
+      if(!Boolean(noteonline.removed) && (!offlinemap[id] || offlinemap[id].date < noteonline.date /*|| offlinemap[id].date < noteonline.last_update*/)){
         notes[id]=noteonline;
         this.updated.push(id);
       }
