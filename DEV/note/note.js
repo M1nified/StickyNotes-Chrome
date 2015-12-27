@@ -28,278 +28,278 @@ $(document).ready(function(){
 	setLiveListeners();
 	setPurchasedItems();
 	checkStoreState();
-//$("#buttonTextToSpeech").click(function(){chrome.tts.speak($("#notetextarea").text());})
-$(".sortable").on("dragstart",function(event){
-	grabbed = event.target;
-});
-$(".toolbar").on("drop",function(event){
-	event.preventDefault();
-	$("#customButtonsEndPoint").before(grabbed);
-	grabbed = null;
-	saveNoteDelayed();
-}).on("dragover",function(event){
-	event.preventDefault();
-});
-$("#noteBox").on("drop",function(event){
-	if(grabbed){
+	//$("#buttonTextToSpeech").click(function(){chrome.tts.speak($("#notetextarea").text());})
+	$(".sortable").on("dragstart",function(event){
+		grabbed = event.target;
+	});
+	$(".toolbar").on("drop",function(event){
 		event.preventDefault();
-		$("#menuMenu").append(grabbed);
+		$("#customButtonsEndPoint").before(grabbed);
 		grabbed = null;
-	}
-	saveNoteDelayed();
-}).on("dragover",function(event){
-	if(grabbed){
+		saveNoteDelayed();
+	}).on("dragover",function(event){
 		event.preventDefault();
-	}
-});
-$(".textFormat").click(function(){
-	var role = $(this).data("role");
-	document.execCommand(role, false, null);
-});
-$("#buttonTaskList").click(function(){
-	document.execCommand('insertUnorderedList',false,null);
-	var elem = $(window.getSelection().focusNode).closest("ul");
-	elem.addClass('task-list');
-})
-$(".fontbutton").each(function(){$(this).css("font-family",$(this).attr("font-family")).attr("title",$(this).attr("font-family"))});
-$(".fontbutton").click(function(event){
-	$("#noteBox").css("font-family",$(this).attr("font-family"));
-	saveNoteDelayed();
-});
-$(".fontsizebutton").click(function(event){
-	$("#noteBox").css("font-size",parseInt($("#noteBox").css("font-size"))+parseInt($(this).attr("font-size-change")));
-	saveNoteDelayed();
-})
-$(".menubutton").click(function(event){
-	var menuId = $(this).attr('menu');
-	if(!$("#"+menuId).is(':visible')){
-		if($(".menucollection").is(':visible')){
-			$(".menucollection").not("#"+menuId).hide(function(){
-				$("#"+menuId).show("slow");
-			});
-		}else{
-			$("#"+menuId).show("slow");
-		}
-	}else{
-		$(".menucollection").hide("slow");
-	}
-});
-$(".menucollection").mouseout(function(){
-	clearTimeout(hidemenutimeout);
-	hidemenutimeout = setTimeout(function(){
-		$(".menucollection").hide("slow");
-	},1500);
-})
-$(".menucollection").mouseover(function(){
-	clearTimeout(hidemenutimeout);
-});
-$("#buttonClose").click(function(event){
-	saveNote(function(){window.close();});
-}).on('mousedown contextmenu mouseover',function(){
-	showWindowActions();
-});
-$("#windowActionsBox").on('mouseout blur',function(){hideWindowActionsDelayed();}).on('mousein',function(){clearTimeout(hideWindowActionsTimeout);});
-$("#buttonMinimize").click(function(){
-	if(!chrome.app.window.current().isMinimized()){
-		chrome.app.window.current().minimize();
-	}else{
-		chrome.app.window.current().restore();
-	}
-});
-$("#buttonMaximize").click(function(){
-	if(!chrome.app.window.current().isMaximized()){
-		chrome.app.window.current().maximize();
-	}else{
-		chrome.app.window.current().restore();
-	}
-});
-$("#buttonAdd").click(function(event){
-	openNewNote();
-});
-$("#buttonDel").click(function(event){
-	$("#removeBox").fadeIn(200);
-});
-$("#removeCancel").click(function(event){
-	$("#removeBox").fadeOut(300);
-});
-$("#removeRemove").click(function(event){
-	closeThisNote();
-});
-$("#buttonCloseAll").click(function(event){
-	var allwindows = chrome.app.window.getAll();
-	console.log(allwindows)
-	for(var i in allwindows){
-		(function(thewindow){
-			if(typeof thewindow.contentWindow.saveNote ==="function") {
-				thewindow.contentWindow.saveNote(function(){thewindow.close();})
-			}else{
-				thewindow.close();
-			}
-		})(allwindows[i])
-	}
-});
-$("#buttonSpeachToText").click(function(event){
-	speechToTextInitiate();
-});
-$("#buttonAlwaysOnTop").click(function(event){
-	var is = chrome.app.window.current().isAlwaysOnTop();
-	chrome.app.window.current().setAlwaysOnTop(!is);
-	buttonYesNoChange(this,!is);
-})
-$("#buttonGoToOptions").click(function(){
-	event.preventDefault();
-	chrome.app.window.create($(this).attr("href"),{innerBounds:{width:800,height:600}});
-});
-$("#buttonOpenStore").click(function(){
-	event.preventDefault();
-	chrome.app.window.create($(this).attr("href"),{innerBounds:{width:800,height:600}});
-});
-$("#buttonShareLink").click(function(){
-	chrome.storage.sync.get("id_owner",function(data){
-		if(data && data.id_owner){
-			var id_owner = data.id_owner;
-			var newnote = {};
-			newnote.id = note.id;
-			newnote.textarea = $("#notetextarea").html();
-			newnote.color = color;
-			newnote.fontfamily = $("#noteBox").css("font-family");
-			newnote.fontsize = $("#noteBox").css("font-size");
-			newnote.date = new Date().valueOf();
-			$.post("http://prowebject.com/stickynotes/sharebox/share.php",{id_owner:id_owner,note:newnote},function(result){
-				console.log(result);
-				if(result){
-					var result = JSON.parse(result);
-					console.log(result);
-					chrome.app.window.create('background/shared.html',{id:note.id+"_shared",innerBounds:{width:256,height:320,maxWidth:256,maxHeight:320}},function(createdWindow){
-						createdWindow.contentWindow.info = result;
-						try{
-							createdWindow.contentWindow.update();
-						}catch(e){
-
-						}
-
-					})
-				}
-			})
-		}
-	})
-});
-$("#colorPalette").on("click",function(evt){
-	$("#colorPalette").fadeOut(300);
-})
-$(window).resize(function(){
-	setTextarea();
-	setSortedMenuItems(function(){setWindowActions();});
-	//setWindowActions();
-	/*saveNoteDelayed();*/
-})
-$(window).blur(function(){
-	chrome.runtime.sendMessage({func:"syncAllDelayed"});
-	hideWindowActions();
-})
-try{
-	color = presetcolor;
-	updateColor();
-}catch(e){}
-if(typeof(note) != 'undefined' && note != null){
-	$("#notetextarea").html(note.textarea);
-	color = note.color || "#FFF";
-	updateColor();
-}else{
-	note = {};
-	note.id = chrome.app.window.current().id;
-}
-$("#notetextarea").on('keypress keyup',function(event){
-	saveNoteDelayed();
-})
-var k17Delay = null;
-var k17 = false;
-var k17selectionstart = null;
-var k17selectionend = null;
-var k17counter = 0;
-$(window).on('keydown keyup',function(event){//functional keys
-	var k17Down = function(){
-		var notetextarea = $("#notetextarea");
-		var noteclickarea = $("#noteclickarea");
-		if(k17===false){
-			k17 = true;
-			k17selectionstart = notetextarea.prop("selectionStart");
-			k17selectionend = notetextarea.prop("selectionEnd");
-			var context = notetextarea.html();
-			var scrolltop = notetextarea.scrollTop();
-			var context_url = urlize(context,{autoescape:false});
-			notetextarea.hide();
-			noteclickarea.show().css('height',notetextarea.css('height')).css('width',notetextarea.css('width')).html(context_url).scrollTop(scrolltop);
-		}
-		clearTimeout(k17Delay);
-		k17Delay = setTimeout(k17Up,1500);
-	}
-	var k17Up = function(){
-		if(k17){
-			clearTimeout(k17Delay);
-			var notetextarea = $("#notetextarea");
-			var noteclickarea = $("#noteclickarea");
-			scrolltop = noteclickarea.scrollTop();
-			noteclickarea.hide();
-			notetextarea.show().scrollTop(scrolltop).prop("selectionStart",k17selectionstart).prop("selectionEnd",k17selectionend);
-			k17 = false;
-		}
-	}
-	//console.log(event)
-	switch(event.keyCode){
-		case 17: switch(event.type){//ctrl
-			case "keydown": if(event.altKey===false && k17counter>0){k17Down();}else{k17counter++;}//pure ctrl only (no alt gr)
-			break;
-			case "keyup": k17counter=0;k17Up();
-			break;
-		}
-		break;
-		case 85: //u
-		if(event.type == "keyup" && event.ctrlKey && event.shiftKey){
-			document.execCommand("strikeThrough", false, null);
-		}
-		break;
-		case 188://< (- font)
-		if(event.type == "keydown" && event.ctrlKey){
+	});
+	$("#noteBox").on("drop",function(event){
+		if(grabbed){
 			event.preventDefault();
-			$("#noteBox").css("font-size",parseInt($("#noteBox").css("font-size"))+1);
-			saveNoteDelayed();
-		}
-		break;
-		case 190://> (+ font)
-		if(event.type == "keydown" && event.ctrlKey){
-			event.preventDefault();
-			$("#noteBox").css("font-size",parseInt($("#noteBox").css("font-size"))-1);
-			saveNoteDelayed();
-		}
-		break;
-	}
-}).on("wheel",function(event){
-	if(event.ctrlKey){
-		event.preventDefault();
-		if(event.originalEvent.deltaY>0){
-			$("#noteBox").css("font-size",parseInt($("#noteBox").css("font-size"))-1);
-		}else if(event.originalEvent.deltaY<0){
-			$("#noteBox").css("font-size",parseInt($("#noteBox").css("font-size"))+1);
+			$("#menuMenu").append(grabbed);
+			grabbed = null;
 		}
 		saveNoteDelayed();
-	}
-})
-$("#notetextarea").on("keydown",function(event){//special characters
-	switch(event.keyCode){
-		case 9://tabulation
+	}).on("dragover",function(event){
+		if(grabbed){
+			event.preventDefault();
+		}
+	});
+	$(".textFormat").click(function(){
+		var role = $(this).data("role");
+		document.execCommand(role, false, null);
+	});
+	$("#buttonTaskList").click(function(){
+		document.execCommand('insertUnorderedList',false,null);
+		var elem = $(window.getSelection().focusNode).closest("ul");
+		elem.addClass('task-list');
+	})
+	$(".fontbutton").each(function(){$(this).css("font-family",$(this).attr("font-family")).attr("title",$(this).attr("font-family"))});
+	$(".fontbutton").click(function(event){
+		$("#noteBox").css("font-family",$(this).attr("font-family"));
+		saveNoteDelayed();
+	});
+	$(".fontsizebutton").click(function(event){
+		$("#noteBox").css("font-size",parseInt($("#noteBox").css("font-size"))+parseInt($(this).attr("font-size-change")));
+		saveNoteDelayed();
+	})
+	$(".menubutton").click(function(event){
+		var menuId = $(this).attr('menu');
+		if(!$("#"+menuId).is(':visible')){
+			if($(".menucollection").is(':visible')){
+				$(".menucollection").not("#"+menuId).hide(function(){
+					$("#"+menuId).show("slow");
+				});
+			}else{
+				$("#"+menuId).show("slow");
+			}
+		}else{
+			$(".menucollection").hide("slow");
+		}
+	});
+	$(".menucollection").mouseout(function(){
+		clearTimeout(hidemenutimeout);
+		hidemenutimeout = setTimeout(function(){
+			$(".menucollection").hide("slow");
+		},1500);
+	})
+	$(".menucollection").mouseover(function(){
+		clearTimeout(hidemenutimeout);
+	});
+	$("#buttonClose").click(function(event){
+		saveNote(function(){window.close();});
+	}).on('mousedown contextmenu mouseover',function(){
+		showWindowActions();
+	});
+	$("#windowActionsBox").on('mouseout blur',function(){hideWindowActionsDelayed();}).on('mousein',function(){clearTimeout(hideWindowActionsTimeout);});
+	$("#buttonMinimize").click(function(){
+		if(!chrome.app.window.current().isMinimized()){
+			chrome.app.window.current().minimize();
+		}else{
+			chrome.app.window.current().restore();
+		}
+	});
+	$("#buttonMaximize").click(function(){
+		if(!chrome.app.window.current().isMaximized()){
+			chrome.app.window.current().maximize();
+		}else{
+			chrome.app.window.current().restore();
+		}
+	});
+	$("#buttonAdd").click(function(event){
+		openNewNote();
+	});
+	$("#buttonDel").click(function(event){
+		$("#removeBox").fadeIn(200);
+	});
+	$("#removeCancel").click(function(event){
+		$("#removeBox").fadeOut(300);
+	});
+	$("#removeRemove").click(function(event){
+		closeThisNote();
+	});
+	$("#buttonCloseAll").click(function(event){
+		var allwindows = chrome.app.window.getAll();
+		console.log(allwindows)
+		for(var i in allwindows){
+			(function(thewindow){
+				if(typeof thewindow.contentWindow.saveNote ==="function") {
+					thewindow.contentWindow.saveNote(function(){thewindow.close();})
+				}else{
+					thewindow.close();
+				}
+			})(allwindows[i])
+		}
+	});
+	$("#buttonSpeachToText").click(function(event){
+		speechToTextInitiate();
+	});
+	$("#buttonAlwaysOnTop").click(function(event){
+		var is = chrome.app.window.current().isAlwaysOnTop();
+		chrome.app.window.current().setAlwaysOnTop(!is);
+		buttonYesNoChange(this,!is);
+	})
+	$("#buttonGoToOptions").click(function(){
 		event.preventDefault();
-		insertElem($(document.createElement('pre')).addClass('pretab').append("&#9;")[0]);
-		break;
+		chrome.app.window.create($(this).attr("href"),{innerBounds:{width:800,height:600}});
+	});
+	$("#buttonOpenStore").click(function(){
+		event.preventDefault();
+		chrome.app.window.create($(this).attr("href"),{innerBounds:{width:800,height:600}});
+	});
+	$("#buttonShareLink").click(function(){
+		chrome.storage.sync.get("id_owner",function(data){
+			if(data && data.id_owner){
+				var id_owner = data.id_owner;
+				var newnote = {};
+				newnote.id = note.id;
+				newnote.textarea = $("#notetextarea").html();
+				newnote.color = color;
+				newnote.fontfamily = $("#noteBox").css("font-family");
+				newnote.fontsize = $("#noteBox").css("font-size");
+				newnote.date = new Date().valueOf();
+				$.post("http://prowebject.com/stickynotes/sharebox/share.php",{id_owner:id_owner,note:newnote},function(result){
+					console.log(result);
+					if(result){
+						var result = JSON.parse(result);
+						console.log(result);
+						chrome.app.window.create('background/shared.html',{id:note.id+"_shared",innerBounds:{width:256,height:320,maxWidth:256,maxHeight:320}},function(createdWindow){
+							createdWindow.contentWindow.info = result;
+							try{
+								createdWindow.contentWindow.update();
+							}catch(e){
+
+							}
+
+						})
+					}
+				})
+			}
+		})
+	});
+	$("#colorPalette").on("click",function(evt){
+		$("#colorPalette").fadeOut(300);
+	})
+	$(window).resize(function(){
+		setTextarea();
+		setSortedMenuItems(function(){setWindowActions();});
+		//setWindowActions();
+		/*saveNoteDelayed();*/
+	})
+	$(window).blur(function(){
+		chrome.runtime.sendMessage({func:"syncAllDelayed"});
+		hideWindowActions();
+	})
+	try{
+		color = presetcolor;
+		updateColor();
+	}catch(e){}
+	if(typeof(note) != 'undefined' && note != null){
+		$("#notetextarea").html(note.textarea);
+		color = note.color || "#FFF";
+		updateColor();
+	}else{
+		note = {};
+		note.id = chrome.app.window.current().id;
 	}
-})
-chrome.app.window.onClosed.addListener(function(){
-	if(save){
-		saveNote();
-	}
-})
-buttonYesNoChange($("#buttonAlwaysOnTop")[0],chrome.app.window.current().isAlwaysOnTop());
-saveNote();
+	$("#notetextarea").on('keypress keyup',function(event){
+		saveNoteDelayed();
+	})
+	var k17Delay = null;
+	var k17 = false;
+	var k17selectionstart = null;
+	var k17selectionend = null;
+	var k17counter = 0;
+	$(window).on('keydown keyup',function(event){//functional keys
+		var k17Down = function(){
+			var notetextarea = $("#notetextarea");
+			var noteclickarea = $("#noteclickarea");
+			if(k17===false){
+				k17 = true;
+				k17selectionstart = notetextarea.prop("selectionStart");
+				k17selectionend = notetextarea.prop("selectionEnd");
+				var context = notetextarea.html();
+				var scrolltop = notetextarea.scrollTop();
+				var context_url = urlize(context,{autoescape:false});
+				notetextarea.hide();
+				noteclickarea.show().css('height',notetextarea.css('height')).css('width',notetextarea.css('width')).html(context_url).scrollTop(scrolltop);
+			}
+			clearTimeout(k17Delay);
+			k17Delay = setTimeout(k17Up,1500);
+		}
+		var k17Up = function(){
+			if(k17){
+				clearTimeout(k17Delay);
+				var notetextarea = $("#notetextarea");
+				var noteclickarea = $("#noteclickarea");
+				scrolltop = noteclickarea.scrollTop();
+				noteclickarea.hide();
+				notetextarea.show().scrollTop(scrolltop).prop("selectionStart",k17selectionstart).prop("selectionEnd",k17selectionend);
+				k17 = false;
+			}
+		}
+		//console.log(event)
+		switch(event.keyCode){
+			case 17: switch(event.type){//ctrl
+				case "keydown": if(event.altKey===false && k17counter>0){k17Down();}else{k17counter++;}//pure ctrl only (no alt gr)
+				break;
+				case "keyup": k17counter=0;k17Up();
+				break;
+			}
+			break;
+			case 85: //u
+			if(event.type == "keyup" && event.ctrlKey && event.shiftKey){
+				document.execCommand("strikeThrough", false, null);
+			}
+			break;
+			case 188://< (- font)
+			if(event.type == "keydown" && event.ctrlKey){
+				event.preventDefault();
+				$("#noteBox").css("font-size",parseInt($("#noteBox").css("font-size"))+1);
+				saveNoteDelayed();
+			}
+			break;
+			case 190://> (+ font)
+			if(event.type == "keydown" && event.ctrlKey){
+				event.preventDefault();
+				$("#noteBox").css("font-size",parseInt($("#noteBox").css("font-size"))-1);
+				saveNoteDelayed();
+			}
+			break;
+		}
+	}).on("wheel",function(event){
+		if(event.ctrlKey){
+			event.preventDefault();
+			if(event.originalEvent.deltaY>0){
+				$("#noteBox").css("font-size",parseInt($("#noteBox").css("font-size"))-1);
+			}else if(event.originalEvent.deltaY<0){
+				$("#noteBox").css("font-size",parseInt($("#noteBox").css("font-size"))+1);
+			}
+			saveNoteDelayed();
+		}
+	})
+	$("#notetextarea").on("keydown",function(event){//special characters
+		switch(event.keyCode){
+			case 9://tabulation
+			event.preventDefault();
+			insertElem($(document.createElement('pre')).addClass('pretab').append("&#9;")[0]);
+			break;
+		}
+	})
+	chrome.app.window.onClosed.addListener(function(){
+		if(save){
+			saveNote();
+		}
+	})
+	buttonYesNoChange($("#buttonAlwaysOnTop")[0],chrome.app.window.current().isAlwaysOnTop());
+	saveNote();
 });
 chrome.storage.onChanged.addListener(function(changes,areaName){
 	if(changes.sortedMenuItems !== null){
@@ -398,18 +398,18 @@ var speechToTextInitiate = function(){
 		}
 	}
 	// if(typeof audioCapture === 'undefined' || !audioCapture){
-		chrome.permissions.request({permissions:['audioCapture']},function(granted){
-			// console.log(granted);
-			// if(chrome.runtime.lasterror){
-			// 	console.log(chrome.runtime.lasterror)
-			// }else{
-			// 	// init()
-			// }
-			if(granted){
-				// audioCapture = true;
-				init();
-			}
-		});
+	chrome.permissions.request({permissions:['audioCapture']},function(granted){
+		// console.log(granted);
+		// if(chrome.runtime.lasterror){
+		// 	console.log(chrome.runtime.lasterror)
+		// }else{
+		// 	// init()
+		// }
+		if(granted){
+			// audioCapture = true;
+			init();
+		}
+	});
 	// }else{
 	// 	init();
 	// }
@@ -419,11 +419,11 @@ var speechToTextOn = function(){
 	if('webkitSpeechRecognition' in window){
 		speachrecognitionon = true;
 		console.log("on")
-        try{
-            recognition = recognition || new webkitSpeechRecognition();
-        }catch(e){
-            recognition = new webkitSpeechRecognition();
-        }
+		try{
+			recognition = recognition || new webkitSpeechRecognition();
+		}catch(e){
+			recognition = new webkitSpeechRecognition();
+		}
 
 
 		recognition.continuous = true;
@@ -452,48 +452,48 @@ var speechToTextOn = function(){
 				(function(range,text){
 					// console.log(text);
 					/* chrome.runtime.sendMessage({func:"toClipboard",val:final_transcript},function(response){
-						if(response && response.status === true){
-							restoreSelection(selection);
-							document.execCommand("Paste");
-							$("#pendingOperations1").hide();
-							saveNoteDelayed();
-						}
-					}) */
-					//console.log(range)
-					if(range){
-							insertText(text,range);
-					}else{
-						// console.error("NO SELECTION");
-					}
+					if(response && response.status === true){
+					restoreSelection(selection);
+					document.execCommand("Paste");
 					$("#pendingOperations1").hide();
 					saveNoteDelayed();
-				})(range,final_transcript);
+				}
+			}) */
+			//console.log(range)
+			if(range){
+				insertText(text,range);
+			}else{
+				// console.error("NO SELECTION");
 			}
-		}
-		recognition.onerror = function(event) {
-			console.log("ERR")
-			console.log(event.error)
-			//setTimeout(function(){recognition.start();},1000);
-		}
-		recognition.onend = function() {
-			// console.log("END")
 			$("#pendingOperations1").hide();
-			if(speachrecognitionon === true){
-				recognition.start();
-			}
-		}
-		//recognition.start();
-		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-		navigator.getUserMedia({audio:true}, function(stream) {
-			// console.log("GRANTED")
-			// console.log(stream);
-			//stream.stop();
-				recognition.start();// Now you know that you have audio permission. Do whatever you want...
-			}, function(err) {
-				console.log("DENIED")
-				console.log(err) // Aw. No permission (or no microphone available).
-			});
+			saveNoteDelayed();
+		})(range,final_transcript);
 	}
+}
+recognition.onerror = function(event) {
+	console.log("ERR")
+	console.log(event.error)
+	//setTimeout(function(){recognition.start();},1000);
+}
+recognition.onend = function() {
+	// console.log("END")
+	$("#pendingOperations1").hide();
+	if(speachrecognitionon === true){
+		recognition.start();
+	}
+}
+//recognition.start();
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+navigator.getUserMedia({audio:true}, function(stream) {
+	// console.log("GRANTED")
+	// console.log(stream);
+	//stream.stop();
+	recognition.start();// Now you know that you have audio permission. Do whatever you want...
+}, function(err) {
+	console.log("DENIED")
+	console.log(err) // Aw. No permission (or no microphone available).
+});
+}
 }
 var speechToTextOff = function(){
 	$("#buttonSpeachToText").removeClass('speachToTextOn');
@@ -587,8 +587,8 @@ var setFonts = function(){
 	}
 	//zmiana koloru czcionki
 	/*$("body").on("click",".fontcolorbutton",function(evt){
-		$()
-	});*/
+	$()
+});*/
 }
 var setMenuColors = function(){
 	$("#menuColors").empty();
@@ -780,55 +780,55 @@ var setPurchasedItems = function(){
 	chrome.storage.sync.get("purchasedinapp",function(data){
 		//console.log(data)
 		/*if(!data || !data.purchasedinapp || !data.purchasedinapp.speech_to_text){
-			$("#buttonSpeachToText").css("display","none");
-		}*/
-		if(data && data.purchasedinapp){
-			var items = data.purchasedinapp;
-			u_color = false;
-			for(var i in items){
-				console.log(i)
-				console.log(items[i])
-				if(items[i]!==true){
-					continue;
-				}
-				if(/^color_box_background_.+/.test(i)===true){
-					if(inAppProducts[i] && inAppProducts[i].colors){
-						for(j in inAppProducts[i].colors){
-							addOptionalBgColor(inAppProducts[i].colors[j]);
-						}
-					}
-					u_color = true;
-					continue;
-				}
-				switch(i){
-					case "color_palette_background":
-					purchasedelementslocal["color_palette_background"]=true;
-					u_color = true;
-					break;
-
-					case "color_background_454f56":
-					addOptionalBgColor("#"+i.split("color_background_").join(""));
-					u_color = true;
-					break;
-					case "color_background_ff7171":
-					addOptionalBgColor("#"+i.split("color_background_").join(""));
-					u_color = true;
-					break;
-					case "color_background_ff4fc1":
-					addOptionalBgColor("#"+i.split("color_background_").join(""));
-					u_color = true;
-					break;
-
-					case "speech_to_text":
-						$("#buttonSpeachToText").css("display","block");
-					break;
-				}
+		$("#buttonSpeachToText").css("display","none");
+	}*/
+	if(data && data.purchasedinapp){
+		var items = data.purchasedinapp;
+		u_color = false;
+		for(var i in items){
+			console.log(i)
+			console.log(items[i])
+			if(items[i]!==true){
+				continue;
 			}
-			if(u_color){
-				setMenuColors();
+			if(/^color_box_background_.+/.test(i)===true){
+				if(inAppProducts[i] && inAppProducts[i].colors){
+					for(j in inAppProducts[i].colors){
+						addOptionalBgColor(inAppProducts[i].colors[j]);
+					}
+				}
+				u_color = true;
+				continue;
+			}
+			switch(i){
+				case "color_palette_background":
+				purchasedelementslocal["color_palette_background"]=true;
+				u_color = true;
+				break;
+
+				case "color_background_454f56":
+				addOptionalBgColor("#"+i.split("color_background_").join(""));
+				u_color = true;
+				break;
+				case "color_background_ff7171":
+				addOptionalBgColor("#"+i.split("color_background_").join(""));
+				u_color = true;
+				break;
+				case "color_background_ff4fc1":
+				addOptionalBgColor("#"+i.split("color_background_").join(""));
+				u_color = true;
+				break;
+
+				case "speech_to_text":
+				$("#buttonSpeachToText").css("display","block");
+				break;
 			}
 		}
-	})
+		if(u_color){
+			setMenuColors();
+		}
+	}
+})
 }
 var addOptionalBgColor = function(color){
 	if(colors.indexOf(color)===-1){

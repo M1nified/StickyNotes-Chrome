@@ -19,13 +19,14 @@ var Sync = {
     return promise;
   },
   syncLoop : function(timeout=10000){
+    console.log('timeout:',timeout);
     this.syncLoopIsGoing = true;
     clearTimeout(this.syncLoopTimeout);
     this.syncLoopTimeout = setTimeout(()=>{
       console.log('before synchronizeNow');
       this.synchronizeNow().then(()=>{
         console.log('after synchronizeNow');
-        this.syncLoop();
+        this.syncLoop(timeout);
       })
     },timeout)
   },
@@ -126,6 +127,8 @@ class SyncMethod{
       }catch(e){
         console.error('CMP LOG ERROR');
       }
+      console.log('ON:',noteonline);
+      console.log('OFF:',offlinemap[id]);
       if(!Boolean(noteonline.removed) && (!offlinemap[id] || offlinemap[id].date < noteonline.date /*|| offlinemap[id].date < noteonline.last_update*/)){
         notes[id]=noteonline;
         this.updated.push(id);
@@ -133,13 +136,20 @@ class SyncMethod{
     }
     for(let off of this.offline){//wstawianie pozostalych offline
       let id = off.id;
-      if(!notes[id] && Boolean(off.removed)!==true){
+      if(!notes[id] /*&& Boolean(off.removed)!==true*/){
         notes[id]=off;
       }
     }
     this.final = notes;
   }
   static notifyUpdates(){
+    if(this.final && Object.keys(this.final).length>0){
+      let launcher = chrome.app.window.get("notes_launcher");
+      if(launcher){
+        console.log('LAUNCHER WINDOW',launcher);
+        launcher.contentWindow.updateNotes();
+      }
+    }
     if(this.updated && this.updated.length>1){
       Notifications.simpleInfo(`${this.updated.length} notes were updated`);
     }
@@ -214,7 +224,7 @@ class SyncViaGoogleDrive extends SyncMethod{
         .then((notes)=>{
           this.online = notes || [];
           this.cmp();
-          // console.log(this.final);
+          console.log('FINAL NOTES:',this.final);
           IndexedDB.putNotes(this.final)
           SyncFileSystem.putNotes(this.final)
           this.notifyUpdates();

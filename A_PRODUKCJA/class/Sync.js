@@ -42,13 +42,14 @@ var Sync = {
 
     var timeout = arguments.length <= 0 || arguments[0] === undefined ? 10000 : arguments[0];
 
+    console.log('timeout:', timeout);
     this.syncLoopIsGoing = true;
     clearTimeout(this.syncLoopTimeout);
     this.syncLoopTimeout = setTimeout(function () {
       console.log('before synchronizeNow');
       _this3.synchronizeNow().then(function () {
         console.log('after synchronizeNow');
-        _this3.syncLoop();
+        _this3.syncLoop(timeout);
       });
     }, timeout);
   },
@@ -180,6 +181,8 @@ var SyncMethod = (function () {
           } catch (e) {
             console.error('CMP LOG ERROR');
           }
+          console.log('ON:', noteonline);
+          console.log('OFF:', offlinemap[id]);
           if (!Boolean(noteonline.removed) && (!offlinemap[id] || offlinemap[id].date < noteonline.date)) {
               notes[id] = noteonline;
               this.updated.push(id);
@@ -209,9 +212,9 @@ var SyncMethod = (function () {
           var off = _step3.value;
 
           var id = off.id;
-          if (!notes[id] && Boolean(off.removed) !== true) {
-            notes[id] = off;
-          }
+          if (!notes[id]) {
+              notes[id] = off;
+            }
         }
       } catch (err) {
         _didIteratorError3 = true;
@@ -233,6 +236,13 @@ var SyncMethod = (function () {
   }, {
     key: 'notifyUpdates',
     value: function notifyUpdates() {
+      if (this.final && Object.keys(this.final).length > 0) {
+        var launcher = chrome.app.window.get("notes_launcher");
+        if (launcher) {
+          console.log('LAUNCHER WINDOW', launcher);
+          launcher.contentWindow.updateNotes();
+        }
+      }
       if (this.updated && this.updated.length > 1) {
         Notifications.simpleInfo(this.updated.length + ' notes were updated');
       }
@@ -361,7 +371,7 @@ var SyncViaGoogleDrive = (function (_SyncMethod2) {
           SyncFileSystem.requestFileSystem().then(SyncFileSystem.getFileEntries).then(SyncFileSystem.getNotesFromEntries).then(function (notes) {
             _this12.online = notes || [];
             _this12.cmp();
-
+            console.log('FINAL NOTES:', _this12.final);
             IndexedDB.putNotes(_this12.final);
             SyncFileSystem.putNotes(_this12.final);
             _this12.notifyUpdates();

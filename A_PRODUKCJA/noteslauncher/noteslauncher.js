@@ -1,5 +1,6 @@
 "use strict";
 
+var notes = window.notes || [];
 $(function () {
 
 	chrome.storage.sync.get(["allLaunch", "isStoreOpen"], function (data) {
@@ -15,24 +16,17 @@ $(function () {
 		}
 	});
 
-	var nl = $("#noteslist");
-	for (var i in notes) {
-		var note = notes[i];
-		if (note.removed) {
-			continue;
-		}
-		nl.append('<li><table><tr><td><span class="notecolor" data-note="' + note.id + '" style="background-color:' + note.color + ';"></span></td><td class="notecontent" style="font-family:' + note.fontfamily + '"><div>' + note.textarea + '</div></td><td><span class="openbutton" data-note="' + note.id + '" style="background-color:' + note.color + ';">Open</span></td></tr></li>');
-	}
+	displayNotes(notes);
 
 	$(".openall").on("click", function () {
 		openAllNotes();
 	});
 	$(".openallclose").on("click", function () {
 		openAllNotes(function () {
-			chrome.app.window.current().close();
+			window.close();
 		});
 	});
-	$(".notecolor").on("click", function () {
+	$(document).on("click", ".notecolor", function () {
 		var id = $(this).data('note');
 		var note = jQuery.grep(notes, function (n, i) {
 			return n.id === id;
@@ -64,14 +58,24 @@ $(function () {
 	});
 	$(".opendonate").on('click', function () {});
 });
+var displayNotes = function displayNotes(notes) {
+	var nl = $("#noteslist").empty();
+	for (var i in notes) {
+		var note = notes[i];
+		if (note.removed) {
+			continue;
+		}
+		nl.append('<li><table><tr><td><span class="notecolor" data-note="' + note.id + '" style="background-color:' + note.color + ';"></span></td><td class="notecontent" style="font-family:' + note.fontfamily + '"><div>' + note.textarea + '</div></td><td><span class="openbutton" data-note="' + note.id + '" style="background-color:' + note.color + ';">Open</span></td></tr></li>');
+	}
+};
 var openAllNotes = function openAllNotes(callback) {
 	var callbackcounter = 0;
 	for (var i in notes) {
-		callbackcounter++;
 		var note = notes[i];
 		if (note.removed === true) {
 			continue;
 		}
+		callbackcounter++;
 		(function (note) {
 			chrome.app.window.create('/note/note.html', { id: note.id, frame: 'none' }, function (createdWindow) {
 				createdWindow.contentWindow.note = note;
@@ -79,10 +83,62 @@ var openAllNotes = function openAllNotes(callback) {
 					syncAll();
 				});
 				callbackcounter--;
+
 				if (callbackcounter === 0 && typeof callback === 'function') {
 					callback();
 				}
 			});
 		})(note);
+	}
+};
+var updateNotes = function updateNotes(newnotes) {
+	if (newnotes && newnotes.length > 0) {
+		notes = newnotes;
+		displayNotes(newnotes);
+	} else {
+		IndexedDB.getNotes().then(function (n) {
+			var doINeedToRefresh = false;
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+
+			try {
+				var _loop = function _loop() {
+					var newnote = _step.value;
+
+					var oldnote = jQuery.grep(notes, function (n, i) {
+						return n.id === newnote.id;
+					});
+					if (oldnote && Note.isContentTheSame(newnote, oldnote)) {
+						doINeedToRefresh = true;
+						return "break";
+					}
+				};
+
+				for (var _iterator = n[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var _ret = _loop();
+
+					if (_ret === "break") break;
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
+
+			notes = n;
+			if (doINeedToRefresh) {
+				displayNotes(n);
+			}
+		});
 	}
 };

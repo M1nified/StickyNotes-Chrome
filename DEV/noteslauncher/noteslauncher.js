@@ -1,3 +1,4 @@
+var notes = window.notes || [];
 $(function(){
 	//console.log(notes)
 
@@ -14,22 +15,16 @@ $(function(){
 		}
 	});
 
-	var nl = $("#noteslist")
-	for(var i in notes){
-		var note = notes[i];
-		if(note.removed){
-			continue;
-		}
-		nl.append('<li><table><tr><td><span class="notecolor" data-note="'+note.id+'" style="background-color:'+note.color+';"></span></td><td class="notecontent" style="font-family:'+note.fontfamily+'"><div>'+note.textarea+'</div></td><td><span class="openbutton" data-note="'+note.id+'" style="background-color:'+note.color+';">Open</span></td></tr></li>');
-	}
+	displayNotes(notes);
 
 	$(".openall").on("click",function(){
 		openAllNotes();
 	})
 	$(".openallclose").on("click",function(){
-		openAllNotes(function(){chrome.app.window.current().close();});
+		// openAllNotes(function(){chrome.app.window.current().close();});
+		openAllNotes(function(){window.close();});
 	})
-	$(".notecolor").on("click",function(){
+	$(document).on("click",".notecolor",function(){
 		var id = $(this).data('note');
 		var note = jQuery.grep(notes,function(n,i){
 			return (n.id===id);
@@ -65,14 +60,24 @@ $(function(){
 
 	})
 });
+var displayNotes = function(notes){
+	var nl = $("#noteslist").empty();
+	for(var i in notes){
+		var note = notes[i];
+		if(note.removed){
+			continue;
+		}
+		nl.append('<li><table><tr><td><span class="notecolor" data-note="'+note.id+'" style="background-color:'+note.color+';"></span></td><td class="notecontent" style="font-family:'+note.fontfamily+'"><div>'+note.textarea+'</div></td><td><span class="openbutton" data-note="'+note.id+'" style="background-color:'+note.color+';">Open</span></td></tr></li>');
+	}
+}
 var openAllNotes = function(callback){
 	var callbackcounter = 0;
 	for(var i in notes){
-			callbackcounter++;
 			var note = notes[i];
 			if(note.removed === true){
 				continue;
 			}
+			callbackcounter++;
 			(function(note){
 				chrome.app.window.create('/note/note.html',{id:note.id,frame:'none'},function(createdWindow){
 					createdWindow.contentWindow.note = note;
@@ -80,10 +85,35 @@ var openAllNotes = function(callback){
 						syncAll();
 					})
 					callbackcounter--;
+					// console.log('callbackcounter',callbackcounter);
 					if(callbackcounter === 0 && typeof callback === 'function'){
+						// console.log('CALLBACK');
 						callback();
 					}
 				})
 			})(note);
 		}
+}
+var updateNotes = function(newnotes){
+	if(newnotes && newnotes.length>0){
+		notes = newnotes;
+		displayNotes(newnotes);
+	}else{
+		IndexedDB.getNotes().then((n)=>{
+			let doINeedToRefresh = false;
+			for(let newnote of n){
+				let oldnote = jQuery.grep(notes,function(n,i){
+					return (n.id === newnote.id);
+				});
+				if(oldnote && Note.isContentTheSame(newnote,oldnote)){
+					doINeedToRefresh = true;
+					break;
+				}
+			}
+			notes = n;
+			if(doINeedToRefresh){
+				displayNotes(n)
+			}
+		})
+	}
 }

@@ -68,7 +68,9 @@ var IndexedDB = {
 			var tx = db.transaction("notes", "readwrite");
 			var store = tx.objectStore("notes");
 			var index = store.index("by_id");
-			for (var note in notes) {
+			for (var i in notes) {
+				var note = notes[i];
+				console.log('putNotes note:', note);
 				if (note.removed === true) {
 					try {
 						store.delete(note.id);
@@ -79,7 +81,7 @@ var IndexedDB = {
 					try {
 						store.put(note);
 					} catch (e) {
-						console.error();
+						console.error(e);
 					}
 				}
 			}

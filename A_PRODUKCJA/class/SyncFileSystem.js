@@ -108,7 +108,9 @@ var SyncFileSystem = {
 
           fs.root.getFile('note_' + note.id, { create: true }, function (fileEntry) {
             if (note.removed) {
-              fileEntry.remove();
+              fileEntry.remove(function () {}, function (e) {
+                console.error('fileEntry.remove() ERROR:', e);
+              });
             } else {
                 _this.writeToFile(fileEntry, JSON.stringify(note));
               }
