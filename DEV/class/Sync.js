@@ -121,7 +121,11 @@ class SyncMethod{
       let id = noteonline.id;
       // noteonline = JSON.parse(noteonline);
       noteonline.last_update = parseInt(noteonline.last_update);
-      console.log(`ON | OFF : ${noteonline.date} | ${offlinemap[id].date}`)
+      try{
+        console.log(`ON | OFF : ${noteonline.date} | ${offlinemap[id].date}`)
+      }catch(e){
+        console.error('CMP LOG ERROR');
+      }
       if(!Boolean(noteonline.removed) && (!offlinemap[id] || offlinemap[id].date < noteonline.date /*|| offlinemap[id].date < noteonline.last_update*/)){
         notes[id]=noteonline;
         this.updated.push(id);
