@@ -67,11 +67,16 @@ class App{
 	properLaunching(){
 		chrome.storage.sync.get("allLaunch",function(data){
 			if(data && data.allLaunch){
-				Notes.launchNotes(this.notes);
+				Notes.launchNotesNewIfEmpty(this.notes);
 			}else{
-				chrome.app.window.create('noteslauncher/noteslauncher.html',{id:"notes_launcher",innerBounds:{width:430,height:540},frame:{color:"#8C8C8C"}},function(createdWindow){
-					createdWindow.contentWindow.notes = this.notes;
-				}.bind(this))
+				App.openLauncher.call(this)
+			}
+		}.bind(this))
+	}
+	static openLauncher(){
+		chrome.app.window.create('noteslauncher/noteslauncher.html',{id:"notes_launcher",innerBounds:{width:430,height:540},frame:{color:"#8C8C8C"}},function(createdWindow){
+			if(this.notes){
+				createdWindow.contentWindow.notes = this.notes;
 			}
 		}.bind(this))
 	}
@@ -81,6 +86,7 @@ var BackgroundListeners = {
 		console.log('LISTENERS');
 		chrome.runtime.onMessage.addListener(this.runtimeOnMessage)
 		chrome.storage.onChanged.addListener(this.storageOnChanged)
+		chrome.notifications.onClicked.addListener(Notifications.onClicked)
 		this.customListener1 = setInterval(()=>{
 			let windows = chrome.app.window.getAll();
 			if(windows.length===0){

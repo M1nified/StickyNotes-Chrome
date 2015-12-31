@@ -208,7 +208,7 @@ var loadSyncStorageNotes = function loadSyncStorageNotes() {
 					console.log(data["note_" + id]);
 					var openRequest = indexedDB.open("notes");
 					openRequest.onsuccess = function (e) {
-						db = e.target.result;
+						var db = e.target.result;
 						var tx = db.transaction("notes", "readwrite");
 						var store = tx.objectStore("notes");
 						var index = store.index("by_id");
@@ -266,7 +266,7 @@ var loadImportExportMenu = function loadImportExportMenu() {
 		chrome.fileSystem.chooseEntry({ type: "saveFile", suggestedName: "sticky_notes.sticky_notes" }, function (fileEntry) {
 			var openRequest = indexedDB.open("notes");
 			openRequest.onsuccess = function (e) {
-				db = e.target.result;
+				var db = e.target.result;
 				var tx = db.transaction("notes", "readwrite");
 				var store = tx.objectStore("notes");
 				var index = store.index("by_id");
@@ -327,12 +327,12 @@ var loadImportExportMenu = function loadImportExportMenu() {
 var closeAllNotes = function closeAllNotes() {
 	var allwindows = chrome.app.window.getAll();
 	console.log(allwindows);
-	for (i in allwindows) {
+	for (var _i in allwindows) {
 		(function (thewindow) {
 			thewindow.contentWindow.saveNote(function () {
 				thewindow.close();
 			});
-		})(allwindows[i]);
+		})(allwindows[_i]);
 	}
 };
 var loadServiceMenu = function loadServiceMenu() {
@@ -350,7 +350,7 @@ var memoryFullReset = function memoryFullReset() {
 var memoryIndexedDBClear = function memoryIndexedDBClear() {
 	var openRequest = indexedDB.open("notes");
 	openRequest.onsuccess = function (e) {
-		db = e.target.result;
+		var db = e.target.result;
 		var tx = db.transaction("notes", "readwrite");
 		var store = tx.objectStore("notes");
 		var index = store.index("by_id");

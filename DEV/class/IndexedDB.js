@@ -21,7 +21,7 @@ var IndexedDB = {
 				}
 			}
 			openRequest.onsuccess = function(e) {
-				console.log("Success! (1)");
+				// console.log("Success! (1)");
 				//console.log(e)
 				var db = this.result;
 				db.onerror = function(event) {
@@ -83,14 +83,15 @@ var IndexedDB = {
 			var index = store.index("by_id");
 			for(let i in notes){//WTF
 				let note  = notes[i];
-				console.log('putNotes note:',note);
-				if(note.removed === true){
-					try{
-						store.delete(note.id);
-					}catch(e){
-						console.error(e)
-					}
-				}else if(note){
+				// console.log('putNotes note:',note);
+				// if(note.removed === true){
+				// 	try{
+				// 		store.delete(note.id);
+				// 	}catch(e){
+				// 		console.error(e)
+				// 	}
+				// }else
+				if(note){
 					try {
 						store.put(note);
 					} catch (e) {
@@ -100,8 +101,7 @@ var IndexedDB = {
 			}
 		}
 		openRequest.onerror = function(e) {
-			console.log("Error");
-			console.dir(e);
+			console.error("Error",e);
 		}
 	},
 	clearRemovedNotes : function(){

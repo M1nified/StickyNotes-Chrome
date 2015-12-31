@@ -9,7 +9,12 @@ var Note = (function () {
     _classCallCheck(this, Note);
   }
 
-  _createClass(Note, null, [{
+  _createClass(Note, [{
+    key: "isRemoved",
+    value: function isRemoved() {
+      Note.isRemoved(this);
+    }
+  }], [{
     key: "isContentTheSame",
     value: function isContentTheSame(note1, note2) {
       var arethesame = true;
@@ -31,6 +36,11 @@ var Note = (function () {
       } else {
         return differences;
       }
+    }
+  }, {
+    key: "isRemoved",
+    value: function isRemoved(note) {
+      return note && (note.removed === true || note.removed === "true");
     }
   }]);
 

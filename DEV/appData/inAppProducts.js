@@ -1,4 +1,4 @@
-inAppProducts = [];
+var inAppProducts = [];
 
 inAppProducts["color_palette_background"]={sku:"color_palette_background",title:"Palette of 127 background colors",description:'<img src="../img/colormap.png">'};
 
@@ -17,7 +17,7 @@ Color id: 003366
 
 inAppProducts["color_background_ff4fc1"]={sku:"color_background_ff4fc1",title:"Background color: pink 1",description:'<span style="margin-left:5px;display:inline-block;width:100px;height:100px;background-color:#ff4fc1; border-radius:100%;"></span>'};*/
 
-/*var c = [	
+/*var c = [
 	{c:"003366"},
 	{c:"336699"},
 	{c:"3366cc"},

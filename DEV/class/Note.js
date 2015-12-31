@@ -1,6 +1,6 @@
 class Note{
   static isContentTheSame(note1,note2){
-    //skips id, date, window settings, sorted menu items
+    //skips id, date, window settings, sorted menu items, removed
   	var arethesame = true;
   	var differences = {};
   	if(note1.textarea !== note2.textarea){
@@ -20,5 +20,11 @@ class Note{
   	}else{
   		return differences;
   	}
+  }
+  isRemoved(){
+    Note.isRemoved(this)
+  }
+  static isRemoved(note){
+    return note && (note.removed === true || note.removed === "true");
   }
 }

@@ -224,7 +224,7 @@ var loadSyncStorageNotes = function(){
 					console.log(data["note_"+id]);
 					var openRequest = indexedDB.open("notes");
 					openRequest.onsuccess = function(e) {
-						db = e.target.result;
+						var db = e.target.result;
 						var tx=db.transaction("notes","readwrite");
 						var store = tx.objectStore("notes");
 						var index = store.index("by_id");
@@ -281,7 +281,7 @@ var loadImportExportMenu = function(){
 			var openRequest = indexedDB.open("notes");
 			openRequest.onsuccess = function(e) {
 				//console.log("Success!");
-				db = e.target.result;
+				var db = e.target.result;
 				var tx=db.transaction("notes","readwrite");
 				var store = tx.objectStore("notes");
 				var index = store.index("by_id");
@@ -342,7 +342,7 @@ $("#uploadNotes").on("click",function(){
 var closeAllNotes = function(){
 	var allwindows = chrome.app.window.getAll();
 	console.log(allwindows)
-	for(i in allwindows){
+	for(let i in allwindows){
 		(function(thewindow){
 			thewindow.contentWindow.saveNote(function(){thewindow.close();})
 		})(allwindows[i])
@@ -364,7 +364,7 @@ var memoryFullReset = function(){
 var memoryIndexedDBClear = function(){
 	var openRequest = indexedDB.open("notes");
 	openRequest.onsuccess = function(e) {
-		db = e.target.result;
+		var db = e.target.result;
 		var tx=db.transaction("notes","readwrite");
 		var store = tx.objectStore("notes");
 		var index = store.index("by_id");

@@ -5,10 +5,13 @@
           "lib/jquery.min.js",
           "lib/buy.js",
           "class/IndexedDB.js",
+          "class/Note.js",
           "class/Notes.js",
           "class/Notifications.js",
           "class/Store.js",
           "class/Sync.js",
+          "class/SyncMethod.js",
+          "class/SyncViaMethods.js",
           "class/SyncFileSystem.js",
           "background/general.js",
           "background/background.js"
@@ -50,5 +53,5 @@
     "https://www.paypalobjects.com/*"
   ],
   "short_name": "Sticky Notes Test",
-  "version": "1.17.0.7"
+  "version": "1.17.0.32"
 }

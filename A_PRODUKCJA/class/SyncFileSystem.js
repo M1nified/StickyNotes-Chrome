@@ -19,16 +19,12 @@ var SyncFileSystem = {
     return promise;
   },
   getFileEntries: function getFileEntries(fileSystem) {
-    console.log(fileSystem);
     var promise = new Promise(function (resolve, reject) {
       var dirReader = fileSystem.root.createReader();
       var fileEntries = [];
       var readEntries = function readEntries() {
-        console.log(fileEntries);
         dirReader.readEntries(function (results) {
-          console.log(results);
           if (!results.length) {
-            console.log(fileEntries);
             resolve(fileEntries);
           } else {
               fileEntries = fileEntries.concat(results);
@@ -36,7 +32,7 @@ var SyncFileSystem = {
               readEntries();
             }
         }, function (e) {
-          console.log(e);
+          console.error(e);
           reject();
         });
       };
@@ -99,28 +95,22 @@ var SyncFileSystem = {
     var _this2 = this;
 
     this.requestFileSystem().then(function (fs) {
-      console.log(notes);
       for (var i in notes) {
         var note = notes[i];
-        console.log("PUT NOTE: ", note);
+
         (function (note) {
           var _this = this;
 
           fs.root.getFile('note_' + note.id, { create: true }, function (fileEntry) {
-            if (note.removed) {
-              fileEntry.remove(function () {}, function (e) {
-                console.error('fileEntry.remove() ERROR:', e);
-              });
-            } else {
-                _this.writeToFile(fileEntry, JSON.stringify(note));
-              }
+            _this.writeToFile(fileEntry, JSON.stringify(note));
+          }, function (err) {
+            console.error('fs.root.getFile', err);
           });
         }).call(_this2, note);
       }
     });
   },
   writeToFile: function writeToFile(fileEntry, content) {
-    console.log('writeToFile', fileEntry);
     fileEntry.createWriter(function (fileWriter) {
       var truncated = false;
       fileWriter.onwriteend = function (e) {

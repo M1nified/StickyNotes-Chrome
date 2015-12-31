@@ -18,17 +18,17 @@ var SyncFileSystem = {
     return promise;
   },
   getFileEntries : function(fileSystem){
-    console.log(fileSystem);
+    // console.log(fileSystem);
     var promise = new Promise((resolve,reject)=>{
       var dirReader = fileSystem.root.createReader();
       var fileEntries = [];
       var readEntries = function(){
-        console.log(fileEntries);
+        // console.log(fileEntries);
         dirReader.readEntries((results)=>{
-          console.log(results);
+          // console.log(results);
           if(!results.length){
             // console.log(1);
-            console.log(fileEntries);
+            // console.log(fileEntries);
             resolve(fileEntries);
             // useFileEntries(fileEntries.sort(),notesoffline);
           }else{
@@ -39,7 +39,7 @@ var SyncFileSystem = {
             readEntries();
           }
         },(e)=>{
-          console.log(e);
+          console.error(e);
           reject();
         });
       };
@@ -102,28 +102,30 @@ var SyncFileSystem = {
   },
   putNotes : function(notes){
     this.requestFileSystem().then((fs)=>{
-      console.log(notes);
+      // console.log(notes);
       for(let i in notes){
         let note = notes[i];
-        console.log("PUT NOTE: ",note);
+        // console.log("PUT NOTE: ",note);
         (function(note){
           fs.root.getFile(`note_${note.id}`,{create:true},(fileEntry)=>{
-            if(note.removed){
-              fileEntry.remove(()=>{
-                //Success
-              },(e)=>{
-                console.error('fileEntry.remove() ERROR:',e);
-              });//errors?
-            }else{
+            // if(Note.isRemoved(note)){
+            //   fileEntry.remove(()=>{
+            //     //Success
+            //   },(e)=>{
+            //     console.error('fileEntry.remove() ERROR:',e);
+            //   });//errors?
+            // }else{
               this.writeToFile(fileEntry,JSON.stringify(note));
-            }
+            // }
+          },(err)=>{
+            console.error('fs.root.getFile',err);
           })
         }).call(this,note)
       }
     })
   },
   writeToFile : function(fileEntry,content){
-    console.log('writeToFile',fileEntry);
+    // console.log('writeToFile',fileEntry);
     fileEntry.createWriter((fileWriter)=>{
       let truncated = false;
       fileWriter.onwriteend = function(e){

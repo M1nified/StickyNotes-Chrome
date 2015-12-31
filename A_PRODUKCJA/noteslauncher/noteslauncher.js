@@ -16,7 +16,12 @@ $(function () {
 		}
 	});
 
-	displayNotes(notes);
+	if (!notes || !notes.length || notes.length === 0) {
+		console.log('GET MYSELF');
+		updateNotes();
+	} else {
+		displayNotes(notes);
+	}
 
 	$(".openall").on("click", function () {
 		openAllNotes();
@@ -33,14 +38,7 @@ $(function () {
 		});
 		if (note && note[0]) {
 			note = note[0];
-			(function (note) {
-				chrome.app.window.create('/note/note.html', { id: note.id, frame: 'none' }, function (createdWindow) {
-					createdWindow.contentWindow.note = note;
-					chrome.app.window.get(note.id).onClosed.addListener(function () {
-						syncAll();
-					});
-				});
-			})(note);
+			Notes.openNote(note);
 		}
 	});
 	$("#showalways").on("change", function () {
@@ -69,26 +67,26 @@ var displayNotes = function displayNotes(notes) {
 	}
 };
 var openAllNotes = function openAllNotes(callback) {
+	var callbackcounterDecrementTrigger = function callbackcounterDecrementTrigger() {
+		callbackcounter--;
+
+		if (callbackcounter === 0 && typeof callback === 'function') {
+			callback();
+		}
+	};
 	var callbackcounter = 0;
+	console.log('NOTES', notes);
 	for (var i in notes) {
 		var note = notes[i];
-		if (note.removed === true) {
+		if (Note.isRemoved(note)) {
 			continue;
 		}
 		callbackcounter++;
-		(function (note) {
-			chrome.app.window.create('/note/note.html', { id: note.id, frame: 'none' }, function (createdWindow) {
-				createdWindow.contentWindow.note = note;
-				chrome.app.window.get(note.id).onClosed.addListener(function () {
-					syncAll();
-				});
-				callbackcounter--;
-
-				if (callbackcounter === 0 && typeof callback === 'function') {
-					callback();
-				}
-			});
-		})(note);
+		Notes.openNote(note).then(function () {
+			callbackcounterDecrementTrigger();
+		}).catch(function (err) {
+			callbackcounterDecrementTrigger();
+		});
 	}
 };
 var updateNotes = function updateNotes(newnotes) {
@@ -109,7 +107,7 @@ var updateNotes = function updateNotes(newnotes) {
 					var oldnote = jQuery.grep(notes, function (n, i) {
 						return n.id === newnote.id;
 					});
-					if (oldnote && Note.isContentTheSame(newnote, oldnote)) {
+					if (oldnote && (Note.isContentTheSame(newnote, oldnote) || newnote.removed !== newnote.removed)) {
 						doINeedToRefresh = true;
 						return "break";
 					}

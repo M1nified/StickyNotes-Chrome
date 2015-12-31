@@ -20,8 +20,6 @@ var IndexedDB = {
 				}
 			};
 			openRequest.onsuccess = function (e) {
-				console.log("Success! (1)");
-
 				var db = this.result;
 				db.onerror = function (event) {
 					reject(event.target.errorCode);
@@ -70,14 +68,8 @@ var IndexedDB = {
 			var index = store.index("by_id");
 			for (var i in notes) {
 				var note = notes[i];
-				console.log('putNotes note:', note);
-				if (note.removed === true) {
-					try {
-						store.delete(note.id);
-					} catch (e) {
-						console.error(e);
-					}
-				} else if (note) {
+
+				if (note) {
 					try {
 						store.put(note);
 					} catch (e) {
@@ -87,8 +79,7 @@ var IndexedDB = {
 			}
 		};
 		openRequest.onerror = function (e) {
-			console.log("Error");
-			console.dir(e);
+			console.error("Error", e);
 		};
 	},
 	clearRemovedNotes: function clearRemovedNotes() {

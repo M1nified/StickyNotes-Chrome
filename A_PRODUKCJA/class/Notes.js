@@ -33,12 +33,44 @@ var Notes = (function () {
       });
     }
   }, {
+    key: 'openNote',
+    value: function openNote(note) {
+      var promise = new Promise(function (resolve, reject) {
+        try {
+          if (!note) {
+            throw "openNote, no note object";
+          }
+          var currentWindow = chrome.app.window.get(note.id);
+          if (currentWindow) {
+            console.log('SHOW');
+            currentWindow.show();
+            resolve();
+          } else {
+            console.log('MAKE');
+            chrome.app.window.create('/note/note.html', {
+              id: note.id,
+              frame: 'none'
+            }, function (createdWindow) {
+              createdWindow.contentWindow.note = note;
+              chrome.app.window.get(note.id).onClosed.addListener(function chromeAppWindowOnClosed() {
+                syncAll();
+              });
+              resolve();
+            });
+          }
+        } catch (e) {
+          reject(e);
+        }
+      });
+      return promise;
+    }
+  }, {
     key: 'launchNotes',
     value: function launchNotes(notes) {
       if (!notes) {
-        this.openNewNote();
-        return;
+        return false;
       }
+      var allremoved = true;
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
@@ -47,8 +79,8 @@ var Notes = (function () {
         for (var _iterator = notes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var note = _step.value;
 
-          if (note.removed) {
-            notes.splice(notes.indexOf(note), 1);
+          if (!Note.isRemoved(note)) {
+            allremoved = false;
           }
         }
       } catch (err) {
@@ -66,9 +98,8 @@ var Notes = (function () {
         }
       }
 
-      if (!notes || notes.length === 0) {
-        this.openNewNote();
-        return;
+      if (!notes || notes.length === 0 || allremoved) {
+        return false;
       }
       var _iteratorNormalCompletion2 = true;
       var _didIteratorError2 = false;
@@ -78,17 +109,9 @@ var Notes = (function () {
         for (var _iterator2 = notes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
           var note = _step2.value;
 
-          (function (note) {
-            chrome.app.window.create('/note/note.html', {
-              id: note.id,
-              frame: 'none'
-            }, function launchNoteCallback(createdWindow) {
-              createdWindow.contentWindow.note = note;
-              chrome.app.window.get(note.id).onClosed.addListener(function () {
-                syncAll();
-              });
-            });
-          })(note);
+          if (!Note.isRemoved(note)) {
+            this.openNote(note);
+          }
         }
       } catch (err) {
         _didIteratorError2 = true;
@@ -104,6 +127,16 @@ var Notes = (function () {
           }
         }
       }
+
+      return true;
+    }
+  }, {
+    key: 'launchNotesNewIfEmpty',
+    value: function launchNotesNewIfEmpty(notes) {
+      if (this.launchNotes(notes) === false) {
+        this.openNewNote();
+      }
+      return true;
     }
   }, {
     key: 'updateDisplayedNotes',

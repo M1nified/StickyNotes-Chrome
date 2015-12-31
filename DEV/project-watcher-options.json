@@ -1,5 +1,6 @@
 {
   "babel": [
+    "appData/inAppProducts.js",
     "background/background.js",
     "background/buttons.js",
     "background/general_variables.js",
@@ -11,6 +12,8 @@
     "class/Notes.js",
     "class/Notifications.js",
     "class/Sync.js",
+    "class/SyncMethod.js",
+    "class/SyncViaMethods.js",
     "class/Store.js",
     "class/SyncFileSystem.js",
     "note/note.js",
