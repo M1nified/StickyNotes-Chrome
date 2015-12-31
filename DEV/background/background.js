@@ -99,6 +99,9 @@ var BackgroundListeners = {
 				}
 			}
 		},3000)
+		this.storeListener1 = setInterval(()=>{
+			Store.updatePurchasedElements();
+		},10000)
 	},
 	runtimeOnMessage : (msg,sender,sendResponse)=>{
 		switch(msg.func){

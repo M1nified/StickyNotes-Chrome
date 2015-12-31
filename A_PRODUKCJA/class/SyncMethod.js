@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -10,11 +10,10 @@ var SyncMethod = (function () {
   }
 
   _createClass(SyncMethod, null, [{
-    key: 'synchronize',
+    key: "synchronize",
     value: function synchronize(_notes) {
       var _this = this;
 
-      console.log('SYNCHRONIZE as ', this.name);
       var promise = new Promise(function (resolve, reject) {
         if (!_notes) {
           IndexedDB.getNotes().then(function (n) {
@@ -30,7 +29,7 @@ var SyncMethod = (function () {
       return promise;
     }
   }, {
-    key: 'cmp',
+    key: "cmp",
     value: function cmp() {
       var notes = {};
       this.updated = [];
@@ -132,7 +131,7 @@ var SyncMethod = (function () {
       this.final = notes;
     }
   }, {
-    key: 'notifyUpdates',
+    key: "notifyUpdates",
     value: function notifyUpdates() {
       if (this.final && Object.keys(this.final).length > 0) {
         var launcher = chrome.app.window.get("notes_launcher");

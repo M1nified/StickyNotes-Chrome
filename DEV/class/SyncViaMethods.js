@@ -82,7 +82,7 @@ class SyncViaGoogleDrive extends SyncMethod{
         .then((notes)=>{
           this.online = notes || [];
           this.cmp();
-          console.log('FINAL NOTES:',this.final);
+          // console.log('FINAL NOTES:',this.final);
           IndexedDB.putNotes(this.final)
           SyncFileSystem.putNotes(this.final)
           this.notifyUpdates();

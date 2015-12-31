@@ -743,7 +743,7 @@ var setPurchasedItems = function setPurchasedItems() {
 	chrome.storage.sync.get("purchasedinapp", function (data) {
 		if (data && data.purchasedinapp) {
 			var items = data.purchasedinapp;
-			u_color = false;
+			var u_color = false;
 			for (var i in items) {
 				console.log(i);
 				console.log(items[i]);

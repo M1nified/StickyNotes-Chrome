@@ -1,6 +1,6 @@
 class SyncMethod{
   static synchronize(_notes){
-    console.log('SYNCHRONIZE as ',this.name);
+    // console.log('SYNCHRONIZE as ',this.name);
     let promise = new Promise((resolve,reject)=>{
       if(!_notes){
         IndexedDB.getNotes().then((n)=>{

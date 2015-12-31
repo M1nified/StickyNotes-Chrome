@@ -39,8 +39,9 @@ var SyncFileSystem = {
             readEntries();
           }
         },(e)=>{
-          console.error(e);
-          reject();
+          console.error('Handled file error',e);
+          // reject();
+          resolve();
         });
       };
       readEntries();

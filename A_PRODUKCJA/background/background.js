@@ -101,6 +101,9 @@ var BackgroundListeners = {
 				}
 			}
 		}, 3000);
+		this.storeListener1 = setInterval(function () {
+			Store.updatePurchasedElements();
+		}, 10000);
 	},
 	runtimeOnMessage: function runtimeOnMessage(msg, sender, sendResponse) {
 		switch (msg.func) {
