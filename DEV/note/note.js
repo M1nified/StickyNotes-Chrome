@@ -793,7 +793,7 @@ var setPurchasedItems = function(){
 			}
 			if(/^color_box_background_.+/.test(i)===true){
 				if(inAppProducts[i] && inAppProducts[i].colors){
-					for(j in inAppProducts[i].colors){
+					for(var j in inAppProducts[i].colors){
 						addOptionalBgColor(inAppProducts[i].colors[j]);
 					}
 				}
