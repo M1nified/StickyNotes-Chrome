@@ -244,7 +244,7 @@ $(document).ready(function () {
 				clearTimeout(k17Delay);
 				var notetextarea = $("#notetextarea");
 				var noteclickarea = $("#noteclickarea");
-				scrolltop = noteclickarea.scrollTop();
+				var scrolltop = noteclickarea.scrollTop();
 				noteclickarea.hide();
 				notetextarea.show().scrollTop(scrolltop).prop("selectionStart", k17selectionstart).prop("selectionEnd", k17selectionend);
 				k17 = false;
@@ -414,6 +414,7 @@ var speechToTextInitiate = function speechToTextInitiate() {
 		}
 	});
 };
+var recognition;
 var speechToTextOn = function speechToTextOn() {
 	console.log("try");
 	if ('webkitSpeechRecognition' in window) {
