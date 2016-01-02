@@ -6,16 +6,6 @@ var GLOBALS = {
 	pwj_pair_code : null,
 	options : {}
 }
-// class Chrome{
-// 	static get Storage(){
-// 		return{
-// 			test(){
-// 				console.log('test');
-// 			}
-// 		}
-// 	}
-// }
-// Chrome.Storage.test();
 class StickyNotes{
 	constructor(){
 		chrome.app.runtime.onLaunched.addListener(function onLaunched(){
@@ -42,6 +32,7 @@ class App{
 	constructor(){
 		console.log('LAUNCH');
 		this.initLaunching();
+		App.storageCheck();
 	}
 	initLaunching(){
 		// chrome.storage.sync.get(['pwj_sync','pwj_pair_code'],function initLaunching2(data){
@@ -74,11 +65,26 @@ class App{
 		}.bind(this))
 	}
 	static openLauncher(){
-		chrome.app.window.create('noteslauncher/noteslauncher.html',{id:"notes_launcher",innerBounds:{width:430,height:540},frame:{color:"#8C8C8C"}},function(createdWindow){
+		chrome.app.window.create('/noteslauncher/noteslauncher.html',{id:"notes_launcher",innerBounds:{width:430,height:540},frame:{color:"#8C8C8C"}},function(createdWindow){
 			if(this.notes){
 				createdWindow.contentWindow.notes = this.notes;
 			}
 		}.bind(this))
+	}
+	static storageCheck(){//checks if all options are valid
+		chrome.storage.sync.get(null,(data)=>{
+			let fieldstobeset = {};
+			if(!data || !data.id_owner){
+				let id_owner = App.randOwnerId();
+				fieldstobeset.id_owner = id_owner;
+			}
+			chrome.storage.sync.set(fieldstobeset);
+		})
+	}
+	static randOwnerId(){
+		let d = new Date();
+		let id = d.valueOf() + '_' + Math.random().toString().slice(2);
+		return id;
 	}
 }
 var BackgroundListeners = {

@@ -1,8 +1,1 @@
-"use strict";
-
-$(document).on('click', '.copybutton', function copyToClipboard() {
-  var target = $(this).data('target');
-  $("#" + target).select();
-  document.execCommand('copy');
-  console.log("COPPIERD");
-});
+"use strict";$(document).on("click",".copybutton",function(){var t=$(this).data("target");$("#"+t).select(),document.execCommand("copy"),console.log("COPPIERD")});
