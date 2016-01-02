@@ -2,18 +2,23 @@ var notes = window.notes || [];
 $(function(){
 	//console.log(notes)
 
-	chrome.storage.sync.get(["allLaunch","isStoreOpen"],function(data){
+	chrome.storage.sync.get(["allLaunch"],function(data){
 		var allLaunch = data.allLaunch;
 		if(allLaunch === true){
 			$("#showalways").attr("checked",true);
 		}else if(allLaunch === false){
 			$("#showalways").attr("checked",false);
 		}
+	});
+	chrome.storage.local.get(["isStoreOpen"],(data)=>{
+		console.log(data);
 		var isStoreOpen = data.isStoreOpen;
 		if(!isStoreOpen){
 			$(".storedependent").css("display","none");
+		}else{
+			$(".storedependent").css("display","block");
 		}
-	});
+	})
 
 	if(!notes || !notes.length || notes.length === 0){
 		console.log('GET MYSELF');

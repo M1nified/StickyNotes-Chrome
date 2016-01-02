@@ -19,7 +19,7 @@
     }
   },
   "author": "ProWebJect - Michal Gora",
-  "description": "Sticky Notes for your desktop! It is easy to manage and customize.",
+  "description": "The first, truly sticky app for notes on your desktop! It is easy to manage and customize. Now also supports speech recognition!",
   "icons": {
     "128": "img/icon_128.png",
     "19": "img/icon_19.png",
@@ -53,5 +53,5 @@
     "https://www.paypalobjects.com/*"
   ],
   "short_name": "Sticky Notes",
-  "version": "1.17.0.39"
+  "version": "1.17.0.41"
 }
