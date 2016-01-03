@@ -3,8 +3,9 @@ var Store = {
   run : function(){
     if(!this.runnning){
       this.runnning = true;
-      console.log('MAKE ME SHOP');
+      // console.log('MAKE ME SHOP');
       this.availabilityCheck();
+      this.updatePurchasedElements();
     }
   },
   availabilityCheck : function(){

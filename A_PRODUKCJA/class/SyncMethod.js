@@ -1,1 +1,160 @@
-"use strict";function _classCallCheck(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var _createClass=function(){function t(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,n,i){return n&&t(e.prototype,n),i&&t(e,i),e}}(),SyncMethod=function(){function t(){_classCallCheck(this,t)}return _createClass(t,null,[{key:"synchronize",value:function(t){var e=this,n=new Promise(function(n,i){t?(e.offline=t,n()):IndexedDB.getNotes().then(function(t){e.offline=t,n()})});return n}},{key:"cmp",value:function(){var t={};this.updated=[],this.removed=[];var e=function(t){var e={},n=!0,i=!1,o=void 0;try{for(var a,r=t[Symbol.iterator]();!(n=(a=r.next()).done);n=!0){var s=a.value;e[s.id]=s}}catch(l){i=!0,o=l}finally{try{!n&&r["return"]&&r["return"]()}finally{if(i)throw o}}return e}(this.offline),n=!0,i=!1,o=void 0;try{for(var a,r=this.online[Symbol.iterator]();!(n=(a=r.next()).done);n=!0){var s=a.value,l=s.id;s.last_update=parseInt(s.last_update);try{}catch(u){}(!e[l]||e[l].date<s.date)&&(t[l]=s,Note.isRemoved(s)?this.removed.push(l):this.updated.push(l))}}catch(d){i=!0,o=d}finally{try{!n&&r["return"]&&r["return"]()}finally{if(i)throw o}}var f=!0,h=!1,c=void 0;try{for(var v,y=this.offline[Symbol.iterator]();!(f=(v=y.next()).done);f=!0){var p=v.value,l=p.id;t[l]||(t[l]=p)}}catch(d){h=!0,c=d}finally{try{!f&&y["return"]&&y["return"]()}finally{if(h)throw c}}this["final"]=t}},{key:"notifyUpdates",value:function(){if(this["final"]&&Object.keys(this["final"]).length>0){var t=chrome.app.window.get("notes_launcher");if(t)try{t.contentWindow.updateNotes()}catch(e){console.log("Launcher has not been loaded yet.",e)}}this.updated&&this.updated.length>1?Notifications.notifyAboutUpdatedNotes(this.updated):this.updated&&1===this.updated.length&&Notifications.notifyAboutUpdatedNotes(this.updated[0]),this.removed&&this.removed.length>1?Notifications.notifyAboutRemovedNotes(this.updated):this.removed&&1===this.removed.length&&Notifications.notifyAboutRemovedNotes(this.updated[0])}}]),t}();
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SyncMethod = (function () {
+  function SyncMethod() {
+    _classCallCheck(this, SyncMethod);
+  }
+
+  _createClass(SyncMethod, null, [{
+    key: "synchronize",
+    value: function synchronize(_notes) {
+      var _this = this;
+
+      var promise = new Promise(function (resolve, reject) {
+        if (!_notes) {
+          IndexedDB.getNotes().then(function (n) {
+            _this.offline = n;
+
+            resolve();
+          });
+        } else {
+          _this.offline = _notes;
+          resolve();
+        }
+      });
+      return promise;
+    }
+  }, {
+    key: "cmp",
+    value: function cmp() {
+      var notes = {};
+      this.updated = [];
+      this.removed = [];
+      var offlinemap = (function (notesarray) {
+        var obj = {};
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = notesarray[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var note = _step.value;
+
+            obj[note.id] = note;
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+
+        return obj;
+      })(this.offline);
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = this.online[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var noteonline = _step2.value;
+
+          var id = noteonline.id;
+
+          noteonline.last_update = parseInt(noteonline.last_update);
+          try {} catch (e) {}
+
+          if (!offlinemap[id] || offlinemap[id].date < noteonline.date) {
+              notes[id] = noteonline;
+              if (Note.isRemoved(noteonline)) {
+                this.removed.push(id);
+              } else {
+                this.updated.push(id);
+              }
+            }
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
+
+      try {
+        for (var _iterator3 = this.offline[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var off = _step3.value;
+
+          var id = off.id;
+          if (!notes[id]) {
+              notes[id] = off;
+            }
+        }
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3.return) {
+            _iterator3.return();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
+          }
+        }
+      }
+
+      this.final = notes;
+    }
+  }, {
+    key: "notifyUpdates",
+    value: function notifyUpdates() {
+      if (this.final && Object.keys(this.final).length > 0) {
+        var launcher = chrome.app.window.get("notes_launcher");
+        if (launcher) {
+          try {
+            launcher.contentWindow.updateNotes();
+          } catch (err) {
+            console.log('Launcher has not been loaded yet.', err);
+          }
+        }
+      }
+      if (this.updated && this.updated.length > 1) {
+        Notifications.notifyAboutUpdatedNotes(this.updated);
+      } else if (this.updated && this.updated.length === 1) {
+        Notifications.notifyAboutUpdatedNotes(this.updated[0]);
+      }
+      if (this.removed && this.removed.length > 1) {
+        Notifications.notifyAboutRemovedNotes(this.updated);
+      } else if (this.removed && this.removed.length === 1) {
+        Notifications.notifyAboutRemovedNotes(this.updated[0]);
+      }
+    }
+  }]);
+
+  return SyncMethod;
+})();

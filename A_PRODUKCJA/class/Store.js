@@ -1,1 +1,69 @@
-"use strict";var Store={run:function(){this.runnning||(this.runnning=!0,console.log("MAKE ME SHOP"),this.availabilityCheck())},availabilityCheck:function(){google.payments.inapp.getSkuDetails({parameters:{env:"prod"},success:this.onSkuDetails.bind(this),failure:this.onSkuDetailsFail.bind(this)})},setIsStoreOpen:function(e){chrome.storage.local.set({isStoreOpen:e}),this.availabilityCheckTimeout=setTimeout(this.availabilityCheck.bind(this),3e4)},onSkuDetails:function(e){try{e.response.details.inAppProducts.length>0?this.setIsStoreOpen(!0):this.setIsStoreOpen(!1)}catch(t){this.setIsStoreOpen(!1)}},onSkuDetailsFail:function(e){this.setIsStoreOpen(!1)},updatePurchasedElements:function(){google.payments.inapp.getPurchases({parameters:{env:"prod"},success:this.onLicenseUpdate.bind(this),failure:this.onLicenseUpdateFail.bind(this)})},onLicenseUpdate:function(e){var t=e.response.details,i=chrome.runtime.id.toString(),s={};for(var n in t)if("ACTIVE"===t[n].state){var a=t[n].sku.split(i+"_inapp").join("");s[a]=!0}s.speech_to_text=!0,chrome.storage.sync.set({purchasedinapp:s})},onLicenseUpdateFail:function(e){chrome.storage.sync.get("purchasedinapp",function(e){var t={};e&&e.purchasedinapp&&(t=e.purchasedinapp),t.speech_to_text=!0,chrome.storage.sync.set({purchasedinapp:t})})}};
+'use strict';
+
+var Store = {
+  run: function run() {
+    if (!this.runnning) {
+      this.runnning = true;
+
+      this.availabilityCheck();
+      this.updatePurchasedElements();
+    }
+  },
+  availabilityCheck: function availabilityCheck() {
+    google.payments.inapp.getSkuDetails({
+      'parameters': { 'env': 'prod' },
+      'success': this.onSkuDetails.bind(this),
+      'failure': this.onSkuDetailsFail.bind(this)
+    });
+  },
+  setIsStoreOpen: function setIsStoreOpen(state) {
+    chrome.storage.local.set({ isStoreOpen: state });
+    this.availabilityCheckTimeout = setTimeout(this.availabilityCheck.bind(this), 30000);
+  },
+  onSkuDetails: function onSkuDetails(sku) {
+    try {
+      if (sku.response.details.inAppProducts.length > 0) {
+        this.setIsStoreOpen(true);
+      } else {
+        this.setIsStoreOpen(false);
+      }
+    } catch (err) {
+      this.setIsStoreOpen(false);
+    }
+  },
+  onSkuDetailsFail: function onSkuDetailsFail(sku) {
+    this.setIsStoreOpen(false);
+  },
+  updatePurchasedElements: function updatePurchasedElements() {
+    google.payments.inapp.getPurchases({
+      'parameters': { 'env': 'prod' },
+      'success': this.onLicenseUpdate.bind(this),
+      'failure': this.onLicenseUpdateFail.bind(this)
+    });
+  },
+  onLicenseUpdate: function onLicenseUpdate(resp) {
+    var prodsArr = resp.response.details;
+    var appid = chrome.runtime.id.toString();
+    var newlist = {};
+    for (var i in prodsArr) {
+      if (prodsArr[i].state !== "ACTIVE") {
+        continue;
+      }
+      var sku = prodsArr[i].sku.split(appid + "_inapp").join("");
+      newlist[sku] = true;
+    }
+    newlist.speech_to_text = true;
+    chrome.storage.sync.set({ purchasedinapp: newlist });
+  },
+  onLicenseUpdateFail: function onLicenseUpdateFail(resp) {
+    chrome.storage.sync.get('purchasedinapp', function (data) {
+      var newlist = {};
+      if (data && data.purchasedinapp) {
+        newlist = data.purchasedinapp;
+      }
+
+      newlist.speech_to_text = true;
+      chrome.storage.sync.set({ purchasedinapp: newlist });
+    });
+  }
+};

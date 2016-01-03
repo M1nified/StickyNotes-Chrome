@@ -90,9 +90,6 @@ class App{
 var BackgroundListeners = {
 	run : function(){
 		console.log('LISTENERS');
-		//getting required data
-		Store.updatePurchasedElements();
-		Store.availabilityCheck();
 		//setting listeners
 		chrome.runtime.onMessage.addListener(this.runtimeOnMessage)
 		chrome.storage.onChanged.addListener(this.storageOnChanged)
@@ -110,9 +107,9 @@ var BackgroundListeners = {
 			}
 		},3000)
 		this.storeListener1 = setInterval(()=>{
-			Store.updatePurchasedElements();
+			// Store.updatePurchasedElements();
 			Store.availabilityCheck();
-		},10000)
+		},3600000)
 	},
 	runtimeOnMessage : (msg,sender,sendResponse)=>{
 		switch(msg.func){

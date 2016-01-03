@@ -1,1 +1,48 @@
-"use strict";function _classCallCheck(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var _createClass=function(){function e(e,t){for(var n=0;n<t.length;n++){var o=t[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,o.key,o)}}return function(t,n,o){return n&&e(t.prototype,n),o&&e(t,o),t}}(),Note=function(){function e(){_classCallCheck(this,e)}return _createClass(e,[{key:"isRemoved",value:function(){e.isRemoved(this)}}],[{key:"isContentTheSame",value:function(e,t){var n={};return e.textarea!==t.textarea&&(n.textarea=!0),e.color!==t.color&&(n.color=!0),e.fontfamily!==t.fontfamily&&(n.fontfamily=!0),e.fontsize!==t.fontsize&&(n.fontsize=!0),0==Object.keys(n).length?!0:n}},{key:"isRemoved",value:function(e){return e&&(e.removed===!0||"true"===e.removed)}}]),e}();
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Note = (function () {
+  function Note() {
+    _classCallCheck(this, Note);
+  }
+
+  _createClass(Note, [{
+    key: "isRemoved",
+    value: function isRemoved() {
+      Note.isRemoved(this);
+    }
+  }], [{
+    key: "isContentTheSame",
+    value: function isContentTheSame(note1, note2) {
+      var arethesame = true;
+      var differences = {};
+      if (note1.textarea !== note2.textarea) {
+        differences.textarea = true;
+      }
+      if (note1.color !== note2.color) {
+        differences.color = true;
+      }
+      if (note1.fontfamily !== note2.fontfamily) {
+        differences.fontfamily = true;
+      }
+      if (note1.fontsize !== note2.fontsize) {
+        differences.fontsize = true;
+      }
+      if (Object.keys(differences).length == 0) {
+        return true;
+      } else {
+        return differences;
+      }
+    }
+  }, {
+    key: "isRemoved",
+    value: function isRemoved(note) {
+      return note && (note.removed === true || note.removed === "true");
+    }
+  }]);
+
+  return Note;
+})();

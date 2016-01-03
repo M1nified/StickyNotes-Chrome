@@ -27,7 +27,7 @@
     "babelrc": true,
     "comments": false
   },
-  "babel_uglify":true,
+  "babel_uglify":false,
   "copy": [
     "manifest.json",
     "*.html",

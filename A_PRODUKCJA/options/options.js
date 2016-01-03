@@ -1,1 +1,384 @@
-"use strict";$(document).ready(function(){displayNotifications1(),displayStartupPanel(),loadPWJsyncManager(),displayAutostart1(),setCheckboxListeners(),setSpeechToTextLangs(),loadNotesManager(),loadSharedNotesManager(),loadSyncStorageNotes(),loadGDriveFilesManager(),loadServiceMenu(),loadImportExportMenu()});var displayNotifications1=function(){chrome.storage.sync.get("notifications1",function(e){e&&e.notifications1?$("#notifications1").attr("checked",e.notifications1):($("#notifications1").attr("checked",!0),chrome.storage.sync.set({notifications1:!0}))})},displayStartupPanel=function(){chrome.storage.sync.get("allLaunch",function(e){e=e.allLaunch,e===!0?$("#startuppanel1").attr("checked",!1):$("#startuppanel1").attr("checked",!0)})},displayPWJsyncManager=function(){chrome.storage.sync.get(["pwj_sync","pwj_pair_code"],function(e){$("#pwj_login").empty(),e&&e.pwj_sync&&e.pwj_pair_code&&($("#pwj_pair_code").attr("value",e.pwj_pair_code),$("#pwj_sync").attr("checked",e.pwj_sync))})},loadPWJsyncManager=function(){displayPWJsyncManager(),$("#pwj_sync").on("change",function(e){this.checked?chrome.storage.sync.get("pwj_pair_code",function(e){if(e&&e.pwj_pair_code)chrome.storage.sync.set({pwj_sync:!0},function(e){displayPWJsyncManager()});else{var o=("xxxxxxxx-xxxx-yxxx-yxxx-xxxxxxxxxxxx-"+Date.now()).replace(/[xy]/g,function(e){var o=crypto.getRandomValues(new Uint8Array(1))[0]%16|0,t="x"==e?o:3&o|8;return t.toString(16)});chrome.storage.sync.set({pwj_sync:!0,pwj_pair_code:o},function(e){displayPWJsyncManager()})}}):chrome.storage.sync.set({pwj_sync:!1,pwj_login:null})})},displayAutostart1=function(){chrome.storage.sync.get("autorun",function(e){console.log("displayAutostart1",e),e&&"boolean"==typeof e.autorun&&$("#autostart1").attr("checked",e.autorun)})},setSpeechToTextLangs=function(){chrome.storage.sync.get("purchasedinapp",function(e){e&&e.purchasedinapp&&e.purchasedinapp.speech_to_text||$(".s2t").css("display","none")});for(var e in speechToTextLangs){var o=speechToTextLangs[e];if(o)if(2===o.length)$("#speechToTextLang").append('<option code="'+o[1]+'">'+o[0]+"</option>");else if(o.length>2)for(var t=1;t<o.length;t++){var n=o[t];$("#speechToTextLang").append('<option code="'+n[0]+'">'+o[0]+" ("+n[1]+")</option>")}}chrome.storage.sync.get("speechToTextLang",function(e){e=e.speechToTextLang,e&&(console.log($("#speechToTextLang>option[code="+e+"]")[0]),$("#speechToTextLang>option[code="+e+"]").attr("selected","selected"))}),$("#speechToTextLang").on("change",function(){var e=$("#speechToTextLang>option:selected").attr("code");chrome.storage.sync.set({speechToTextLang:e},function(){})})},setCheckboxListeners=function(){$("input[type=checkbox]:not(.prevent)").on("change",function(){var e={};e[$(this).data("name")]=$(this).data("negate")?!this.checked:this.checked,console.log(e),chrome.storage.sync.set(e)})},loadNotesManager=function(){$(".localNotes tbody").empty().append("<li>Loading...</li>");var e=indexedDB.open("notes");e.onupgradeneeded=function(o){var t=e.result,n=t.createObjectStore("notes",{keyPath:"id"});n.createIndex("by_id","id",{unique:!0})},e.onsuccess=function(e){console.log("Success!");var o=e.target.result,t=o.transaction("notes","readwrite"),n=t.objectStore("notes"),r=(n.index("by_id"),[]);t.oncomplete=function(e){$(".localNotes tbody").empty();for(var o in r){var t="<td>"+r[o].id+"</td><td>"+(r[o].textarea?r[o].textarea.replace(/<(?:.|\n)*?>/gm," ").replace(/\s+/g," ").slice(0,40):" ")+"</td><td>"+toTimeStamp(r[o].date)+"</td>";$(".localNotes tbody").append("<tr>"+t+"</tr>")}};var c=n.openCursor();c.onerror=function(e){console.log(e)},c.onsuccess=function(e){var o=e.target.result;o&&(r.push(o.value),o["continue"]())}},e.onerror=function(e){console.log("Error"),console.dir(e)}},loadSharedNotesManager=function e(){chrome.storage.sync.get("id_owner",function(o){var t=o.id_owner;$.get("http://prowebject.com/stickynotes/sharebox/getNotesByUser.php?id_owner="+t,function(o){$(".sharedNotes tbody").empty();var t=null;try{t=JSON.parse(o)}catch(n){}if(t)for(i in t)if(t[i].note){var r="<td><a class='clicker removeSharedNote' link='"+t[i].link_remove+"'>DELETE</a></td><td><a target='_blank' href='"+t[i].link_note+"'>"+t[i].id_note+"</a></td><td>"+t[i].note.textarea.replace(/<(?:.|\n)*?>/gm," ").replace(/\s+/g," ").slice(0,40)+"</td><td>"+toTimeStamp(parseInt(t[i].note.date))+"</td>";$(".sharedNotes tbody").append("<tr>"+r+"</tr>")}$("a.removeSharedNote").on("click",function(){$.get($(this).attr("link"),function(o){e()})})})})},loadSyncStorageNotes=function o(){$(".syncStorageNotes tbody").empty().append("<li>Loading...</li>"),chrome.storage.sync.get(null,function(e){var t=Object.keys(e);$(".syncStorageNotes tbody").empty();for(i in t)if(/note_\w+/.test(t[i])){var n="<td><button class='copyFromSyncStorageToIndexedDB' noteID='"+e[t[i]].id+"'>IMPORT</button></td><td><button class='removeFromSyncStorage' noteID='"+e[t[i]].id+"'>REMOVE</button></td><td>"+e[t[i]].id+"</td><td>"+e[t[i]].textarea.replace(/<(?:.|\n)*?>/gm," ").replace(/\s+/g," ").slice(0,40)+"</td><td>"+toTimeStamp(e[t[i]].date)+"</td>";$(".syncStorageNotes tbody").append("<tr>"+n+"</tr>")}$("button.copyFromSyncStorageToIndexedDB").on("click",function(){console.log();var e=$(this).attr("noteID");chrome.storage.sync.get("note_"+e,function(o){var t=o["note_"+e];if(t){console.log(o["note_"+e]);var n=indexedDB.open("notes");n.onsuccess=function(e){var o=e.target.result,n=o.transaction("notes","readwrite"),r=n.objectStore("notes"),c=r.index("by_id"),a=c.get(t.id);a.onsuccess=function(){var e=r.put(t);e.onsuccess=function(){loadNotesManager()}}}}})}),$("button.removeFromSyncStorage").on("click",function(){console.log();var e=$(this).attr("noteID");chrome.storage.sync.remove("note_"+e,function(e){o()})})})},loadGDriveFilesManager=function(){chrome.syncFileSystem.requestFileSystem(function(o){var t=o.root.createReader(),n=[],r=function c(){t.readEntries(function(o){console.log("run"),console.log(o),o&&o.length?(o.forEach(function(e,o){n.push(e)}),c()):e(n)})};r()});var e=function(e){console.log(e),e.forEach(function(e,o){console.log(o),$(".gDriveFiles>tbody").append("<tr><td>"+o+"</td><td></td><td>"+e.name+"</td><td></td></tr>")})}},loadImportExportMenu=function(){$("#downloadNotes").on("click",function(){chrome.fileSystem.chooseEntry({type:"saveFile",suggestedName:"sticky_notes.sticky_notes"},function(e){var o=indexedDB.open("notes");o.onsuccess=function(o){var t=o.target.result,n=t.transaction("notes","readwrite"),r=n.objectStore("notes"),c=(r.index("by_id"),[]);n.oncomplete=function(o){e.createWriter(function(e){var o=!1;e.onwriteend=function(e){o||(this.truncate(this.position),o=!0)};var t=new Blob([JSON.stringify(c)],{type:"text/plain"});e.write(t)},function(){})};var a=r.openCursor();a.onerror=function(e){console.log(e)},a.onsuccess=function(e){var o=e.target.result;o&&(c.push(o.value),o["continue"]())}},o.onerror=function(e){console.log("Error"),console.dir(e)}})}),$("#uploadNotes").on("click",function(){chrome.fileSystem.chooseEntry({type:"openFile",suggestedName:"sticky_notes.sticky_notes"},function(e){e.file(function(e){var o=new FileReader;o.onloadend=function(){var e=null;try{e=JSON.parse(this.result)}catch(o){errorHandler(o)}e&&chrome.runtime.getBackgroundPage(function(o){o.saveNotesToIndexedDB(e)})},o.readAsText(e)})})})},closeAllNotes=function(){var e=chrome.app.window.getAll();console.log(e);for(var o in e)!function(e){e.contentWindow.saveNote(function(){e.close()})}(e[o])},loadServiceMenu=function(){$("button.memoryFullReset").on("click",memoryFullReset),$("button.memoryIndexedDBClear").on("click",memoryIndexedDBClear),$("button.memoryChromeLocalStorageClear").on("click",memoryChromeLocalStorageClear),$("button.memoryChromeSyncStorageClear").on("click",memoryChromeSyncStorageClear)},memoryFullReset=function(){memoryIndexedDBClear(),memoryChromeSyncStorageClear(),memoryChromeLocalStorageClear()},memoryIndexedDBClear=function(){var e=indexedDB.open("notes");e.onsuccess=function(e){var o=e.target.result,t=o.transaction("notes","readwrite"),n=t.objectStore("notes"),r=(n.index("by_id"),[]);t.oncomplete=function(e){};var c=n.openCursor();c.onerror=function(e){console.log(e)},c.onsuccess=function(e){var o=e.target.result;o&&(r.push(o.value),o["continue"]());for(var t in r)n["delete"](r[t].id)}},e.onerror=function(e){console.log("Error"),console.dir(e)}},memoryChromeLocalStorageClear=function(){chrome.storage.local.clear(function(){})},memoryChromeSyncStorageClear=function(){chrome.storage.sync.clear(function(){})};
+"use strict";
+
+$(document).ready(function () {
+	displayNotifications1();
+	displayStartupPanel();
+	loadPWJsyncManager();
+	displayAutostart1();
+	setCheckboxListeners();
+	setSpeechToTextLangs();
+	loadNotesManager();
+	loadSharedNotesManager();
+	loadSyncStorageNotes();
+	loadGDriveFilesManager();
+	loadServiceMenu();
+	loadImportExportMenu();
+});
+var displayNotifications1 = function displayNotifications1() {
+	chrome.storage.sync.get("notifications1", function (data) {
+		if (data && data.notifications1) {
+			$("#notifications1").attr("checked", data.notifications1);
+		} else {
+			$("#notifications1").attr("checked", true);
+			chrome.storage.sync.set({ notifications1: true });
+		}
+	});
+};
+var displayStartupPanel = function displayStartupPanel() {
+	chrome.storage.sync.get("allLaunch", function (allLaunch) {
+		allLaunch = allLaunch.allLaunch;
+		if (allLaunch === true) {
+			$("#startuppanel1").attr("checked", false);
+		} else {
+			$("#startuppanel1").attr("checked", true);
+		}
+	});
+};
+var displayPWJsyncManager = function displayPWJsyncManager() {
+	chrome.storage.sync.get(["pwj_sync", "pwj_pair_code"], function (data) {
+		$("#pwj_login").empty();
+		if (data) {
+			if (data.pwj_sync && data.pwj_pair_code) {
+				$("#pwj_pair_code").attr('value', data.pwj_pair_code);
+				$("#pwj_sync").attr('checked', data.pwj_sync);
+			}
+		}
+	});
+};
+var loadPWJsyncManager = function loadPWJsyncManager() {
+	displayPWJsyncManager();
+	$("#pwj_sync").on('change', function (evt) {
+		if (this.checked) {
+			chrome.storage.sync.get("pwj_pair_code", function (data) {
+				if (!data || !data.pwj_pair_code) {
+					var code = ('xxxxxxxx-xxxx-yxxx-yxxx-xxxxxxxxxxxx-' + Date.now()).replace(/[xy]/g, function (c) {
+						var r = crypto.getRandomValues(new Uint8Array(1))[0] % 16 | 0,
+						    v = c == 'x' ? r : r & 0x3 | 0x8;
+						return v.toString(16);
+					});
+					chrome.storage.sync.set({ pwj_sync: true, pwj_pair_code: code }, function (d) {
+						displayPWJsyncManager();
+					});
+				} else {
+					chrome.storage.sync.set({ pwj_sync: true }, function (d) {
+						displayPWJsyncManager();
+					});
+				}
+			});
+		} else {
+			chrome.storage.sync.set({ pwj_sync: false, pwj_login: null });
+		}
+	});
+};
+var displayAutostart1 = function displayAutostart1() {
+	chrome.storage.sync.get("autorun", function (data) {
+		console.log('displayAutostart1', data);
+		if (data && typeof data.autorun === 'boolean') {
+			$("#autostart1").attr("checked", data.autorun);
+		}
+	});
+};
+var setSpeechToTextLangs = function setSpeechToTextLangs() {
+	chrome.storage.sync.get("purchasedinapp", function (data) {
+		if (!data || !data.purchasedinapp || !data.purchasedinapp.speech_to_text) {
+			$(".s2t").css("display", "none");
+		}
+	});
+
+	for (var i in speechToTextLangs) {
+		var l = speechToTextLangs[i];
+		if (!l) {
+			continue;
+		}
+		if (l.length === 2) {
+			$("#speechToTextLang").append("<option code=\"" + l[1] + "\">" + l[0] + "</option>");
+		} else if (l.length > 2) {
+			for (var di = 1; di < l.length; di++) {
+				var d = l[di];
+				$("#speechToTextLang").append("<option code=\"" + d[0] + "\">" + l[0] + " (" + d[1] + ")" + "</option>");
+			}
+		}
+	}
+	chrome.storage.sync.get('speechToTextLang', function (lang) {
+		lang = lang.speechToTextLang;
+		if (lang) {
+			console.log($("#speechToTextLang>option[code=" + lang + "]")[0]);
+			$("#speechToTextLang>option[code=" + lang + "]").attr("selected", "selected");
+		}
+	});
+	$("#speechToTextLang").on("change", function () {
+		var l = $("#speechToTextLang>option:selected").attr("code");
+		chrome.storage.sync.set({ speechToTextLang: l }, function () {});
+	});
+};
+var setCheckboxListeners = function setCheckboxListeners() {
+	$("input[type=checkbox]:not(.prevent)").on("change", function () {
+		var data = {};
+		data[$(this).data('name')] = $(this).data('negate') ? !this.checked : this.checked;
+		console.log(data);
+		chrome.storage.sync.set(data);
+	});
+};
+var loadNotesManager = function loadNotesManager() {
+	$(".localNotes tbody").empty().append("<li>Loading...</li>");
+	var openRequest = indexedDB.open("notes");
+	openRequest.onupgradeneeded = function (e) {
+		var db = openRequest.result;
+		var store = db.createObjectStore("notes", { keyPath: "id" });
+		var idIndex = store.createIndex("by_id", "id", { unique: true });
+	};
+	openRequest.onsuccess = function (e) {
+		console.log("Success!");
+		var db = e.target.result;
+		var tx = db.transaction("notes", "readwrite");
+		var store = tx.objectStore("notes");
+		var index = store.index("by_id");
+
+		var items = [];
+
+		tx.oncomplete = function (evt) {
+			$(".localNotes tbody").empty();
+			for (var i in items) {
+				var noterow = "<td>" + items[i].id + "</td><td>" + (items[i].textarea ? items[i].textarea.replace(/<(?:.|\n)*?>/gm, ' ').replace(/\s+/g, " ").slice(0, 40) : ' ') + "</td><td>" + toTimeStamp(items[i].date) + "</td>";
+				$(".localNotes tbody").append("<tr>" + noterow + "</tr>");
+			}
+		};
+		var cursorRequest = store.openCursor();
+		cursorRequest.onerror = function (error) {
+			console.log(error);
+		};
+		cursorRequest.onsuccess = function (evt) {
+			var cursor = evt.target.result;
+			if (cursor) {
+				items.push(cursor.value);
+				cursor.continue();
+			}
+		};
+	};
+	openRequest.onerror = function (e) {
+		console.log("Error");
+		console.dir(e);
+	};
+};
+var loadSharedNotesManager = function loadSharedNotesManager() {
+	chrome.storage.sync.get("id_owner", function (data) {
+		var id_owner = data.id_owner;
+		$.get("http://prowebject.com/stickynotes/sharebox/getNotesByUser.php?id_owner=" + id_owner, function (result) {
+			$(".sharedNotes tbody").empty();
+			var items = null;
+			try {
+				items = JSON.parse(result);
+			} catch (e) {}
+			if (items) {
+				for (i in items) {
+					if (!items[i].note) {
+						continue;
+					}
+					var noterow = "<td><a class='clicker removeSharedNote' link='" + items[i].link_remove + "'>DELETE</a></td><td><a target='_blank' href='" + items[i].link_note + "'>" + items[i].id_note + "</a></td><td>" + items[i].note.textarea.replace(/<(?:.|\n)*?>/gm, ' ').replace(/\s+/g, " ").slice(0, 40) + "</td><td>" + toTimeStamp(parseInt(items[i].note.date)) + "</td>";
+					$(".sharedNotes tbody").append("<tr>" + noterow + "</tr>");
+				}
+			}
+			$("a.removeSharedNote").on("click", function () {
+				$.get($(this).attr('link'), function (req) {
+					loadSharedNotesManager();
+				});
+			});
+		});
+	});
+};
+var loadSyncStorageNotes = function loadSyncStorageNotes() {
+	$(".syncStorageNotes tbody").empty().append("<li>Loading...</li>");
+	chrome.storage.sync.get(null, function (data) {
+		var allonlinekeys = Object.keys(data);
+		var notes = [];
+		var notesJSON = {};
+		$(".syncStorageNotes tbody").empty();
+		for (i in allonlinekeys) {
+			if (/note_\w+/.test(allonlinekeys[i])) {
+				var noterow = "<td><button class='copyFromSyncStorageToIndexedDB' noteID='" + data[allonlinekeys[i]].id + "'>IMPORT</button></td><td><button class='removeFromSyncStorage' noteID='" + data[allonlinekeys[i]].id + "'>REMOVE</button></td><td>" + data[allonlinekeys[i]].id + "</td><td>" + data[allonlinekeys[i]].textarea.replace(/<(?:.|\n)*?>/gm, ' ').replace(/\s+/g, " ").slice(0, 40) + "</td><td>" + toTimeStamp(data[allonlinekeys[i]].date) + "</td>";
+				$(".syncStorageNotes tbody").append("<tr>" + noterow + "</tr>");
+			}
+		}
+		$("button.copyFromSyncStorageToIndexedDB").on("click", function () {
+			console.log();
+			var id = $(this).attr("noteID");
+			chrome.storage.sync.get("note_" + id, function (data) {
+				var note = data["note_" + id];
+				if (note) {
+					console.log(data["note_" + id]);
+					var openRequest = indexedDB.open("notes");
+					openRequest.onsuccess = function (e) {
+						var db = e.target.result;
+						var tx = db.transaction("notes", "readwrite");
+						var store = tx.objectStore("notes");
+						var index = store.index("by_id");
+
+						var request = index.get(note.id);
+						request.onsuccess = function () {
+							var put = store.put(note);
+							put.onsuccess = function () {
+								loadNotesManager();
+							};
+						};
+					};
+				}
+			});
+		});
+		$("button.removeFromSyncStorage").on("click", function () {
+			console.log();
+			var id = $(this).attr("noteID");
+			chrome.storage.sync.remove("note_" + id, function (data) {
+				loadSyncStorageNotes();
+			});
+		});
+	});
+};
+var loadGDriveFilesManager = function loadGDriveFilesManager() {
+	chrome.syncFileSystem.requestFileSystem(function (fs) {
+		var dirReader = fs.root.createReader();
+		var entries = [];
+		var getFiles = function getFiles() {
+			dirReader.readEntries(function (results) {
+				console.log("run");
+				console.log(results);
+				if (results && results.length) {
+					results.forEach(function (elem, index) {
+						entries.push(elem);
+					});
+					getFiles();
+				} else {
+					fillTable(entries);
+				}
+			});
+		};
+		getFiles();
+	});
+	var fillTable = function fillTable(fe) {
+		console.log(fe);
+		fe.forEach(function (elem, index) {
+			console.log(index);
+			$(".gDriveFiles>tbody").append("<tr><td>" + index + "</td><td></td><td>" + elem.name + "</td><td></td></tr>");
+		});
+	};
+};
+var loadImportExportMenu = function loadImportExportMenu() {
+	$("#downloadNotes").on("click", function () {
+		chrome.fileSystem.chooseEntry({ type: "saveFile", suggestedName: "sticky_notes.sticky_notes" }, function (fileEntry) {
+			var openRequest = indexedDB.open("notes");
+			openRequest.onsuccess = function (e) {
+				var db = e.target.result;
+				var tx = db.transaction("notes", "readwrite");
+				var store = tx.objectStore("notes");
+				var index = store.index("by_id");
+				var items = [];
+				tx.oncomplete = function (evt) {
+					fileEntry.createWriter(function (fileWriter) {
+						var truncated = false;
+						fileWriter.onwriteend = function (e) {
+							if (!truncated) {
+								this.truncate(this.position);
+								truncated = true;
+							}
+						};
+						var blob = new Blob([JSON.stringify(items)], { type: 'text/plain' });
+						fileWriter.write(blob);
+					}, function () {});
+				};
+				var cursorRequest = store.openCursor();
+				cursorRequest.onerror = function (error) {
+					console.log(error);
+				};
+				cursorRequest.onsuccess = function (evt) {
+					var cursor = evt.target.result;
+					if (cursor) {
+						items.push(cursor.value);
+						cursor.continue();
+					}
+				};
+			};
+			openRequest.onerror = function (e) {
+				console.log("Error");
+				console.dir(e);
+			};
+		});
+	});
+	$("#uploadNotes").on("click", function () {
+		chrome.fileSystem.chooseEntry({ type: "openFile", suggestedName: "sticky_notes.sticky_notes" }, function (fileEntry) {
+			fileEntry.file(function (file) {
+				var reader = new FileReader();
+				reader.onloadend = function () {
+					var note = null;
+					try {
+						note = JSON.parse(this.result);
+					} catch (e) {
+						errorHandler(e);
+					}
+					if (note) {
+						chrome.runtime.getBackgroundPage(function (backgroundPage) {
+							backgroundPage.saveNotesToIndexedDB(note);
+						});
+					}
+				};
+				reader.readAsText(file);
+			});
+		});
+	});
+};
+var closeAllNotes = function closeAllNotes() {
+	var allwindows = chrome.app.window.getAll();
+	console.log(allwindows);
+	for (var _i in allwindows) {
+		(function (thewindow) {
+			thewindow.contentWindow.saveNote(function () {
+				thewindow.close();
+			});
+		})(allwindows[_i]);
+	}
+};
+var loadServiceMenu = function loadServiceMenu() {
+	$("button.memoryFullReset").on("click", memoryFullReset);
+	$("button.memoryIndexedDBClear").on("click", memoryIndexedDBClear);
+	$("button.memoryChromeLocalStorageClear").on("click", memoryChromeLocalStorageClear);
+	$("button.memoryChromeSyncStorageClear").on("click", memoryChromeSyncStorageClear);
+};
+var memoryFullReset = function memoryFullReset() {
+	memoryIndexedDBClear();
+
+	memoryChromeSyncStorageClear();
+	memoryChromeLocalStorageClear();
+};
+var memoryIndexedDBClear = function memoryIndexedDBClear() {
+	var openRequest = indexedDB.open("notes");
+	openRequest.onsuccess = function (e) {
+		var db = e.target.result;
+		var tx = db.transaction("notes", "readwrite");
+		var store = tx.objectStore("notes");
+		var index = store.index("by_id");
+		var items = [];
+		tx.oncomplete = function (evt) {};
+		var cursorRequest = store.openCursor();
+		cursorRequest.onerror = function (error) {
+			console.log(error);
+		};
+		cursorRequest.onsuccess = function (evt) {
+			var cursor = evt.target.result;
+			if (cursor) {
+				items.push(cursor.value);
+				cursor.continue();
+			}
+			for (var i in items) {
+				store.delete(items[i].id);
+			}
+		};
+	};
+	openRequest.onerror = function (e) {
+		console.log("Error");
+		console.dir(e);
+	};
+};
+var memoryChromeLocalStorageClear = function memoryChromeLocalStorageClear() {
+	chrome.storage.local.clear(function () {});
+};
+var memoryChromeSyncStorageClear = function memoryChromeSyncStorageClear() {
+	chrome.storage.sync.clear(function () {});
+};
