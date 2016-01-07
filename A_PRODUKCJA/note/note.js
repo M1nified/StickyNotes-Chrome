@@ -348,6 +348,7 @@ var setLiveListeners = function setLiveListeners() {
 		} else {
 			$(this).addClass('done');
 		}
+		saveNoteDelayed();
 		var selection = window.getSelection();
 
 		selection.removeAllRanges();
