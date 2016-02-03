@@ -11,21 +11,26 @@ var speachrecognitionon = false;
 var speechToTextActiveLang = "en-US";
 var purchasedelementslocal = {};
 var grabbed = null;
+var runIndependently = function runIndependently(func) {
+	setTimeout(func, 0);
+};
 $(document).ready(function () {
 	chrome.storage.sync.get(null, function (data) {
 		console.log(data);
 	});
-	updateColor();
-	setTextarea();
-	setMenuColors();
-	setFonts();
-	setSortedMenuItems(function () {
-		setWindowActions();
+	runIndependently(updateColor);
+	runIndependently(setTextarea);
+	runIndependently(setMenuColors);
+	runIndependently(setFonts);
+	runIndependently(function () {
+		setSortedMenuItems(function () {
+			setWindowActions();
+		});
 	});
-	setSpeechToTextLangsList();
-	setLiveListeners();
-	setPurchasedItems();
-	checkStoreState();
+	runIndependently(setSpeechToTextLangsList);
+	runIndependently(setLiveListeners);
+	runIndependently(setPurchasedItems);
+	runIndependently(checkStoreState);
 
 	$(".sortable").on("dragstart", function (event) {
 		grabbed = event.target;

@@ -9,6 +9,9 @@ var speachrecognitionon = false;
 var speechToTextActiveLang = "en-US";
 var purchasedelementslocal = {};
 var grabbed = null;
+var runIndependently = function(func){
+	setTimeout(func,0)
+}
 $(document).ready(function(){
 	// $("#buttonTest").click(function(){
 	// 	chrome.permissions.request({permissions:['audioCapture']},function(g){
@@ -19,15 +22,17 @@ $(document).ready(function(){
 	// 	});
 	// })
 	chrome.storage.sync.get(null,function(data){console.log(data)});
-	updateColor();
-	setTextarea();
-	setMenuColors();
-	setFonts();
-	setSortedMenuItems(function(){setWindowActions();});
-	setSpeechToTextLangsList();
-	setLiveListeners();
-	setPurchasedItems();
-	checkStoreState();
+	runIndependently(updateColor)// updateColor();
+	runIndependently(setTextarea);
+	runIndependently(setMenuColors);
+	runIndependently(setFonts);
+	runIndependently(()=>{
+		setSortedMenuItems(function(){setWindowActions();});
+	})
+	runIndependently(setSpeechToTextLangsList);
+	runIndependently(setLiveListeners);
+	runIndependently(setPurchasedItems);
+	runIndependently(checkStoreState);
 	//$("#buttonTextToSpeech").click(function(){chrome.tts.speak($("#notetextarea").text());})
 	$(".sortable").on("dragstart",function(event){
 		grabbed = event.target;
