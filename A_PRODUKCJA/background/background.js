@@ -19,7 +19,6 @@ var StickyNotes = function StickyNotes() {
 		this.background = new App();
 	}).bind(this));
 	BackgroundListeners.run();
-	Store.run();
 	Sync.synchronizeNow();
 	Sync.syncLoop();
 	chrome.storage.sync.get("autorun", function (data) {
@@ -41,6 +40,7 @@ var App = (function () {
 		console.log('LAUNCH');
 		this.initLaunching();
 		App.storageCheck();
+		Store.run();
 	}
 
 	_createClass(App, [{

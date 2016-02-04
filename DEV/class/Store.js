@@ -5,8 +5,8 @@ var Store = {
       this.runnning = true;
       // console.log('MAKE ME SHOP');
       this.availabilityCheck();
-      this.updatePurchasedElements();
     }
+    this.updatePurchasedElements();
   },
   availabilityCheck : function(){
   	//console.log("CHECK")

@@ -12,7 +12,6 @@ class StickyNotes{
 			this.background = new App();
 		}.bind(this));
 		BackgroundListeners.run();
-		Store.run();
 		Sync.synchronizeNow();
 		Sync.syncLoop();
 		chrome.storage.sync.get("autorun",(data)=>{
@@ -33,6 +32,7 @@ class App{
 		console.log('LAUNCH');
 		this.initLaunching();
 		App.storageCheck();
+		Store.run();
 	}
 	initLaunching(){
 		// chrome.storage.sync.get(['pwj_sync','pwj_pair_code'],function initLaunching2(data){

@@ -1,7 +1,7 @@
 $(function(){
 	getAllItems();
 	getPurchases();
-	
+
 	$(".tabbutton").on("click",function(){
 		$(".tabbutton").removeClass("tabcurrent");
 		$(".tabcontent").removeClass("tabcontenton");
@@ -88,21 +88,22 @@ $(document).on('click',".purchasebutton.buy",function(evt){
 	});
 })
 var onBuySuccess = function(resp){
-	chrome.storage.sync.get("purchasedinapp",function(data){
-		if(data && data.purchasedinapp === undefined){
-			data.purchasedinapp={};
-		}
-		items = data.purchasedinapp;
-		var bought = resp.request.contents.line_item;
-		var appid = chrome.runtime.id.toString();
-		for(var i in bought){
-			var item = bought[i];
-			var sku = item.sku.split(appid+"_inapp").join("");
-			items[sku] = true;
-		}
-		chrome.storage.sync.set({purchasedinapp:items});
-	})
+	Store.updatePurchasedElements();
+	// chrome.storage.sync.get("purchasedinapp",function(data){
+	// 	if(data && data.purchasedinapp === undefined){
+	// 		data.purchasedinapp={};
+	// 	}
+	// 	items = data.purchasedinapp;
+	// 	var bought = resp.request.contents.line_item;
+	// 	var appid = chrome.runtime.id.toString();
+	// 	for(var i in bought){
+	// 		var item = bought[i];
+	// 		var sku = item.sku.split(appid+"_inapp").join("");
+	// 		items[sku] = true;
+	// 	}
+	// 	chrome.storage.sync.set({purchasedinapp:items});
+	// })
 }
 var onBuyFailure = function(resp){
-	
+
 }

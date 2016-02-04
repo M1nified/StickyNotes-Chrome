@@ -6,8 +6,8 @@ var Store = {
       this.runnning = true;
 
       this.availabilityCheck();
-      this.updatePurchasedElements();
     }
+    this.updatePurchasedElements();
   },
   availabilityCheck: function availabilityCheck() {
     google.payments.inapp.getSkuDetails({
