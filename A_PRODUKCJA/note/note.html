@@ -5,9 +5,18 @@
 	<link rel="stylesheet" type="text/css" href="note.css">
 	<script type="text/javascript" src="../lib/jquery.min.js"></script>
 	<script type="text/javascript" src="../lib/urlize.js"></script>
+
+	<script type="text/javascript" src="../class/Content.js"></script>
+	<script type="text/javascript" src="../class/Note.js"></script>
+	<script type="text/javascript" src="../class/Notes.js"></script>
+	<script type="text/javascript" src="../class/Speech2Text.js"></script>
+	<script type="text/javascript" src="../class/WindowManager.js"></script>
+
 	<script type="text/javascript" src="../appData/inAppProducts.js"></script>
 	<script type="text/javascript" src="/background/general_variables.js"></script>
 	<script type="text/javascript" src="/background/general.js"></script>
+
+	<script type="text/javascript" src="_buttons.js"></script>
 	<script type="text/javascript" src="note.js"></script>
 </head>
 <body>
@@ -27,7 +36,7 @@
 			<div class="menu">
 				<div class="menucollection" id="menuMenu">
 					<!-- <div class="button left" id="buttonTest" title="Test"></div> -->
-					<div class="button left buttonMic sortable" id="buttonSpeachToText" title="Speech to text" draggable="true" style="display:none;"></div>
+					<div class="button left buttonMic sortable" id="buttonSpeechToText" title="Speech to text" draggable="true" style="display:none;"></div>
 					<div class="button left buttonNo sortable" id="buttonAlwaysOnTop" title="Always on top." draggable="true"></div>
 					<a href="/options/main.html" target="_blank" class="button left sortable" id="buttonGoToOptions" title="Options!" style="background: url('../img/button_options.png') no-repeat center center; cursor:pointer;"></a>
 					<div class="button left sortable" id="buttonShareLink" title="Share/Update this note!" draggable="true"></div>

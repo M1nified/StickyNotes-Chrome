@@ -5,7 +5,7 @@ var hidemenutimeout = null;
 var save = true;
 chrome.app.window.current().outerBounds.setMinimumSize(160,160);
 var sortedMenuItemsReady = false;
-var speachrecognitionon = false;
+var speechrecognitionon = false;
 var speechToTextActiveLang = "en-US";
 var purchasedelementslocal = {};
 var grabbed = null;
@@ -131,33 +131,21 @@ $(document).ready(function(){
 		closeThisNote();
 	});
 	$("#buttonCloseAll").click(function(event){
-		var allwindows = chrome.app.window.getAll();
-		console.log(allwindows)
-		for(var i in allwindows){
-			(function(thewindow){
-				if(typeof thewindow.contentWindow.saveNote ==="function") {
-					thewindow.contentWindow.saveNote(function(){thewindow.close();})
-				}else{
-					thewindow.close();
-				}
-			})(allwindows[i])
-		}
+		WindowManager.closeAllWindows();
 	});
-	$("#buttonSpeachToText").click(function(event){
-		speechToTextInitiate();
+	$("#buttonSpeechToText").click(function(event){
+		Speech2Text.initiate();
 	});
 	$("#buttonAlwaysOnTop").click(function(event){
-		var is = chrome.app.window.current().isAlwaysOnTop();
-		chrome.app.window.current().setAlwaysOnTop(!is);
-		buttonYesNoChange(this,!is);
+		buttonYesNoChange(this,WindowManager.alwaysOnTopSwap());
 	})
 	$("#buttonGoToOptions").click(function(){
 		event.preventDefault();
-		chrome.app.window.create($(this).attr("href"),{innerBounds:{width:800,height:600}});
+		WindowManager.openLink.call(this);
 	});
 	$("#buttonOpenStore").click(function(){
 		event.preventDefault();
-		chrome.app.window.create($(this).attr("href"),{innerBounds:{width:800,height:600}});
+		WindowManager.openLink.call(this);
 	});
 	$("#buttonShareLink").click(function(evt){
 		// console.log('buttonShareLink click',evt);
@@ -391,127 +379,6 @@ var setSpeechToTextLangsList = function(){
 		chrome.storage.sync.set({speechToTextLang:langcode},function(){	});
 		$("#speechToTextLangSelBox").fadeOut(300);
 	})
-}
-var speechToTextInitiate = function(){
-	var init = function(){
-		if(speachrecognitionon === true){
-			speechToTextOff();
-		}else{
-			chrome.storage.sync.get('speechToTextLang',function(lang){
-				console.log(lang)
-				lang = lang.speechToTextLang;
-				if(!lang){
-					$("#speechToTextLangSelBox").fadeIn(200);
-				}else{
-					speechToTextActiveLang = lang;
-					speechToTextOn();
-				}
-			})
-		}
-	}
-	// if(typeof audioCapture === 'undefined' || !audioCapture){
-	chrome.permissions.request({permissions:['audioCapture']},function(granted){
-		// console.log(granted);
-		// if(chrome.runtime.lasterror){
-		// 	console.log(chrome.runtime.lasterror)
-		// }else{
-		// 	// init()
-		// }
-		if(granted){
-			// audioCapture = true;
-			init();
-		}
-	});
-	// }else{
-	// 	init();
-	// }
-}
-var recognition;
-var speechToTextOn = function(){
-	console.log("try")
-	if('webkitSpeechRecognition' in window){
-		speachrecognitionon = true;
-		console.log("on")
-		try{
-			recognition = recognition || new webkitSpeechRecognition();
-		}catch(e){
-			recognition = new webkitSpeechRecognition();
-		}
-
-
-		recognition.continuous = true;
-		recognition.interimResults = true;
-		recognition.lang = speechToTextActiveLang;//"en-GB";//select_dialect.value;
-
-		recognition.onstart = function() {
-			//console.log("stt")
-			$("#buttonSpeachToText").addClass('speachToTextOn');
-		}
-		recognition.onresult = function(event) {
-			$("#pendingOperations1").show();//.each(function(){var el = $(this); el.replaceWith(el.clone(true));})
-			//console.log("stt2")
-			var interim_transcript = '';
-			var final_transcript = '';
-			var range = saveSelection();
-			for (var i = event.resultIndex; i < event.results.length; ++i) {
-				//console.log(event)
-				if (event.results[i].isFinal) {
-					final_transcript += event.results[i][0].transcript;
-				} else {
-					interim_transcript += event.results[i][0].transcript;
-				}
-			}
-			if(final_transcript.trim() !== ""){
-				(function(range,text){
-					// console.log(text);
-					/* chrome.runtime.sendMessage({func:"toClipboard",val:final_transcript},function(response){
-					if(response && response.status === true){
-					restoreSelection(selection);
-					document.execCommand("Paste");
-					$("#pendingOperations1").hide();
-					saveNoteDelayed();
-				}
-			}) */
-			//console.log(range)
-			if(range){
-				insertText(text,range);
-			}else{
-				// console.error("NO SELECTION");
-			}
-			$("#pendingOperations1").hide();
-			saveNoteDelayed();
-		})(range,final_transcript);
-	}
-}
-recognition.onerror = function(event) {
-	console.log("ERR")
-	console.log(event.error)
-	//setTimeout(function(){recognition.start();},1000);
-}
-recognition.onend = function() {
-	// console.log("END")
-	$("#pendingOperations1").hide();
-	if(speachrecognitionon === true){
-		recognition.start();
-	}
-}
-//recognition.start();
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-navigator.getUserMedia({audio:true}, function(stream) {
-	// console.log("GRANTED")
-	// console.log(stream);
-	//stream.stop();
-	recognition.start();// Now you know that you have audio permission. Do whatever you want...
-}, function(err) {
-	console.log("DENIED")
-	console.log(err) // Aw. No permission (or no microphone available).
-});
-}
-}
-var speechToTextOff = function(){
-	$("#buttonSpeachToText").removeClass('speachToTextOn');
-	speachrecognitionon = false;
-	recognition.stop();
 }
 var setSortedMenuItems = function(callback){
 	chrome.storage.sync.get({sortedMenuItems:null},function(data){
@@ -793,7 +660,7 @@ var setPurchasedItems = function(){
 	chrome.storage.sync.get("purchasedinapp",function(data){
 		//console.log(data)
 		/*if(!data || !data.purchasedinapp || !data.purchasedinapp.speech_to_text){
-		$("#buttonSpeachToText").css("display","none");
+		$("#buttonSpeechToText").css("display","none");
 	}*/
 	if(data && data.purchasedinapp){
 		var items = data.purchasedinapp;
@@ -833,7 +700,7 @@ var setPurchasedItems = function(){
 				break;
 
 				case "speech_to_text":
-				$("#buttonSpeachToText").css("display","block");
+				$("#buttonSpeechToText").css("display","block");
 				break;
 			}
 		}

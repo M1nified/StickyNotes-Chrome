@@ -7,7 +7,7 @@ var hidemenutimeout = null;
 var save = true;
 chrome.app.window.current().outerBounds.setMinimumSize(160, 160);
 var sortedMenuItemsReady = false;
-var speachrecognitionon = false;
+var speechrecognitionon = false;
 var speechToTextActiveLang = "en-US";
 var purchasedelementslocal = {};
 var grabbed = null;
@@ -137,35 +137,21 @@ $(document).ready(function () {
 		closeThisNote();
 	});
 	$("#buttonCloseAll").click(function (event) {
-		var allwindows = chrome.app.window.getAll();
-		console.log(allwindows);
-		for (var i in allwindows) {
-			(function (thewindow) {
-				if (typeof thewindow.contentWindow.saveNote === "function") {
-					thewindow.contentWindow.saveNote(function () {
-						thewindow.close();
-					});
-				} else {
-					thewindow.close();
-				}
-			})(allwindows[i]);
-		}
+		WindowManager.closeAllWindows();
 	});
-	$("#buttonSpeachToText").click(function (event) {
-		speechToTextInitiate();
+	$("#buttonSpeechToText").click(function (event) {
+		Speech2Text.initiate();
 	});
 	$("#buttonAlwaysOnTop").click(function (event) {
-		var is = chrome.app.window.current().isAlwaysOnTop();
-		chrome.app.window.current().setAlwaysOnTop(!is);
-		buttonYesNoChange(this, !is);
+		buttonYesNoChange(this, WindowManager.alwaysOnTopSwap());
 	});
 	$("#buttonGoToOptions").click(function () {
 		event.preventDefault();
-		chrome.app.window.create($(this).attr("href"), { innerBounds: { width: 800, height: 600 } });
+		WindowManager.openLink.call(this);
 	});
 	$("#buttonOpenStore").click(function () {
 		event.preventDefault();
-		chrome.app.window.create($(this).attr("href"), { innerBounds: { width: 800, height: 600 } });
+		WindowManager.openLink.call(this);
 	});
 	$("#buttonShareLink").click(function (evt) {
 		chrome.storage.sync.get("id_owner", function (data) {
@@ -398,96 +384,6 @@ var setSpeechToTextLangsList = function setSpeechToTextLangsList() {
 		chrome.storage.sync.set({ speechToTextLang: langcode }, function () {});
 		$("#speechToTextLangSelBox").fadeOut(300);
 	});
-};
-var speechToTextInitiate = function speechToTextInitiate() {
-	var init = function init() {
-		if (speachrecognitionon === true) {
-			speechToTextOff();
-		} else {
-			chrome.storage.sync.get('speechToTextLang', function (lang) {
-				console.log(lang);
-				lang = lang.speechToTextLang;
-				if (!lang) {
-					$("#speechToTextLangSelBox").fadeIn(200);
-				} else {
-					speechToTextActiveLang = lang;
-					speechToTextOn();
-				}
-			});
-		}
-	};
-
-	chrome.permissions.request({ permissions: ['audioCapture'] }, function (granted) {
-		if (granted) {
-			init();
-		}
-	});
-};
-var recognition;
-var speechToTextOn = function speechToTextOn() {
-	console.log("try");
-	if ('webkitSpeechRecognition' in window) {
-		speachrecognitionon = true;
-		console.log("on");
-		try {
-			recognition = recognition || new webkitSpeechRecognition();
-		} catch (e) {
-			recognition = new webkitSpeechRecognition();
-		}
-
-		recognition.continuous = true;
-		recognition.interimResults = true;
-		recognition.lang = speechToTextActiveLang;
-
-		recognition.onstart = function () {
-			$("#buttonSpeachToText").addClass('speachToTextOn');
-		};
-		recognition.onresult = function (event) {
-			$("#pendingOperations1").show();
-			var interim_transcript = '';
-			var final_transcript = '';
-			var range = saveSelection();
-			for (var i = event.resultIndex; i < event.results.length; ++i) {
-				if (event.results[i].isFinal) {
-					final_transcript += event.results[i][0].transcript;
-				} else {
-					interim_transcript += event.results[i][0].transcript;
-				}
-			}
-			if (final_transcript.trim() !== "") {
-				(function (range, text) {
-					if (range) {
-						insertText(text, range);
-					} else {}
-					$("#pendingOperations1").hide();
-					saveNoteDelayed();
-				})(range, final_transcript);
-			}
-		};
-		recognition.onerror = function (event) {
-			console.log("ERR");
-			console.log(event.error);
-		};
-		recognition.onend = function () {
-			$("#pendingOperations1").hide();
-			if (speachrecognitionon === true) {
-				recognition.start();
-			}
-		};
-
-		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-		navigator.getUserMedia({ audio: true }, function (stream) {
-			recognition.start();
-		}, function (err) {
-			console.log("DENIED");
-			console.log(err);
-		});
-	}
-};
-var speechToTextOff = function speechToTextOff() {
-	$("#buttonSpeachToText").removeClass('speachToTextOn');
-	speachrecognitionon = false;
-	recognition.stop();
 };
 var setSortedMenuItems = function setSortedMenuItems(callback) {
 	chrome.storage.sync.get({ sortedMenuItems: null }, function (data) {
@@ -789,7 +685,7 @@ var setPurchasedItems = function setPurchasedItems() {
 						break;
 
 					case "speech_to_text":
-						$("#buttonSpeachToText").css("display", "block");
+						$("#buttonSpeechToText").css("display", "block");
 						break;
 				}
 			}
