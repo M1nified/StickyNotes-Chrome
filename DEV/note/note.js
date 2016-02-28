@@ -1,3 +1,4 @@
+'use strict';
 var colors = ['#FFF','#f7f945','#FEFF87','#87E7FF','#C0A2D8','#8BE48E','#53e3de','#ff9e2b'];
 var color = "#FFF";
 var savetimeout = null;
