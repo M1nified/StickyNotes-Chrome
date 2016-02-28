@@ -15,6 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      '../A_PRODUKCJA/note/note.html',
       '../A_PRODUKCJA/class/*.js',
       'class/*.js'
     ],

@@ -3,6 +3,12 @@
 $(function () {
   console.log('SET LISTENERS');
 
+  chrome.app.window.onClosed.addListener(function () {
+    if (save) {
+      InTheNote.save();
+    }
+  });
+
   $(window).on('resize', function () {
     setTextarea();
     setSortedMenuItems(function () {
@@ -12,7 +18,9 @@ $(function () {
   $(window).on('blur', function () {
     chrome.runtime.sendMessage({ func: "syncAllDelayed" });
     hideWindowActions();
-  })(function sortableMenuElementsListeners() {
+  });
+
+  (function sortableMenuElementsListeners() {
     var grabbed = undefined;
     $(".sortable").on('dragstart', function (event) {
       grabbed = event.target;
@@ -21,7 +29,7 @@ $(function () {
       event.preventDefault();
       $("#customButtonsEndPoint").before(grabbed);
       grabbed = null;
-      saveNoteDelayed();
+      InTheNote.saveDelayed();
     }).on('dragover', function (event) {
       event.preventDefault();
     });
@@ -31,7 +39,7 @@ $(function () {
         $("#menuMenu").append(grabbed);
         grabbed = null;
       }
-      saveNoteDelayed();
+      InTheNote.saveDelayed();
     }).on('dragover', function (event) {
       if (grabbed) {
         event.preventDefault();
@@ -53,11 +61,11 @@ $(function () {
     $(this).css('font-family', fontfamily).attr('title', fontfamily);
   }).click(function (event) {
     $("#noteBox").css('font-family', $(this).attr("font-family"));
-    saveNoteDelayed();
+    InTheNote.saveDelayed();
   });
   $(".fontsizebutton").click(function (event) {
     $("#noteBox").css("font-size", parseInt($("#noteBox").css('font-size')) + parseInt($(this).attr("font-size-change")));
-    saveNoteDelayed();
+    InTheNote.saveDelayed();
   });
 
   $("#colorPalette").click(function (evt) {
@@ -88,7 +96,7 @@ $(function () {
   });
 
   $("#buttonClose").click(function (event) {
-    saveNote(function () {
+    InTheNote.save().then(function () {
       window.close();
     });
   }).on('mousedown contextmenu mouseover', function () {
@@ -126,7 +134,7 @@ $(function () {
     $("#removeBox").fadeOut(300);
   });
   $("#removeRemove").click(function (event) {
-    closeThisNote();
+    InTheNote.remove();
   });
   $("#buttonCloseAll").click(function (event) {
     WindowManager.closeAllWindows();
@@ -151,7 +159,7 @@ $(function () {
   });
 
   $("#notetextarea").on('keypress keyup', function (event) {
-    saveNoteDelayed();
+    InTheNote.saveDelayed();
   });
 
   (function functionalKeysListeners() {
@@ -213,14 +221,14 @@ $(function () {
           if (event.type == "keydown" && event.ctrlKey) {
             event.preventDefault();
             $("#noteBox").css("font-size", parseInt($("#noteBox").css("font-size")) + 1);
-            saveNoteDelayed();
+            InTheNote.saveDelayed();
           }
           break;
         case 190:
           if (event.type == "keydown" && event.ctrlKey) {
             event.preventDefault();
             $("#noteBox").css("font-size", parseInt($("#noteBox").css("font-size")) - 1);
-            saveNoteDelayed();
+            InTheNote.saveDelayed();
           }
           break;
       }
@@ -232,7 +240,7 @@ $(function () {
         } else if (event.originalEvent.deltaY < 0) {
           $("#noteBox").css("font-size", parseInt($("#noteBox").css("font-size")) + 1);
         }
-        saveNoteDelayed();
+        InTheNote.saveDelayed();
       }
     });
   })();

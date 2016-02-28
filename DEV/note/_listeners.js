@@ -2,6 +2,13 @@
 $(()=>{
   console.log('SET LISTENERS');
 
+
+  chrome.app.window.onClosed.addListener(function(){
+    if(save){
+      InTheNote.save();
+    }
+  });
+
   $(window).on('resize',function(){
 		setTextarea();
 		setSortedMenuItems(function(){
@@ -11,7 +18,7 @@ $(()=>{
 	$(window).on('blur',function(){
 		chrome.runtime.sendMessage({func:"syncAllDelayed"});
 		hideWindowActions();
-	})
+	});
 
   (function sortableMenuElementsListeners(){
     let grabbed;
@@ -22,7 +29,7 @@ $(()=>{
       event.preventDefault();
       $("#customButtonsEndPoint").before(grabbed);
       grabbed = null;
-      saveNoteDelayed();
+      InTheNote.saveDelayed();
     }).on('dragover',function(event){
       event.preventDefault();
     });
@@ -32,7 +39,7 @@ $(()=>{
         $("#menuMenu").append(grabbed);
         grabbed = null;
       }
-      saveNoteDelayed();
+      InTheNote.saveDelayed();
     }).on('dragover',function(event){
       if(grabbed){
         event.preventDefault();
@@ -54,11 +61,11 @@ $(()=>{
     $(this).css('font-family',fontfamily).attr('title',fontfamily);
   }).click(function(event){
     $("#noteBox").css('font-family',$(this).attr("font-family"));
-    saveNoteDelayed();
+    InTheNote.saveDelayed();
   });
   $(".fontsizebutton").click(function(event){
     $("#noteBox").css("font-size",parseInt($("#noteBox").css('font-size'))+parseInt($(this).attr("font-size-change")));
-    saveNoteDelayed();
+    InTheNote.saveDelayed();
   });
 
   $("#colorPalette").click(function(evt){
@@ -89,7 +96,9 @@ $(()=>{
 	});
 
   $("#buttonClose").click(function(event){
-		saveNote(function(){window.close();});
+		InTheNote.save().then(()=>{
+      window.close();
+    });
 	}).on('mousedown contextmenu mouseover',function(){
 		showWindowActions();
 	});
@@ -125,7 +134,7 @@ $(()=>{
 		$("#removeBox").fadeOut(300);
 	});
 	$("#removeRemove").click(function(event){
-		closeThisNote();
+		InTheNote.remove();
 	});
 	$("#buttonCloseAll").click(function(event){
 		WindowManager.closeAllWindows();
@@ -151,7 +160,7 @@ $(()=>{
 
 
 	$("#notetextarea").on('keypress keyup',function(event){
-		saveNoteDelayed();
+		InTheNote.saveDelayed();
 	});
 
   (function functionalKeysListeners(){
@@ -206,14 +215,14 @@ $(()=>{
   			if(event.type == "keydown" && event.ctrlKey){
   				event.preventDefault();
   				$("#noteBox").css("font-size",parseInt($("#noteBox").css("font-size"))+1);
-  				saveNoteDelayed();
+  				InTheNote.saveDelayed();
   			}
   			break;
   			case 190://> (+ font)
   			if(event.type == "keydown" && event.ctrlKey){
   				event.preventDefault();
   				$("#noteBox").css("font-size",parseInt($("#noteBox").css("font-size"))-1);
-  				saveNoteDelayed();
+  				InTheNote.saveDelayed();
   			}
   			break;
   		}
@@ -225,7 +234,7 @@ $(()=>{
   			}else if(event.originalEvent.deltaY<0){
   				$("#noteBox").css("font-size",parseInt($("#noteBox").css("font-size"))+1);
   			}
-  			saveNoteDelayed();
+  			InTheNote.saveDelayed();
   		}
   	})
   })();

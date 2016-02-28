@@ -1,7 +1,7 @@
 'use strict';
 
 var IndexedDB = {
-	getNotes: function getNotes() {
+	openRequest: function openRequest() {
 		var promise = new Promise(function (resolve, reject) {
 			var openRequest = indexedDB.open("notes", 4);
 			openRequest.onupgradeneeded = function (e) {
@@ -20,7 +20,21 @@ var IndexedDB = {
 				}
 			};
 			openRequest.onsuccess = function (e) {
-				var db = this.result;
+				resolve(this.result);
+			};
+			openRequest.onerror = function (e) {
+				console.log("Error");
+				console.dir(e);
+				reject(e);
+			};
+		});
+		return promise;
+	},
+	getNotes: function getNotes() {
+		var _this = this;
+
+		var promise = new Promise(function (resolve, reject) {
+			_this.openRequest().then(function (db) {
 				db.onerror = function (event) {
 					reject(event.target.errorCode);
 				};
@@ -33,9 +47,7 @@ var IndexedDB = {
 				}
 				var store = tx.objectStore("notes");
 				var index = store.index("by_id");
-
 				var items = [];
-
 				tx.oncomplete = function (evt) {
 					resolve(items);
 				};
@@ -50,49 +62,89 @@ var IndexedDB = {
 						cursor.continue();
 					}
 				};
-			};
-			openRequest.onerror = function (e) {
-				console.log("Error");
-				console.dir(e);
-				reject(e);
-			};
+			});
+		});
+		return promise;
+	},
+	getNote: function getNote(id) {
+		var _this2 = this;
+
+		var promise = new Promise(function (resolve, reject) {
+			_this2.openRequest().then(function (db) {
+				var tx = db.transaction("notes", "readonly");
+				var store = tx.objectStore("notes");
+				var index = store.index("by_id");
+				var request = index.get(id);
+				request.onsuccess = function () {
+					resolve(request.result);
+				};
+				request.onerror = function (e) {
+					reject(e);
+				};
+			});
 		});
 		return promise;
 	},
 	putNotes: function putNotes(notes) {
-		var openRequest = indexedDB.open("notes");
-		openRequest.onsuccess = function (e) {
-			var db = e.target.result;
-			var tx = db.transaction("notes", "readwrite");
-			var store = tx.objectStore("notes");
-			var index = store.index("by_id");
-			for (var i in notes) {
-				var note = notes[i];
+		var _this3 = this;
 
-				if (note) {
+		var promise = new Promise(function (resolve, reject) {
+			_this3.openRequest().then(function (db) {
+				var tx = db.transaction("notes", "readwrite");
+				var store = tx.objectStore("notes");
+				var index = store.index("by_id");
+				var callStack = 0;
+				var _iteratorNormalCompletion = true;
+				var _didIteratorError = false;
+				var _iteratorError = undefined;
+
+				try {
+					for (var _iterator = notes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+						var note = _step.value;
+
+						if (note) {
+							callStack++;
+							try {
+								store.put(note).onsuccess = function (event) {
+									callStack--;
+									if (callStack === 0) {
+										resolve();
+									}
+								};
+							} catch (e) {
+								console.error(e);
+								callStack--;
+							}
+						}
+					}
+				} catch (err) {
+					_didIteratorError = true;
+					_iteratorError = err;
+				} finally {
 					try {
-						store.put(note);
-					} catch (e) {
-						console.error(e);
+						if (!_iteratorNormalCompletion && _iterator.return) {
+							_iterator.return();
+						}
+					} finally {
+						if (_didIteratorError) {
+							throw _iteratorError;
+						}
 					}
 				}
-			}
-		};
-		openRequest.onerror = function (e) {
-			console.error("Error", e);
-		};
+			});
+		});
+		return promise;
 	},
 	clearRemovedNotes: function clearRemovedNotes() {
-		var promise = new Promise(function () {
-			var openRequest = indexedDB.open("notes");
-			openRequest.onsuccess = function (e) {
+		var _this4 = this;
+
+		var promise = new Promise(function (resolve, reject) {
+			_this4.openRequest().then(function (db) {
 				var db = e.target.result;
 				var tx = db.transaction("notes", "readwrite");
 				var store = tx.objectStore("notes");
 				var cursorRequest = store.openCursor();
-
 				var items = [];
-
 				cursorRequest.onerror = function (error) {
 					console.log(error);
 				};
@@ -102,38 +154,34 @@ var IndexedDB = {
 						items.push(cursor.value);
 						cursor.continue();
 					}
-					var _iteratorNormalCompletion = true;
-					var _didIteratorError = false;
-					var _iteratorError = undefined;
+					var _iteratorNormalCompletion2 = true;
+					var _didIteratorError2 = false;
+					var _iteratorError2 = undefined;
 
 					try {
-						for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-							var item = _step.value;
+						for (var _iterator2 = items[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+							var item = _step2.value;
 
 							if (Boolean(item.removed) === true) {
 								store.delete(item.id);
 							}
 						}
 					} catch (err) {
-						_didIteratorError = true;
-						_iteratorError = err;
+						_didIteratorError2 = true;
+						_iteratorError2 = err;
 					} finally {
 						try {
-							if (!_iteratorNormalCompletion && _iterator.return) {
-								_iterator.return();
+							if (!_iteratorNormalCompletion2 && _iterator2.return) {
+								_iterator2.return();
 							}
 						} finally {
-							if (_didIteratorError) {
-								throw _iteratorError;
+							if (_didIteratorError2) {
+								throw _iteratorError2;
 							}
 						}
 					}
 				};
-			};
-			openRequest.onerror = function (e) {
-				console.log("Error");
-				console.dir(e);
-			};
+			});
 		});
 		return promise;
 	}

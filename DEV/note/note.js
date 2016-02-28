@@ -14,14 +14,6 @@ var runIndependently = function(func){
 	setTimeout(func,0)
 }
 $(document).ready(function(){
-	// $("#buttonTest").click(function(){
-	// 	chrome.permissions.request({permissions:['audioCapture']},function(g){
-	// 		if(chrome.runtime.lasterror){
-	// 			console.log(chrome.runtime.lasterror)
-	// 		}
-	// 		console.log(g);
-	// 	});
-	// })
 	chrome.storage.sync.get(null,function(data){console.log(data)});
 	runIndependently(updateColor)// updateColor();
 	runIndependently(setTextarea);
@@ -34,9 +26,6 @@ $(document).ready(function(){
 	runIndependently(setLiveListeners);
 	runIndependently(setPurchasedItems);
 	runIndependently(checkStoreState);
-	//$("#buttonTextToSpeech").click(function(){chrome.tts.speak($("#notetextarea").text());})
-
-
 
 	try{
 		color = presetcolor;
@@ -52,13 +41,9 @@ $(document).ready(function(){
 		note.id = chrome.app.window.current().id;
 	}
 
-	chrome.app.window.onClosed.addListener(function(){
-		if(save){
-			saveNote();
-		}
-	})
 	buttonYesNoChange($("#buttonAlwaysOnTop")[0],chrome.app.window.current().isAlwaysOnTop());
-	saveNote();
+	
+	InTheNote.save();
 });
 chrome.storage.onChanged.addListener(function(changes,areaName){
 	if(changes.sortedMenuItems !== null){
@@ -92,7 +77,7 @@ var setLiveListeners = function(){
 		}else{
 			$(this).addClass('done');
 		}
-		saveNoteDelayed();
+		InTheNote.saveDelayed();
 		var selection = window.getSelection();
 		//selection.collapseToEnd();
 		selection.removeAllRanges();
@@ -180,30 +165,11 @@ var updateColor = function(save,nc){
 	$(".globalBox").css("background-color",c);
 	$("#buttonColor .dot").css("background-color",c);
 	if(save){
-		saveNoteDelayed();
+		InTheNote.saveDelayed();
 	}
 }
 var openNewNote = function(){
 	chrome.runtime.sendMessage({func:"openNewNote",presetcolor:color,presetfont:{fontfamily:$("#noteBox").css("font-family"),fontsize:$("#noteBox").css("font-size")}});
-}
-var closeThisNote = function(){
-	var openRequest = indexedDB.open("notes");
-	openRequest.onsuccess = function(e) {
-		//console.log("Success!");
-		var db = e.target.result;
-		var tx=db.transaction("notes","readwrite");
-		var store = tx.objectStore("notes");
-		var index = store.index("by_id");
-		store.put({id:note.id,removed:true,date:new Date().valueOf()}).onsuccess = function(event){
-			chrome.runtime.sendMessage({func:"syncAllDelayed"});
-			save=false;
-			chrome.app.window.current().close();
-		}
-	}
-	openRequest.onerror = function(e) {
-		console.log("Error");
-		console.dir(e);
-	}
 }
 var setTextarea = function(){
 	var h = $(window).height() - 10;
@@ -269,107 +235,6 @@ var openBackgroundPalette = function(){
 };
 var setSnippet = function(){
 	document.title = $("#notetextarea").text().slice(0,40);
-}
-var saveNoteDelayedTimeout = null;
-var changesInProgress = false;
-var saveNoteDelayed = function(){
-	changesInProgress = true;
-	$("#buttonClose").addClass("buttonclosesaveon-delayed").attr('title','Changes detected, stop typing to autosave :)');
-	clearTimeout(saveNoteDelayedTimeout);
-	saveNoteDelayedTimeout = setTimeout(saveNote,700);
-}
-var saveNote = function(callback){
-	$("#buttonClose").removeClass("buttonclosesaveon-delayed").attr('title','Saving!');
-	var textarea = $("#notetextarea").html();
-	//console.log($("#notetextarea").text())
-	//console.log($("#notetextarea").html())
-	if(sortedMenuItemsReady){
-		var sortedMenuItems = $(".toolbar > .sortable").toArray();
-		for(var i in sortedMenuItems){
-			sortedMenuItems[i] = sortedMenuItems[i].id;
-		}
-		chrome.storage.sync.set({sortedMenuItems:sortedMenuItems},function(){setSortedMenuItems(function(){setWindowActions();});});
-		//console.log(sortedMenuItems)
-	}
-	setSnippet();
-	var openRequest = indexedDB.open("notes");
-	openRequest.onsuccess = function(e) {
-		//console.log("Success!");
-		var db = e.target.result;
-		var tx=db.transaction("notes","readwrite");
-		var store = tx.objectStore("notes");
-		var index = store.index("by_id");
-
-		var request = index.get(note.id);
-		request.onsuccess = function(){
-			//console.log(request)
-			//console.log(request.result)
-			if(request.result === undefined){
-				//console.log('problem')
-				var newnote = {};
-				newnote.id = note.id;
-				newnote.textarea = textarea;
-				newnote.width = $(window).width();
-				newnote.height = $(window).height();
-				newnote.top = window.screenY;
-				newnote.left = window.screenX;
-				newnote.color = color;
-				newnote.fontfamily = $("#noteBox").css("font-family");
-				newnote.fontsize = $("#noteBox").css("font-size");
-				newnote.date = new Date().valueOf();
-				newnote.sortedMenuItems = sortedMenuItems;
-				//newnote.removed = false;
-				var put = store.put(newnote);
-				put.onsuccess = function(){
-					//console.log("SAVED!")
-					note = newnote;
-					markButtonCloseAsSaved();
-					chrome.runtime.sendMessage({func:"syncAllDelayed"});
-					if(callback){
-						callback();
-					}
-				}
-				changesInProgress = false;
-			}else{
-				var oldnotecopy = JSON.parse(JSON.stringify(request.result));
-				request.result.textarea = textarea;
-				request.result.width = $(window).width();
-				request.result.height = $(window).height();
-				request.result.top = window.screenY;
-				request.result.left = window.screenX;
-				request.result.color = color;
-				request.result.fontfamily = $("#noteBox").css("font-family");
-				request.result.fontsize = $("#noteBox").css("font-size");
-				request.result.sortedMenuItems = sortedMenuItems;
-				if(isNotesContentSame(oldnotecopy,request.result)===true){
-					//console.log("SAME");
-					markButtonCloseAsSaved();
-					if(callback){
-						//console.log("CALLBACK")
-						callback();
-					}
-				}else{
-					request.result.date = new Date().valueOf();
-					console.log("UPDATED")
-					var put = store.put(request.result);
-					put.onsuccess = function(){
-						//console.log("SAVED!")
-						note = request.result;
-						markButtonCloseAsSaved();
-						chrome.runtime.sendMessage({func:"syncAllDelayed"});
-						if(callback){
-							callback();
-						}
-					}
-				}
-				changesInProgress = false;
-			}
-		}
-	}
-	openRequest.onerror = function(e) {
-		console.log("Error");
-		console.dir(e);
-	}
 }
 var updateNote = function(){
 	var openRequest = indexedDB.open("notes");

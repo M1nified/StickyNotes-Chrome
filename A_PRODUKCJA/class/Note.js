@@ -42,6 +42,15 @@ var Note = (function () {
     value: function isRemoved(note) {
       return note && (note.removed === true || note.removed === "true");
     }
+  }, {
+    key: "remove",
+    value: function remove(id) {
+      return IndexedDB.putNotes([{
+        id: note.id,
+        removed: true,
+        date: new Date().valueOf()
+      }]);
+    }
   }]);
 
   return Note;

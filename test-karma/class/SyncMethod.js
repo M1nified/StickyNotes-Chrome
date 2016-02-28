@@ -65,4 +65,9 @@ describe('SyncMethod cmp',function(){
     SyncMethod.cmp.call(sync);
     expect(sync.final["note_123"]).toBe(sync.online[0])
   })
+  // it("shoould pick correct note if !offline",()=>{
+  //   sync.offline[0] = null;
+  //   SyncMethod.cmp.call(sync);
+  //   expect(sync.final['note_123']).toBe(sync.online[0]);
+  // })
 })

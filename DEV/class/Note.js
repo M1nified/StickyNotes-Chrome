@@ -27,4 +27,11 @@ class Note{
   static isRemoved(note){
     return note && (note.removed === true || note.removed === "true");
   }
+  static remove(id){
+    return IndexedDB.putNotes([{
+      id:note.id,
+      removed:true,
+      date:new Date().valueOf()
+    }]);
+  }
 }
