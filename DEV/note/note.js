@@ -1,7 +1,7 @@
 'use strict';
 var colors = ['#FFF','#f7f945','#FEFF87','#87E7FF','#C0A2D8','#8BE48E','#53e3de','#ff9e2b'];
-var color = "#FFF";
-var savetimeout = null;
+var color = "#FEFF87";
+// var savetimeout = null;
 var hidemenutimeout = null;
 var save = true;
 chrome.app.window.current().outerBounds.setMinimumSize(160,160);
@@ -17,14 +17,16 @@ $(document).ready(function(){
 	chrome.storage.sync.get(null,function(data){console.log(data)});
 	runIndependently(updateColor)// updateColor();
 	runIndependently(setTextarea);
-	runIndependently(setMenuColors);
+	runIndependently(InTheNote.setMenuColors);
 	runIndependently(setFonts);
 	runIndependently(()=>{
-		setSortedMenuItems(function(){setWindowActions();});
+		InTheNote.setSortedMenuItems().then(()=>{
+			InTheNote.setWindowActions();
+		});
 	})
 	runIndependently(setSpeechToTextLangsList);
 	runIndependently(setLiveListeners);
-	runIndependently(setPurchasedItems);
+	runIndependently(InTheNote.setPurchasedItems);
 	runIndependently(checkStoreState);
 
 	try{
@@ -34,7 +36,7 @@ $(document).ready(function(){
 
 	if(typeof(note) != 'undefined' && note != null){
 		$("#notetextarea").html(note.textarea);
-		color = note.color || "#FFF";
+		color = note.color || "#FEFF87";
 		updateColor();
 	}else{
 		note = {};
@@ -42,32 +44,10 @@ $(document).ready(function(){
 	}
 
 	buttonYesNoChange($("#buttonAlwaysOnTop")[0],chrome.app.window.current().isAlwaysOnTop());
-	
+
 	InTheNote.save();
 });
-chrome.storage.onChanged.addListener(function(changes,areaName){
-	if(changes.sortedMenuItems !== null){
-		setSortedMenuItems(function(){setWindowActions();});
-	}
-	if(changes.purchasedinapp !== null && changes.purchasedinapp !== undefined){
-		setPurchasedItems();
-	}
-	if(changes.isStoreOpen !== null && changes.isStoreOpen !== undefined){
-		setStoreState(changes.isStoreOpen.newValue);
-	}
-});
 var hideWindowActionsTimeout = null;
-var setWindowActions = function(){
-	if($("#toolbar > .button, #windowActionsBox > .button").length * 25 <= $(window).width()){
-		//console.log("A");
-		$("#windowActionsBox").removeClass("windowActionsBoxDrop").addClass("windowActionBoxToolbar")
-		$("#buttonClose").after($("#windowActionsBox"))
-	}else{
-		//console.log("B");
-		$("#windowActionsBox").removeClass("windowActionBoxToolbar").addClass("windowActionsBoxDrop")
-		$("body").append($("#windowActionsBox"))
-	}
-}
 var setLiveListeners = function(){
 	$("body").on("dblclick","ul.task-list li",function(event){
 		event.preventDefault();
@@ -87,6 +67,7 @@ var setLiveListeners = function(){
 		event.stopPropagation();
 	});
 }
+
 var showWindowActions = function(){
 	if(!$("#windowActionsBox").is(":visible")){
 		$("#windowActionsBox").show("fast");
@@ -124,25 +105,6 @@ var setSpeechToTextLangsList = function(){
 		chrome.storage.sync.set({speechToTextLang:langcode},function(){	});
 		$("#speechToTextLangSelBox").fadeOut(300);
 	})
-}
-var setSortedMenuItems = function(callback){
-	chrome.storage.sync.get({sortedMenuItems:null},function(data){
-		if(data.sortedMenuItems !== null && data.sortedMenuItems.length > 0){
-			$("#menuMenu").append($("#toolbar > .sortable").not("#"+data.sortedMenuItems.join(",#")));
-			$("#customButtonsEndPoint").before($("#"+data.sortedMenuItems.join(",#")));
-		}else{
-			$("#menuMenu").append($("#toolbar > .sortable"));
-		}
-		sortedMenuItemsReady = true;
-		while($("#toolbar > .button").length * 25 > ($(window).width()-20) && $("#customButtonsEndPoint").prev(".sortable").length > 0){
-			$("#menuMenu").append($("#customButtonsEndPoint").prev(".sortable"));
-			sortedMenuItemsReady = false;
-		}
-		if(typeof callback === "function"){
-			callback();
-		}
-	});
-
 }
 var buttonYesNoChange = function(button,value){
 	if(value){
@@ -196,30 +158,6 @@ var setFonts = function(){
 	$()
 });*/
 }
-var setMenuColors = function(){
-	$("#menuColors").empty();
-	for(var i in colors){
-		$("#menuColors").append('<div class="button left colorbutton" data-color="'+colors[i]+'" style="" title="Set this color!"><div class="dot" style="width:13px;height:13px;margin:6px;background-color:'+colors[i]+';"></div></div>')
-	}
-	$(".colorbutton").on("click",function(){
-		color = $(this).data("color");
-		//console.log(typeof color)
-		updateColor();
-		setMenuColors();
-	})
-	$("#menuColors").append('<div class="button left colorbutton storedependent" id="BuyBgColors" style="" title="Get more colors!"><div class="dot" style="width:13px;height:13px;margin:6px;background-color:#000000; animation:multicolor 5s infinite linear"></div></div>');
-	$("#BuyBgColors").on("click",function(elem){
-		chrome.app.window.create("store/purchase.html#bgcolors",{innerBounds:{width:800,height:600}});
-	})
-
-	if(purchasedelementslocal.color_palette_background){
-		$("#menuColors").append('<div class="button left buttoncolormap" id="openBackgroundPalette" style="" title="Choose from the palette!"></div>');
-		$("#openBackgroundPalette").on("click",function(elem){
-			openBackgroundPalette();
-		})
-	}
-
-}
 var openBackgroundPalette = function(){
 	$("#colorPalette").fadeIn(200);
 	$("#colormap>area").on("click",function(evt){
@@ -253,7 +191,7 @@ var updateNote = function(){
 					color = note.color;
 					updateColor();
 					setTextarea();
-					setMenuColors();
+					InTheNote.setMenuColors();
 					setFonts();
 					setSnippet();
 					//console.log("updateNote")
@@ -279,64 +217,5 @@ var setStoreState = function(state){
 		$(".storedependent").removeClass("offcosnostore");
 	}else{
 		$(".storedependent").addClass("offcosnostore");
-	}
-}
-var setPurchasedItems = function(){
-	chrome.storage.sync.get("purchasedinapp",function(data){
-		//console.log(data)
-		/*if(!data || !data.purchasedinapp || !data.purchasedinapp.speech_to_text){
-		$("#buttonSpeechToText").css("display","none");
-	}*/
-	if(data && data.purchasedinapp){
-		var items = data.purchasedinapp;
-		var u_color = false;
-		for(var i in items){
-			console.log(i)
-			console.log(items[i])
-			if(items[i]!==true){
-				continue;
-			}
-			if(/^color_box_background_.+/.test(i)===true){
-				if(inAppProducts[i] && inAppProducts[i].colors){
-					for(var j in inAppProducts[i].colors){
-						addOptionalBgColor(inAppProducts[i].colors[j]);
-					}
-				}
-				u_color = true;
-				continue;
-			}
-			switch(i){
-				case "color_palette_background":
-				purchasedelementslocal["color_palette_background"]=true;
-				u_color = true;
-				break;
-
-				case "color_background_454f56":
-				addOptionalBgColor("#"+i.split("color_background_").join(""));
-				u_color = true;
-				break;
-				case "color_background_ff7171":
-				addOptionalBgColor("#"+i.split("color_background_").join(""));
-				u_color = true;
-				break;
-				case "color_background_ff4fc1":
-				addOptionalBgColor("#"+i.split("color_background_").join(""));
-				u_color = true;
-				break;
-
-				case "speech_to_text":
-				$("#buttonSpeechToText").css("display","block");
-				break;
-			}
-		}
-		if(u_color){
-			setMenuColors();
-		}
-	}
-})
-}
-var addOptionalBgColor = function(color){
-	if(colors.indexOf(color)===-1){
-		colors.push(color);
 	}
 }

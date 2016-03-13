@@ -2,7 +2,7 @@
 var WindowManager = {
   closeAllWindows : function(){
     let allwindows = chrome.app.window.getAll();
-    for(let win of windows){
+    for(let win of allwindows){
       ((thewindow)=>{
         if(typeof thewindow.contentWindow.saveNote === 'function'){
           thewindow.contentWindow.saveNote(function(){

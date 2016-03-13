@@ -8,7 +8,7 @@ var WindowManager = {
     var _iteratorError = undefined;
 
     try {
-      for (var _iterator = windows[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      for (var _iterator = allwindows[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         var win = _step.value;
 
         (function (thewindow) {

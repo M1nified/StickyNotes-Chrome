@@ -322,16 +322,15 @@ $("#uploadNotes").on("click",function(){
 		fileEntry.file(function(file){
 			var reader = new FileReader();
 			reader.onloadend = function(){
-				var note = null;
+				var notes = null;
 				try{
-					note = JSON.parse(this.result);
+					notes = JSON.parse(this.result);
 				}catch(e){
 					errorHandler(e);
 				}
-				if(note){
-					chrome.runtime.getBackgroundPage(function(backgroundPage){
-						backgroundPage.saveNotesToIndexedDB(note)
-					})
+				console.log(notes)
+				if(notes){
+					IndexedDB.putNotes(notes);
 				}
 			}
 			reader.readAsText(file);

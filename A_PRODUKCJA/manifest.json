@@ -50,6 +50,7 @@
     "clipboardRead",
     "webview",
     "http://prowebject.com/*",
+    "http://www.prowebject.com/*",
     "https://www.paypalobjects.com/*"
   ],
   "short_name": "Sticky Notes",
