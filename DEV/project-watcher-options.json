@@ -19,6 +19,7 @@
     "class/SyncViaMethods.js",
     "class/Store.js",
     "class/SyncFileSystem.js",
+    "class/TextFormat.js",
     "class/WindowManager.js",
     "note/_listeners.js",
     "note/note.js",

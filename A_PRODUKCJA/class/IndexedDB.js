@@ -89,6 +89,13 @@ var IndexedDB = {
 		var _this3 = this;
 
 		var promise = new Promise(function (resolve, reject) {
+			if (!notes || !notes.length || notes.length == 0) {
+				reject();
+				return;
+			}
+			if (!Array.isArray(notes)) {
+				notes = [notes];
+			}
 			_this3.openRequest().then(function (db) {
 				var tx = db.transaction("notes", "readwrite");
 				var store = tx.objectStore("notes");

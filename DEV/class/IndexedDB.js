@@ -81,8 +81,15 @@ var IndexedDB = {
 		})
 		return promise;
 	},
-	putNotes : function(notes){
+	putNotes : function putNotes(notes){
 		let promise = new Promise((resolve,reject)=>{
+			if(!notes || !notes.length || notes.length==0){
+				reject();
+				return;
+			}
+			if(!Array.isArray(notes)){
+				notes = [notes];
+			}
 			this.openRequest().then((db)=> {
 				var tx=db.transaction("notes","readwrite");
 				var store = tx.objectStore("notes");

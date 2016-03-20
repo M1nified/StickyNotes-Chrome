@@ -1,8 +1,6 @@
 'use strict';
 
 $(function () {
-  console.log('SET LISTENERS');
-
   chrome.app.window.onClosed.addListener(function () {
     if (save) {
       InTheNote.save();
@@ -65,9 +63,7 @@ $(function () {
     document.execCommand(role, false, null);
   });
   $("#buttonTaskList").click(function () {
-    document.execCommand('insertUnorderedList', false, null);
-    var elem = $(window.getSelection().focusNode).closest('ul');
-    elem.addClass('task-list');
+    TextFormat.taskList();
   });
   $(".fontbutton").each(function () {
     var fontfamily = $(this).attr('font-family');
@@ -86,7 +82,7 @@ $(function () {
   });
 
   $(".menubutton").click(function (event) {
-    var menuId = $(this).attr('menu');
+    var menuId = $(this).data('menu');
     if (!$("#" + menuId).is(':visible')) {
       if ($(".menucollection").is(':visible')) {
         $(".menucollection").not("#" + menuId).hide(function () {
@@ -171,6 +167,11 @@ $(function () {
   });
   $("#buttonPrint").click(function (event) {
     InTheNote.print();
+  });
+
+  $(".button-backcolor").click(function (event) {
+    var selectedcolor = $(this).data("color");
+    TextFormat.backColor(selectedcolor);
   });
 
   $("#notetextarea").on('keypress keyup', function (event) {
@@ -264,7 +265,7 @@ $(function () {
     switch (event.keyCode) {
       case 9:
         event.preventDefault();
-        insertElem($(document.createElement('pre')).addClass('pretab').append("&#9;")[0]);
+        TextFormat.tabulationInsert();
         break;
     }
   });

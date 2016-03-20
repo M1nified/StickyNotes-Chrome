@@ -12,6 +12,7 @@
 	<script type="text/javascript" src="../class/Note.js"></script>
 	<script type="text/javascript" src="../class/Notes.js"></script>
 	<script type="text/javascript" src="../class/Speech2Text.js"></script>
+	<script type="text/javascript" src="../class/TextFormat.js"></script>
 	<script type="text/javascript" src="../class/WindowManager.js"></script>
 
 	<script type="text/javascript" src="../appData/inAppProducts.js"></script>
@@ -30,9 +31,9 @@
 		<div class="toolbar inset-bottom" id="toolbar">
 			<div class="button left" id="buttonAdd" style="background: url('../img/button_add.png');" title="New!"></div>
 			<div class="button left" id="buttonDel" style="background: url('../img/button_del.png');" title="Remove!"></div>
-			<div class="button left menubutton" menu="menuColors" id="buttonColor" style="" title="Colors..."><div class="dot" style="width:13px;height:13px;margin:6px;"></div></div>
-			<div class="button left menubutton" menu="menuFonts" id="buttonFont" style="background: url('../img/button_font.png');" title="Text format and fonts..."></div>
-			<div class="button left menubutton" menu="menuMenu" id="buttonMenu" style="background: url('../img/button_menu.png');" title="Menu! Drop item from this menu on this icon to pin it to the toolbar."></div>
+			<div class="button left menubutton" data-menu="menuColors" id="buttonColor" style="" title="Colors..."><div class="dot" style="width:13px;height:13px;margin:6px;"></div></div>
+			<div class="button left menubutton" data-menu="menuFonts" id="buttonFont" style="background: url('../img/button_font.png');" title="Text format and fonts..."></div>
+			<div class="button left menubutton" data-menu="menuMenu" id="buttonMenu" style="background: url('../img/button_menu.png');" title="Menu! Drop item from this menu on this icon to pin it to the toolbar."></div>
 			<virtualseparator id="customButtonsEndPoint" style="display:none;"></virtualseparator>
 			<div class="button right" id="buttonClose" title="Hide!"></div>
 			<div class="menu">
@@ -63,6 +64,7 @@
 					<div class="button left textFormat" data-role='insertOrderedList' id="buttonOrderedList" title="Ordered List" style="background: url(../img/button_insertOrderedList.png);"></div>
 
 					<div class="button left" id="buttonTaskList" title="Task List" style="background: url(../img/button_tasklist.png);"></div>
+					<div class="button left menubutton" id="buttonBackColor" title="Text background color..." data-menu="menuBackColors"></div>
 
 					<div class="button left fontbutton" font-family="&quot;Courier New&quot;, Courier, monospace" title="&quot;Courier New&quot;, Courier, monospace" style="font-size: 18px; font-family: 'Courier New', Courier, monospace;">f</div>
 					<div class="button left fontbutton" font-family="&quot;Lucida Console&quot;, Monaco, monospace" title="&quot;Lucida Console&quot;, Monaco, monospace" style="font-size: 15px; line-height:26px; font-family: 'Lucida Console', Monaco, monospace;">f</div>
@@ -77,6 +79,16 @@
 					<div class="button left fontbutton" font-family="&quot;Times New Roman&quot;, Times, serif" title="&quot;Times New Roman&quot;, Times, serif" style="font-size: 17px; font-family: 'Times New Roman', Times, serif;">f</div>
 					<div class="button left fontbutton" font-family="&quot;Palatino Linotype&quot;, &quot;Book Antiqua&quot;, Palatino, serif" title="&quot;Palatino Linotype&quot;, &quot;Book Antiqua&quot;, Palatino, serif" style="font-size: 17px; font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;">f</div>
 					<div class="button left fontbutton" font-family="Georgia, serif" title="Georgia, serif" style="font-size: 16px; font-family: Georgia, serif;">f</div>
+				</div>
+				<div class="menucollection" id="menuBackColors">
+					<div class="button left button-backcolor" data-color="transparent" style="" title="Unset background color"><div class="dot" style="width:13px;height:13px;margin:6px;border: solid 1px #000000;"></div></div>
+					<div class="button left button-backcolor" data-color="#FF0000" style="" title="Use as background color"><div class="dot" style="width:13px;height:13px;margin:6px;background-color:#FF0000;"></div></div>
+					<div class="button left button-backcolor" data-color="#E6E6E6" style="" title="Use as background color"><div class="dot" style="width:13px;height:13px;margin:6px;background-color:#E6E6E6;"></div></div>
+					<div class="button left button-backcolor" data-color="#387EFF" style="" title="Use as background color"><div class="dot" style="width:13px;height:13px;margin:6px;background-color:#387EFF;"></div></div>
+					<div class="button left button-backcolor" data-color="#30FF2D" style="" title="Use as background color"><div class="dot" style="width:13px;height:13px;margin:6px;background-color:#30FF2D;"></div></div>
+					<div class="button left button-backcolor" data-color="#FF6FF4" style="" title="Use as background color"><div class="dot" style="width:13px;height:13px;margin:6px;background-color:#FF6FF4;"></div></div>
+					<div class="button left button-backcolor" data-color="#000000" style="" title="Use as background color"><div class="dot" style="width:13px;height:13px;margin:6px;background-color:#000000;"></div></div>
+					<div class="button left button-backcolor" data-color="#FFF80C" style="" title="Use as background color"><div class="dot" style="width:13px;height:13px;margin:6px;background-color:#FFF80C;"></div></div>
 				</div>
 			</div>
 		</div>

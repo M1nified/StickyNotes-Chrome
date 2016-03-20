@@ -143,7 +143,7 @@ var SyncViaGoogleDrive = (function (_SyncMethod2) {
             _this6.online = notes || [];
             _this6.cmp();
 
-            IndexedDB.putNotes(_this6.final);
+            IndexedDB.putNotes(_this6.final).catch(function (e) {});
             SyncFileSystem.putNotes(_this6.final);
             _this6.notifyUpdates();
             resolve();

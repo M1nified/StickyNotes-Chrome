@@ -181,8 +181,8 @@ var InTheNote = InTheNote || {
           let items = data.purchasedinapp;
           let u_color = false;//should I update available colors
           for(let i in items){
-            console.log(i);
-            console.log(items[i]);
+            // console.log(i);
+            // console.log(items[i]);
             if(items[i]!==true){
               continue;
             }
@@ -268,12 +268,5 @@ var InTheNote = InTheNote || {
       win.resizeTo(500,500);
     }
     print();
-    // chrome.app.window.create('/note/note.html',{
-    //   bounds:{width:800,height:600},
-    //   resizable:true
-    // },function openNewNoteCallback(createdWindow){
-    //   createdWindow.contentWindow.note = note;
-    //   createdWindow.contentWindow.print();
-    // })
   }
 };

@@ -226,8 +226,6 @@ var InTheNote = InTheNote || {
           var items = data.purchasedinapp;
           var u_color = false;
           for (var i in items) {
-            console.log(i);
-            console.log(items[i]);
             if (items[i] !== true) {
               continue;
             }

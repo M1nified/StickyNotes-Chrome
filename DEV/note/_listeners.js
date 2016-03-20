@@ -1,6 +1,6 @@
 'use strict';
 $(()=>{
-  console.log('SET LISTENERS');
+  // console.log('SET LISTENERS');
   //CHROME LISTENERS
   chrome.app.window.onClosed.addListener(function(){
     if(save){
@@ -63,9 +63,7 @@ $(()=>{
     document.execCommand(role,false,null);
   });
   $("#buttonTaskList").click(function(){
-    document.execCommand('insertUnorderedList',false,null);
-    let elem = $(window.getSelection().focusNode).closest('ul');
-    elem.addClass('task-list');
+    TextFormat.taskList();
   });
   $(".fontbutton").each(function(){
     let fontfamily = $(this).attr('font-family');
@@ -84,7 +82,7 @@ $(()=>{
   })
 
   $(".menubutton").click(function(event){
-		let menuId = $(this).attr('menu');
+		let menuId = $(this).data('menu');
 		if(!$("#"+menuId).is(':visible')){
 			if($(".menucollection").is(':visible')){
 				$(".menucollection").not("#"+menuId).hide(function(){
@@ -169,6 +167,11 @@ $(()=>{
   });
   $("#buttonPrint").click(function(event){
     InTheNote.print();
+  });
+
+  $(".button-backcolor").click(function(event){
+    let selectedcolor = $(this).data("color");
+    TextFormat.backColor(selectedcolor);
   });
 
 
@@ -256,7 +259,7 @@ $(()=>{
 		switch(event.keyCode){
 			case 9://tabulation
 			event.preventDefault();
-			insertElem($(document.createElement('pre')).addClass('pretab').append("&#9;")[0]);
+      TextFormat.tabulationInsert();
 			break;
 		}
 	});

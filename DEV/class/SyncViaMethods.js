@@ -83,7 +83,10 @@ class SyncViaGoogleDrive extends SyncMethod{
           this.online = notes || [];
           this.cmp();
           // console.log('FINAL NOTES:',this.final);
-          IndexedDB.putNotes(this.final)
+          IndexedDB.putNotes(this.final).catch((e)=>{
+            //error
+            // console.log(e);
+          });
           SyncFileSystem.putNotes(this.final)
           this.notifyUpdates();
           resolve();//not really good, cos still not sure if quest has ended
