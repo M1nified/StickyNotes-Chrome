@@ -59,7 +59,7 @@ $(function () {
   })();
 
   $(".textFormat").click(function () {
-    var role = $(this).date('role');
+    var role = $(this).data('role');
     document.execCommand(role, false, null);
   });
   $("#buttonTaskList").click(function () {

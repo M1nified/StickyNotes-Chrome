@@ -15,12 +15,12 @@ $(document).ready(function(){
 })
 var displayNotifications1 = function(){
 	chrome.storage.sync.get("notifications1",function(data){
-		if(data && data.notifications1){
-			$("#notifications1").attr("checked",data.notifications1);
-		}else{
-			$("#notifications1").attr("checked",true);
-			chrome.storage.sync.set({notifications1:true});
-		}
+		$("#notifications1").attr("checked",data.notifications1);
+		// if(data && data.notifications1 !== undefined){
+		// }else{
+		// 	$("#notifications1").attr("checked",true);
+		// 	chrome.storage.sync.set({notifications1:true});
+		// }
 	})
 }
 var displayStartupPanel = function(){
@@ -128,8 +128,8 @@ var setCheckboxListeners = function(){
 			}
 		}*/
 		var data = {};
-		data[$(this).data('name')] = $(this).data('negate') ? !this.checked : this.checked ;
-		console.log(data)
+		data[$(this).data('name')] = $(this).data('negate') ? !this.checked : this.checked;
+		// console.log(data)
 		chrome.storage.sync.set(data);
 	})
 }

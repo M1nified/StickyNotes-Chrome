@@ -48,8 +48,12 @@ var Notifications = {
 
     var id = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
-    chrome.notifications.create(id, options, function (notificationId) {
-      _this.idmap[notificationId] = id;
+    chrome.storage.sync.get('notifications1', function (data) {
+      if (data && data.notifications1) {
+        chrome.notifications.create(id, options, function (notificationId) {
+          _this.idmap[notificationId] = id;
+        });
+      }
     });
   },
   notifyAboutUpdatedNotes: function notifyAboutUpdatedNotes(notes) {

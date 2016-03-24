@@ -44,9 +44,13 @@ var Notifications = {
     chrome.notifications.create(opt)
   },
   notify : function(options,id=null){
-    chrome.notifications.create(id,options,(notificationId)=>{
-      this.idmap[notificationId] = id;
-    })
+    chrome.storage.sync.get('notifications1',(data)=>{
+      if(data && data.notifications1){
+        chrome.notifications.create(id,options,(notificationId)=>{
+          this.idmap[notificationId] = id;
+        });
+      }
+    });
   },
   notifyAboutUpdatedNotes : function(notes){//notes - Array of notes or single note
     let notifyAboutSingleNote = () => {
