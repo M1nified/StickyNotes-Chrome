@@ -20,7 +20,7 @@ $(document).ready(function () {
 	});
 	runIndependently(updateColor);
 	runIndependently(setTextarea);
-	runIndependently(InTheNote.setMenuColors);
+	InTheNote.setMenuColors();
 	runIndependently(setFonts);
 	runIndependently(function () {
 		InTheNote.setSortedMenuItems().then(function () {
@@ -29,7 +29,7 @@ $(document).ready(function () {
 	});
 	runIndependently(setSpeechToTextLangsList);
 	runIndependently(setLiveListeners);
-	runIndependently(InTheNote.setPurchasedItems);
+	InTheNote.setPurchasedItems();
 	runIndependently(checkStoreState);
 
 	try {
@@ -125,6 +125,7 @@ var updateColor = function updateColor(save, nc) {
 	if (typeof c === "number") {
 		c = colors[c];
 	}
+	console.log(c);
 	$(".globalBox").css("background-color", c);
 	$("#buttonColor .dot").css("background-color", c);
 	if (save) {

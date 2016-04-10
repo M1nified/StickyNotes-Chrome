@@ -17,7 +17,7 @@ $(document).ready(function(){
 	chrome.storage.sync.get(null,function(data){console.log(data)});
 	runIndependently(updateColor)// updateColor();
 	runIndependently(setTextarea);
-	runIndependently(InTheNote.setMenuColors);
+	InTheNote.setMenuColors();
 	runIndependently(setFonts);
 	runIndependently(()=>{
 		InTheNote.setSortedMenuItems().then(()=>{
@@ -26,7 +26,7 @@ $(document).ready(function(){
 	})
 	runIndependently(setSpeechToTextLangsList);
 	runIndependently(setLiveListeners);
-	runIndependently(InTheNote.setPurchasedItems);
+	InTheNote.setPurchasedItems();
 	runIndependently(checkStoreState);
 
 	try{
@@ -124,6 +124,7 @@ var updateColor = function(save,nc){
 	if(typeof c === "number"){
 		c = colors[c];
 	}
+	console.log(c)
 	$(".globalBox").css("background-color",c);
 	$("#buttonColor .dot").css("background-color",c);
 	if(save){
