@@ -33,7 +33,7 @@ $(document).ready(function () {
 	runIndependently(checkStoreState);
 
 	try {
-		color = presetcolor;
+		color = presetcolor || color;
 		updateColor();
 	} catch (e) {}
 
