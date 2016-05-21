@@ -33,7 +33,7 @@ var Sync = {
   syncLoop: function syncLoop() {
     var _this3 = this;
 
-    var timeout = arguments.length <= 0 || arguments[0] === undefined ? 10000 : arguments[0];
+    var timeout = arguments.length <= 0 || arguments[0] === undefined ? 30000 : arguments[0];
 
     this.syncLoopIsGoing = true;
     clearTimeout(this.syncLoopTimeout);

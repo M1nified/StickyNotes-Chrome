@@ -22,7 +22,7 @@ var Sync = {
     })
     return promise;
   },
-  syncLoop : function(timeout=10000){
+  syncLoop : function(timeout=30000){
     // console.log('timeout:',timeout);
     this.syncLoopIsGoing = true;
     clearTimeout(this.syncLoopTimeout);
