@@ -76,15 +76,16 @@ class SyncMethod{
         }
       }
     }
-    if(this.updated && this.updated.length>1){
-      Notifications.notifyAboutUpdatedNotes(this.updated);
-    }else if(this.updated && this.updated.length===1){
-      Notifications.notifyAboutUpdatedNotes(this.updated[0]);
-    }
-    if(this.removed && this.removed.length>1){
-      Notifications.notifyAboutRemovedNotes(this.updated);
-    }else if(this.removed && this.removed.length===1){
-      Notifications.notifyAboutRemovedNotes(this.updated[0]);
-    }
+    //DISABLED DUE TO NOTIFICATIONS SPAM BUG
+    // if(this.updated && this.updated.length>1){
+    //   Notifications.notifyAboutUpdatedNotes(this.updated);
+    // }else if(this.updated && this.updated.length===1){
+    //   Notifications.notifyAboutUpdatedNotes(this.updated[0]);
+    // }
+    // if(this.removed && this.removed.length>1){
+    //   Notifications.notifyAboutRemovedNotes(this.updated);
+    // }else if(this.removed && this.removed.length===1){
+    //   Notifications.notifyAboutRemovedNotes(this.updated[0]);
+    // }
   }
 }
