@@ -6,6 +6,9 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-babel');
 
+    var dir_produce = 'build/produce';
+    var dir_dev = 'build/dev';
+
     var files_js = [
         "appData/inAppProducts.js",
         "background/background.js",
@@ -39,7 +42,16 @@ module.exports = function(grunt){
         "manifest.json",
         "**/*.html",
         "**/*.min.js",
-        "lib/buy.js"
+        "lib/buy.js",
+        "lib/urlize.js",
+        "img/*",
+        "fonts/*"
+    ];
+    var files_sass = [
+        "note/note.scss",
+        "noteslauncher/noteslauncher.scss",
+        "options/general.scss",
+        "store/purchase.scss"
     ];
 
     grunt.initConfig({
@@ -56,7 +68,7 @@ module.exports = function(grunt){
                         expand : true,
                         cwd : 'src',
                         src : files_js,
-                        dest : 'build/dev',
+                        dest : dir_dev,
                         ext : '.es5.js'
                     }
                 ]
@@ -70,7 +82,7 @@ module.exports = function(grunt){
                         expand : true,
                         cwd : 'src',
                         src : files_js,
-                        dest : 'build/produce',
+                        dest : dir_produce,
                         ext : '.js'
                     }
                 ]
@@ -87,13 +99,13 @@ module.exports = function(grunt){
                 files : [
                     {
                         expand : true,
-                        cwd : 'build/dev',
+                        cwd : dir_dev,
                         src : [
                             '**/*.es5.js',
                             '!**/*.min.js',
                             '!lib/*'
                         ],
-                        dest : 'build/dev',
+                        dest : dir_dev,
                         ext : '.js'
                     }
                 ]
@@ -105,13 +117,13 @@ module.exports = function(grunt){
                 files : [
                     {
                         expand : true,
-                        cwd : 'build/produce',
+                        cwd : dir_produce,
                         src : [
                             '**/*.js',
                             '!**/*.min.js',
                             '!lib/*'
                         ],
-                        dest : 'build/produce',
+                        dest : dir_produce,
                         ext : '.js'
                     }
                 ]
@@ -124,7 +136,7 @@ module.exports = function(grunt){
                         expand : true,
                         cwd : 'src',
                         src : files_copy,
-                        dest : 'build/dev'
+                        dest : dir_dev
                     }
                 ]
             },
@@ -134,14 +146,48 @@ module.exports = function(grunt){
                         expand : true,
                         cwd : 'src',
                         src : files_copy,
-                        dest : 'build/produce'
+                        dest : dir_produce
+                    }
+                ]
+            }
+        },
+        sass : {
+            options : {
+                outputStyle : 'compressed'
+            },
+            dev : {
+                options : {
+                    sourceMap : true
+                },
+                files : [
+                    {
+                        expand : true,
+                        cwd : 'src',
+                        src : files_sass,
+                        dest : dir_dev,
+                        ext : '.css'
+                    }
+                ]
+            },
+            produce : {
+                options : {
+                    sourceMap : false
+                },
+                files : [
+                    {
+                        expand : true,
+                        cwd : 'src',
+                        src : files_sass,
+                        dest : dir_produce,
+                        ext : '.css'
                     }
                 ]
             }
         }
     });
 
-    grunt.registerTask('dev',['babel:dev','uglify:dev','copy:dev'])
-    grunt.registerTask('produce',['babel:produce','uglify:produce','copy:produce'])
+    grunt.registerTask('dev',['babel:dev','uglify:dev','copy:dev','sass:dev']);
+    grunt.registerTask('produce',['babel:produce','uglify:produce','copy:produce','sass:produce']);
+
 
 }
