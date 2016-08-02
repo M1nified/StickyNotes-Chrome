@@ -1,0 +1,25 @@
+{
+  "name": "chrome-stickynotes",
+  "version": "1.0.0",
+  "description": "",
+  "main": " ",
+  "scripts": {
+    "test": " "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/M1nified/chrome-stickynotes-app.git"
+  },
+  "author": "M1nified",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/M1nified/StickyNotes-Chrome/issues"
+  },
+  "homepage": "https://github.com/M1nified/StickyNotes-Chrome#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-sass": "^1.2.0"
+  }
+}
